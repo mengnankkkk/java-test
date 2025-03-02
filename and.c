@@ -46,5 +46,35 @@ Node* andList(Node* A,Node* B){
     }
     return C;
 }
+void printList(Node* head){
+    Node* temp = head;
+    while(temp != NULL){
+        printf("%d ",temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+int main(){
+    Node* A = NULL;
+    Node* B = NULL;
+    insertNode(&A,1);
+    insertNode(&A,2);
+    insertNode(&A,3);
+    insertNode(&A,4);
+    insertNode(&A,5);
+    insertNode(&A,6);
+    insertNode(&A,7);
+    insertNode(&A,8);
+    insertNode(&A,9);
+    insertNode(&A,10);
+    insertNode(&B,1);
+    insertNode(&B,3);
+    insertNode(&B,5);
+    insertNode(&B,7);
+    insertNode(&B,9);
+    Node* C = andList(A,B);
+    printList(C);
+    return 0;
+}
     
     
