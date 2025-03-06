@@ -1,3 +1,4 @@
+import java.nio.file.LinkOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -106,5 +107,42 @@ class Solution6{
             }
         }
         return ans;
+    }
+}
+class Solution7{
+    public int lenOfLongesSubstring(String s){
+        Map<Character,Integer> dic  = new HashMap<>();
+        int i=-1,res = 0,len =s.length();
+        for(int j=0;i<len;j++){
+            if (dic.containsKey(s.charAt(j)))
+                i = Math.max(i,dic.get(s.charAt(j)));
+            dic.put(s.charAt(j),j);
+            res = Math.max(res,j-i);
+        }
+        return res;
+    }
+}
+class Solution8 {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) return null;
+
+        ListNode A = headA, B = headB;
+
+        while (A != B) {
+            A = (A != null) ? A.next : headB;
+            B = (B != null) ? B.next : headA;
+        }
+
+        return A;
+    }
+}
+
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode(int x) {
+        val = x;
+        next = null;
     }
 }
