@@ -146,3 +146,36 @@ class ListNode {
         next = null;
     }
 }
+class Solution9{
+    public ListNode reverList(ListNode head){
+        ListNode cur = head,pre  = null;
+        while (cur!=null){
+            ListNode tmp = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = tmp;
+
+        }
+        return pre;
+    }
+    public boolean isPalindrome(ListNode head){
+        ListNode mid =middleNode(head);
+        ListNode head2  = reverList(mid);
+        while (head2!=null){
+            if (head.val!=head2.val){
+                return false;
+            }
+            head = head.next;
+            head2 = head2.next;
+        }
+        return true;
+    }
+    private ListNode middleNode(ListNode head){
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast!=null&&fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+       }return slow;
+    }
+}
