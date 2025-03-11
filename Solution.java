@@ -146,10 +146,10 @@ class ListNode {
         next = null;
     }
 }
-class Solution9{
-    public ListNode reverList(ListNode head){
-        ListNode cur = head,pre  = null;
-        while (cur!=null){
+class Solution9 {
+    public ListNode reverList(ListNode head) {
+        ListNode cur = head, pre = null;
+        while (cur != null) {
             ListNode tmp = cur.next;
             cur.next = pre;
             pre = cur;
@@ -158,11 +158,12 @@ class Solution9{
         }
         return pre;
     }
-    public boolean isPalindrome(ListNode head){
-        ListNode mid =middleNode(head);
-        ListNode head2  = reverList(mid);
-        while (head2!=null){
-            if (head.val!=head2.val){
+
+    public boolean isPalindrome(ListNode head) {
+        ListNode mid = middleNode(head);
+        ListNode head2 = reverList(mid);
+        while (head2 != null) {
+            if (head.val != head2.val) {
                 return false;
             }
             head = head.next;
@@ -170,36 +171,40 @@ class Solution9{
         }
         return true;
     }
-    private ListNode middleNode(ListNode head){
+
+    private ListNode middleNode(ListNode head) {
         ListNode slow = head;
         ListNode fast = head;
-        while (fast!=null&&fast.next!=null){
+        while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
-       }return slow;
+        }
+        return slow;
     }
-    class Solution10{
-        public boolean hasCycle(ListNode head){
-            ListNode slow = head,fast = head;
-            while (fast!=null&&fast.next!=null){
+
+    class Solution10 {
+        public boolean hasCycle(ListNode head) {
+            ListNode slow = head, fast = head;
+            while (fast != null && fast.next != null) {
                 slow = slow.next;
                 fast = fast.next.next;
-                if (fast==slow){
+                if (fast == slow) {
                     return true;
                 }
             }
             return false;
         }
     }
-    class Solution11{
-        public ListNode detectCycle(ListNode head){
-            ListNode fast = head,slwo = head;
-            while (fast!=null&&fast.next!=null){
+
+    class Solution11 {
+        public ListNode detectCycle(ListNode head) {
+            ListNode fast = head, slwo = head;
+            while (fast != null && fast.next != null) {
                 fast = fast.next.next;
                 slwo = slwo.next;
                 if (fast == slwo) {
                     fast = head;
-                    while (slwo!=fast){
+                    while (slwo != fast) {
                         slwo = slwo.next;
                         fast = fast.next;
                     }
@@ -207,6 +212,51 @@ class Solution9{
                 }
             }
             return null;
+        }
+    }
+
+    class Solution12 {
+        public ListNode mergeTowLists(ListNode l1, ListNode l2) {
+            if (l1 == null) {
+                return l2;
+            } else if (l2 == null) {
+                return l1;
+            } else if (l1.val < l2.val) {
+                l1.next = mergeTowLists(l1.next, l2);
+                return l1;
+            } else {
+                l2.next = mergeTowLists(l1, l2.next);
+                return l2;
+            }
+        }
+    }
+
+    class Solution13 {
+        public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+            ListNode pre = new ListNode(0);
+            ListNode cur = pre;
+            int carry = 0;
+            while (l1 != null || l2 != null) {
+                int x = l1 == null ? 0 : l1.val;
+                int y = l2 == null ? 0 : l2.val;
+                int sum = x + y + carry;
+
+                carry = sum / 10;
+                sum = sum % 10;
+                cur.next = new ListNode(sum);
+
+                cur = cur.next;
+                if (l1 != null) {
+                    l1 = l1.next;
+                }
+                if (l2 != null) {
+                    l2 = l2.next;
+                }
+            }
+            if (carry == 1) {
+                cur.next = new ListNode(carry);
+            }
+            return pre.next;
         }
     }
 }
