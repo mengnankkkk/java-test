@@ -1,262 +1,266 @@
-import java.nio.file.LinkOption;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
-
-
-
-
-class Solution1{
-    public int[] twoSum(int[] nums,int target){
-        Map<Integer,Integer> map = new HashMap<>();
-        for(int i=0;i<nums.length;i++){
-            if(map.containsKey(target-nums[i])){
-                return new int[] {map.get(target-nums[i]),i};
-
-            }
-            map.put(nums[i],i);
-        }
-        throw new IllegalArgumentException("No two sum solution");
-    }
-}
-class Solution2 {
-public List<List<String>> getAnagrams(String[] strs) {
-    return new ArrayList<>(Arrays.stream(strs).collect(Collectors.groupingBy(str -> Stream.of(str.split("")).sorted().collect(Collectors.joining()))).values());
-}
-}
-class Solution3{
-    public int longestConsecutive(int[] nums){
-        int ans = 0;
-        Set<Integer> st = new HashSet<>();
-        for(int num:nums){
-            st.add(num);
-        }
-        for(int x:st){
-            if(st.contains(x-1)){
-                continue;
-            }
-            int y = x+1;
-            while(st.contains(y)){
-                y++;
-            }
-            ans = Math.max(ans,y-x);
-        }
-        return ans;
-    }
-}
-class Solution4 {
-    public void moveZeroes(int[] nums){
-        if (nums == null){
-            return;
-        }
-        int j =0;
-        for (int i=0;i<nums.length;i++){
-            if (nums[i]!=0){
-                int tmp = nums[i];
-                nums[i] = nums[j];
-                nums[j++] = tmp;
-            }
-        }
-    }
-}
-class Solution5{
-    public int maxArea(int[] height){
-        int res = 0;
-        int i = 0;
-        int j = height.length-1;
-        while (i<j){
-            int area = (j-i)*Math.min(height[i],height[j]);
-            res = Math.max(res,area);
-            if (height[i]<height[j]){
-                i++;
-            }else {
-                j--;
-            }
-        }
-        return res;
-    }
-}
-class Solution6{
-    public static List<List<Integer>> threeSum(int[] nums){
-        List<List<Integer>> ans = new ArrayList<>();
-        int len = nums.length;
-        if (nums==null||len<3) return ans;
-        Arrays.sort(nums);
-        for(int i =0;i<len;i++){
-            if (nums[i]>0) break;
-            if (i>0&&nums[i]==nums[i-1]) continue;
-            int L = i+1;
-            int R = len - 1;
-            while (L<R){
-                int sum = nums[i] + nums[L] + nums[R];
-                if (sum == 0){
-                    ans.add(Arrays.asList(nums[i],nums[L],nums[R]));
-                    while (L<R&&nums[L] == nums[L+1]) L++;
-                    while (L<R&&nums[R] == nums[R-1]) R--;
-                    L++;
-                    R--;
-                }
-                else if (sum<0) L++;
-                else if (sum>0) R--;
-            }
-        }
-        return ans;
-    }
-}
-class Solution7{
-    public int lenOfLongesSubstring(String s){
-        Map<Character,Integer> dic  = new HashMap<>();
-        int i=-1,res = 0,len =s.length();
-        for(int j=0;i<len;j++){
-            if (dic.containsKey(s.charAt(j)))
-                i = Math.max(i,dic.get(s.charAt(j)));
-            dic.put(s.charAt(j),j);
-            res = Math.max(res,j-i);
-        }
-        return res;
-    }
-}
-class Solution8 {
-    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        if (headA == null || headB == null) return null;
-
-        ListNode A = headA, B = headB;
-
-        while (A != B) {
-            A = (A != null) ? A.next : headB;
-            B = (B != null) ? B.next : headA;
-        }
-
-        return A;
-    }
-}
 
 class ListNode {
     int val;
     ListNode next;
+    ListNode(int x) { val = x; next = null; }
+}
 
-    ListNode(int x) {
-        val = x;
-        next = null;
+// 1. 两数之和
+class Solution1 {
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(target - nums[i])) {
+                return new int[]{map.get(target - nums[i]), i};
+            }
+            map.put(nums[i], i);
+        }
+        throw new IllegalArgumentException("No two sum solution");
     }
 }
-class Solution9 {
-    public ListNode reverList(ListNode head) {
-        ListNode cur = head, pre = null;
-        while (cur != null) {
-            ListNode tmp = cur.next;
-            cur.next = pre;
-            pre = cur;
-            cur = tmp;
 
-        }
-        return pre;
+// 2. 字母异位词分组
+class Solution2 {
+    public List<List<String>> getAnagrams(String[] strs) {
+        return new ArrayList<>(Arrays.stream(strs)
+                .collect(Collectors.groupingBy(str -> Stream.of(str.split(""))
+                        .sorted().collect(Collectors.joining()))).values());
     }
+}
 
-    public boolean isPalindrome(ListNode head) {
-        ListNode mid = middleNode(head);
-        ListNode head2 = reverList(mid);
-        while (head2 != null) {
-            if (head.val != head2.val) {
-                return false;
+// 3. 最长连续序列
+class Solution3 {
+    public int longestConsecutive(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) set.add(num);
+        int maxLen = 0;
+        for (int num : set) {
+            if (!set.contains(num - 1)) {
+                int currNum = num, count = 1;
+                while (set.contains(currNum + 1)) {
+                    currNum++;
+                    count++;
+                }
+                maxLen = Math.max(maxLen, count);
             }
-            head = head.next;
-            head2 = head2.next;
         }
-        return true;
+        return maxLen;
     }
+}
 
-    private ListNode middleNode(ListNode head) {
-        ListNode slow = head;
-        ListNode fast = head;
+// 4. 移动零
+class Solution4 {
+    public void moveZeroes(int[] nums) {
+        int j = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) {
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j++] = temp;
+            }
+        }
+    }
+}
+
+// 5. 盛最多水的容器
+class Solution5 {
+    public int maxArea(int[] height) {
+        int left = 0, right = height.length - 1, maxArea = 0;
+        while (left < right) {
+            int area = (right - left) * Math.min(height[left], height[right]);
+            maxArea = Math.max(maxArea, area);
+            if (height[left] < height[right]) left++;
+            else right--;
+        }
+        return maxArea;
+    }
+}
+
+// 6. 三数之和
+class Solution6 {
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) continue;
+            int left = i + 1, right = nums.length - 1;
+            while (left < right) {
+                int sum = nums[i] + nums[left] + nums[right];
+                if (sum == 0) {
+                    res.add(Arrays.asList(nums[i], nums[left], nums[right]));
+                    while (left < right && nums[left] == nums[left + 1]) left++;
+                    while (left < right && nums[right] == nums[right - 1]) right--;
+                    left++; right--;
+                } else if (sum < 0) left++;
+                else right--;
+            }
+        }
+        return res;
+    }
+}
+
+// 7. 最长无重复子串
+class Solution7 {
+    public int lengthOfLongestSubstring(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        int left = -1, maxLength = 0;
+        for (int right = 0; right < s.length(); right++) {
+            if (map.containsKey(s.charAt(right))) {
+                left = Math.max(left, map.get(s.charAt(right)));
+            }
+            map.put(s.charAt(right), right);
+            maxLength = Math.max(maxLength, right - left);
+        }
+        return maxLength;
+    }
+}
+
+// 8. 链表相交
+class Solution8 {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode A = headA, B = headB;
+        while (A != B) {
+            A = (A == null) ? headB : A.next;
+            B = (B == null) ? headA : B.next;
+        }
+        return A;
+    }
+}
+
+// 9. 反转链表
+class Solution9 {
+    public ListNode reverseList(ListNode head) {
+        ListNode prev = null, curr = head;
+        while (curr != null) {
+            ListNode temp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = temp;
+        }
+        return prev;
+    }
+}
+
+// 10. 环形链表
+class Solution10 {
+    public boolean hasCycle(ListNode head) {
+        ListNode slow = head, fast = head;
         while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
+            if (slow == fast) return true;
         }
-        return slow;
+        return false;
     }
+}
 
-    class Solution10 {
-        public boolean hasCycle(ListNode head) {
-            ListNode slow = head, fast = head;
-            while (fast != null && fast.next != null) {
-                slow = slow.next;
-                fast = fast.next.next;
-                if (fast == slow) {
-                    return true;
+// 11. 环形链表 II（找到环的入口）
+class Solution11 {
+    public ListNode detectCycle(ListNode head) {
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                fast = head;
+                while (slow != fast) {
+                    slow = slow.next;
+                    fast = fast.next;
                 }
+                return fast;
             }
-            return false;
+        }
+        return null;
+    }
+}
+
+// 12. 合并两个有序链表
+class Solution12 {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) return l2;
+        if (l2 == null) return l1;
+        if (l1.val < l2.val) {
+            l1.next = mergeTwoLists(l1.next, l2);
+            return l1;
+        } else {
+            l2.next = mergeTwoLists(l1, l2.next);
+            return l2;
         }
     }
+}
 
-    class Solution11 {
-        public ListNode detectCycle(ListNode head) {
-            ListNode fast = head, slwo = head;
-            while (fast != null && fast.next != null) {
-                fast = fast.next.next;
-                slwo = slwo.next;
-                if (fast == slwo) {
-                    fast = head;
-                    while (slwo != fast) {
-                        slwo = slwo.next;
-                        fast = fast.next;
+
+class Solution13 {
+            public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+                ListNode pre = new ListNode(0);
+                ListNode cur = pre;
+                int carry = 0;
+                while (l1 != null || l2 != null) {
+                    int x = l1 == null ? 0 : l1.val;
+                    int y = l2 == null ? 0 : l2.val;
+                    int sum = x + y + carry;
+
+                    carry = sum / 10;
+                    sum = sum % 10;
+                    cur.next = new ListNode(sum);
+
+                    cur = cur.next;
+                    if (l1 != null) {
+                        l1 = l1.next;
                     }
-                    return fast;
+                    if (l2 != null) {
+                        l2 = l2.next;
+                    }
                 }
-            }
-            return null;
-        }
-    }
-
-    class Solution12 {
-        public ListNode mergeTowLists(ListNode l1, ListNode l2) {
-            if (l1 == null) {
-                return l2;
-            } else if (l2 == null) {
-                return l1;
-            } else if (l1.val < l2.val) {
-                l1.next = mergeTowLists(l1.next, l2);
-                return l1;
-            } else {
-                l2.next = mergeTowLists(l1, l2.next);
-                return l2;
+                if (carry == 1) {
+                    cur.next = new ListNode(carry);
+                }
+                return pre.next;
             }
         }
-    }
-
-    class Solution13 {
-        public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-            ListNode pre = new ListNode(0);
-            ListNode cur = pre;
-            int carry = 0;
-            while (l1 != null || l2 != null) {
-                int x = l1 == null ? 0 : l1.val;
-                int y = l2 == null ? 0 : l2.val;
-                int sum = x + y + carry;
-
-                carry = sum / 10;
-                sum = sum % 10;
-                cur.next = new ListNode(sum);
-
-                cur = cur.next;
-                if (l1 != null) {
-                    l1 = l1.next;
-                }
-                if (l2 != null) {
-                    l2 = l2.next;
-                }
+        class Solution14 {
+            public ListNode removeNthFromEnd(ListNode head, int n) {
+                ListNode pre = new ListNode(0);
+                pre.next = head;
+                ListNode start = pre, end = pre;
+                while (n != 0) {
+                    start = start.next;
+                    n--;
+                }//start先提前移动
+                while (start.next != null) {
+                    start = start.next;
+                    end = end.next;
+                }//一块移动
+                end.next = end.next.next;//删除某节点
+                return pre.next;
             }
-            if (carry == 1) {
-                cur.next = new ListNode(carry);
-            }
-            return pre.next;
         }
+class Solution15 {
+    public ListNode swapPairs1(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }//没有节点，或者只剩一个的时候
+        ListNode next = head.next;
+        head.next = swapPairs1(next.next);//
+        next.next = head;//后节点等于头节点
+        return next;
     }
+    public ListNode swapPairs2(ListNode head){
+        ListNode pre = new ListNode(0);
+        pre.next = head;
+        ListNode tmp = pre;
+        while (tmp.next!=null&&tmp.next.next!=null){
+            ListNode start = tmp.next;
+            ListNode end = tmp.next.next;
+            tmp.next = end;//head
+            start.next = end.next;
+            end.next = start;
+            tmp = start;
+        }
+        return pre.next;
+    }
+
 }
