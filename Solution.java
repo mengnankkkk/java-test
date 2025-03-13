@@ -264,3 +264,59 @@ class Solution15 {
     }
 
 }
+class Solution16{
+    public Node copyRandomList(Node head){
+        if (head==null) return null;
+        Node cur =head;
+        Map<Node,Node> map = new HashMap<>();
+        while (cur!=null){
+            map.put(cur,new Node(cur.val));
+            cur = cur.next;
+        }//复制
+        cur = head;
+        while (cur!=null){
+            map.get(cur).next = map.get(cur.next);
+            map.get(cur).random = map.get(cur.random);
+            cur = cur.next;
+        }
+        return map.get(head);
+    }
+}
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+class Solution17{
+    public ListNode sortList(ListNode head){
+        if (head==null){
+            return null;
+        }
+        ListNode cur = head;
+        int n = 0;
+        while (cur!=null){
+            n++;
+            cur = cur.next;
+        }
+        int[] arr = new int [n];
+        cur = head;
+        for(int i=0;i<arr.length;i++){
+            arr[i] = cur.val;
+            cur = cur.next;
+        }
+        Arrays.sort(arr);
+        ListNode listNode = new ListNode(arr[0]);
+        cur = listNode;
+        for (int i=1;i<arr.length;i++){
+            cur.next = new ListNode(arr[i]);
+            cur = cur.next;
+        }
+        return listNode;
+    }
+}
