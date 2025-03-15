@@ -320,3 +320,71 @@ class Solution17{
         return listNode;
     }
 }
+class LRUCache extends LinkedHashMap<Integer,Integer> {
+    private int capacity;
+    public LRUCache(int capacity) {
+        super(capacity,0.75F,true);
+        this.capacity = capacity;
+    }
+    public int get(int key) {
+        return super.getOrDefault(key,-1);
+    }
+    public void put(int key, int value) {
+        super.put(key,value);
+    }
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<Integer,Integer> eldest){
+        return size() > capacity;
+    }
+}
+class Solution18{
+    public int maxSubArray(int[] nums){
+        int ans = nums[0];
+        int sum = 0;
+        for (int num:nums){
+            if (sum>0){
+                sum+=num;
+            }
+            else {
+                sum = num;
+            }
+            ans=Math.max(ans,sum);
+        }
+        return ans;
+    }
+}
+class Solution19{
+    public int[][] merge(int[][] intervals){
+        Arrays.sort(intervals,(p,q)->p[0] - q[0]);//按照左端点从小到大排序
+        List<int[]> ans = new ArrayList<>();
+        for (int[] p:intervals){
+            int m = ans.size();
+            if (m>0&&p[0]<=ans.get(m-1)[1]){//限制范围
+                ans.get(m-1)[1] = Math.max(ans.get(m-1)[1],p[1]);
+            }
+            else{
+                ans.add(p);
+            }
+        }
+        return ans.toArray(new int[ans.size()][]);
+
+    }
+}
+class Solution20{
+    public void rotate(int[] nums,int k){
+        k%=nums.length;
+        reverse(nums,0,nums.length-1);
+        reverse(nums,0,k-1);
+        reverse(nums,k,nums.length-1);
+
+    }
+    public void reverse(int[] nums,int start,int end){
+        while (start<end){
+            int temp = nums[start];
+            nums[start] = nums[end];
+            nums[end] = temp;
+            start+=1;
+            end-=1;
+        }
+    }
+}
