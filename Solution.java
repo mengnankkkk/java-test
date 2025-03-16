@@ -1,3 +1,4 @@
+import java.security.PublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -386,5 +387,53 @@ class Solution20{
             start+=1;
             end-=1;
         }
+    }
+}
+class Solution21{
+    public int[] productExcepSelf(int[] nums){
+        int len = nums.length;
+        if (len==0) return new  int[0];
+        int[] ans = new int[len];
+        ans[0] = 1;
+        int tmp = 1;
+        for (int i=1;i<len;i++){
+            ans[i] = ans[i-1] * nums[i-1];
+        }
+        for (int i=len-2;i>=0;i--){
+            tmp *=nums[i+1];
+            ans[i] *= tmp;
+        }
+        return ans;
+    }
+}
+class TreeNode{
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    public TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+
+    public TreeNode(int val) {
+        this.val = val;
+    }
+    public TreeNode(){}
+}
+class Solution22{
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<Integer>();
+        dfs(res, root);
+        return res;
+    }
+        void dfs(List<Integer> res,TreeNode root){
+            if (root==null){
+                return ;
+            }
+            dfs(res,root.left);
+            res.add(root.val);
+            dfs(res,root.right);
     }
 }
