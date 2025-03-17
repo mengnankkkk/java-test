@@ -1,4 +1,5 @@
 import java.security.PublicKey;
+import java.time.temporal.Temporal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -435,5 +436,53 @@ class Solution22{
             dfs(res,root.left);
             res.add(root.val);
             dfs(res,root.right);
+    }
+}
+class Solution23{
+    public int maxDepth(TreeNode root){
+        if (root==null){
+            return 0;
+        }
+        else {
+            int left = maxDepth(root.left);
+            int right = maxDepth(root.right);
+            return Math.max(left,right)+1;
+        }
+    }
+}
+class Solution24{
+    public TreeNode invertTree(TreeNode root){
+        if (root==null) return null;
+        TreeNode tmp = root.left;
+        root.left = invertTree(root.right);
+        root.right = invertTree(tmp);
+        return root;
+    }
+}
+class Solution25{
+    public boolean isSymmetric(TreeNode root){
+        return root==null||recur(root.left,root.right);
+    }
+    boolean recur(TreeNode L,TreeNode R){
+        if (L==null&&R==null) return true;
+        if (L==null||R==null||L.val!=R.val) return false;
+        return recur(L.left,R.right)&&recur(L.right,R.left);
+    }
+}
+class Solution26{
+    private int ans;
+
+    public int diameterOfBinaryTree(TreeNode root){
+        dfs(root);
+        return ans;
+    }
+    private int dfs(TreeNode node){
+        if (node ==null){
+            return -1;
+        }
+        int llen = dfs(node.left)+1;
+        int rlen = dfs(node.right)+1;
+        ans = Math.max(ans,llen+rlen);
+        return Math.max(llen,rlen);
     }
 }
