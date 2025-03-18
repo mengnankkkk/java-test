@@ -1,3 +1,5 @@
+import com.oracle.xmlns.internal.webservices.jaxws_databinding.XmlWebEndpoint;
+
 import java.security.PublicKey;
 import java.time.temporal.Temporal;
 import java.util.*;
@@ -484,5 +486,39 @@ class Solution26{
         int rlen = dfs(node.right)+1;
         ans = Math.max(ans,llen+rlen);
         return Math.max(llen,rlen);
+    }
+}
+class Solution27{
+    public List<List<Integer>> levelOrder(TreeNode root){
+        List<List<Integer>> res = new ArrayList<>();
+        if (root==null) return res;
+        Queue<TreeNode> que = new LinkedList<>();
+        que.add(root);
+        while (!que.isEmpty()){
+            int sized = que.size();
+            List<Integer> layer = new ArrayList<>();
+            while (sized-->0){
+                TreeNode poll = que.poll();
+                layer.add(poll.val);
+                if (poll.left!=null) que.add(poll.left);
+                if (poll.right!=null) que.add(poll.right);
+            }
+            res.add(layer);
+        }return res;
+    }
+}
+class Solution28{
+    public TreeNode sortedArrayToBST(int[] nums){
+        return dfs(nums,0,nums.length-1);
+    }
+    private TreeNode dfs(int[] nums,int lo,int hi){
+        if (lo>hi){
+            return null;
+        }
+        int mid = lo+(hi-lo)/2;
+        TreeNode root  = new TreeNode(nums[mid]);
+        root.left = dfs(nums,lo,mid-1);
+        root.right = dfs(nums,mid+1,hi);
+        return root;
     }
 }
