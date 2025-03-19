@@ -522,3 +522,49 @@ class Solution28{
         return root;
     }
 }
+class Solution29{
+    public boolean isValidBST(TreeNode root){
+        return isValidBST(root,Long.MIN_VALUE,Long.MAX_VALUE);
+    }
+    private boolean isValidBST(TreeNode node,long left,long right){
+        if (node==null){
+            return true;
+        }
+        long x = node.val;
+        return left<x&&x<right&&
+                isValidBST(node.left,left,x)&&
+                isValidBST(node.right,x,right);
+    }
+}
+class Solution30{
+    int res,k;
+    void dfs(TreeNode root){
+        if (root==null) return;
+        dfs(root.left);
+        if (k==0) return;
+        if (--k==0) res = root.val;
+        dfs(root.right);
+    }
+    public int kthSmallest(TreeNode root,int k){
+        this.k = k;
+        dfs(root);
+        return res;
+    }
+}
+class Solution31{
+    public List<Integer> rightSideView(TreeNode  root){
+        List<Integer> ans = new ArrayList<>();
+        dfs(root,0,ans);
+        return ans;
+    }
+    private void dfs(TreeNode root,int depth,List<Integer> ans){
+        if (root==null){
+            return;
+        }
+        if (depth==ans.size()){
+            ans.add(root.val);
+        }
+        dfs(root.right,depth+1,ans);
+        dfs(root.left,depth+1,ans);
+    }
+}
