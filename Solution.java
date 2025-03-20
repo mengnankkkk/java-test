@@ -568,3 +568,39 @@ class Solution31{
         dfs(root.left,depth+1,ans);
     }
 }
+class Solution32 {
+    public void flatten(TreeNode root) {
+        while (root != null) {
+            if (root.left != null) {
+                TreeNode pre = root.left;
+                while (pre.right != null) { // 找到左子树的最右节点
+                    pre = pre.right;
+                }
+                pre.right = root.right; // 右子树接到左子树的最右节点上
+                root.right = root.left; // 左子树变成右子树
+                root.left = null; // 断开左子树
+            }
+            root = root.right; // 继续处理下一个节点
+        }
+    }
+}
+class Solution33{
+    private int ans;
+    public int pathSum(TreeNode root, int targetSum) {
+        Map<Long, Integer> cnt = new HashMap<>();
+        cnt.put(0L, 1);
+        dfs(root, 0, targetSum, cnt);
+        return ans;
+    }
+    private void dfs(TreeNode node,long s,int targetsum,Map<Long,Integer> cnt){
+        if (node==null){
+            return;
+        }
+        s+= node.val;
+        ans+=cnt.getOrDefault(s-targetsum,0);
+        cnt.merge(s,1,Integer::sum);//cnt[s++]
+        dfs(node.left,s,targetsum,cnt);
+        dfs(node.right,s,targetsum,cnt);
+        cnt.merge(s,-1,Integer::sum);//归零
+    }
+}
