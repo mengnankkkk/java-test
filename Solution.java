@@ -614,3 +614,83 @@ class Solution34{
         return root;
     }
 }
+class Solution35{
+    int[] preorder;
+    HashMap<Integer,Integer> dic = new HashMap<>();
+    public TreeNode bulidTree1(int[] preorder,int[] inorder){
+        this.preorder =  preorder;
+        for (int i=0;i<inorder.length;i++)
+            dic.put(inorder[i],i);
+        return recur(0,0,inorder.length-1);
+    }
+    TreeNode recur(int root,int left,int right){
+        if (left>right) return null;
+        TreeNode node = new TreeNode(preorder[root]);
+        int i = dic.get(preorder[root]);
+        node.left = recur(root+1,left,i-1);
+        node.right = recur(root+i-left+1,i+1,right);
+        return node;
+    }
+
+    /**
+     * 解法2
+     */
+    int pre = 0;
+    int in=0;
+    public TreeNode buildTree2(int[] preorder,int[] inorder){
+        return my(preorder,inorder,Integer.MAX_VALUE);
+    }
+    public TreeNode my(int[] preorder,int[] inorder,int stop){
+        if (pre == preorder.length){
+            return null;
+        }
+        if (inorder[in] ==stop){
+            in++;
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[pre++]);
+        root.left = my(preorder,inorder,root.val);
+        root.right = my(preorder,inorder,stop);
+        return root;
+    }
+}
+class Solution36{
+    public int searchInsert(int[] nums,int target){
+        int left = 0,right = nums.length-1;
+        while (left<=right){
+            int mid = (left+right)/2;
+            if (nums[mid] == target){
+                return mid;
+            }
+            else if (nums[mid]<target){
+                left =mid+1;
+            }
+            else {
+                right = mid-1;
+            }
+        }
+        return left;
+    }
+}
+class Solution37{
+    public boolean searchMatrix(int[][] matrix,int target){
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int left = -1;
+        int right = m*n;
+        while (left+1<right){
+            int mid =(left+right)>>>1;
+            int x = matrix[mid/n][mid%n];
+            if (x==target){
+                return true;
+            }
+            if (x<target){
+                left = mid;
+            }
+            else {
+                right = mid;
+            }
+        }
+        return false;
+    }
+}
