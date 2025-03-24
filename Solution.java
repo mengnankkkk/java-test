@@ -694,3 +694,57 @@ class Solution37{
         return false;
     }
 }
+class Solution38{
+    public int[] searchRange(int[] nums,int target){
+        int start = lowBound(nums,target);
+        if (start==nums.length||nums[start] !=target){
+            return new int[] {-1,-1};
+        }
+        int end = lowBound(nums,target+1)-1;
+        return new int[] {start,end};
+    }
+    private int lowBound(int[] nums,int target){
+        int left = -1;
+        int right = nums.length;
+        while (left+1<right){
+            int mid = left+(right-left)/2;
+            if (nums[mid]>=target){
+                right = mid;
+            }else {
+                left = mid;
+            }
+        }
+        return right;
+    }
+}
+class Solution39{
+    public int search(int[] nums,int target){
+        if (nums==null||nums.length==0){
+            return -1;
+        }
+        int start = 0;
+        int end = nums.length-1;
+        int mid;
+        while (start<=end){
+            mid = start+(end-start)/2;
+            if (nums[mid] ==target){
+                return mid;
+            }
+            if (nums[start]<=nums[mid]){
+                if (target>=nums[start]&&target<nums[mid]){
+                    end  = mid-1;
+                }else {
+                    start = mid+1;
+                }
+            }else {
+                if (target<=nums[end]&&target>nums[mid]){
+                    start = mid +1;
+                }
+                else {
+                    end = mid-1;
+                }
+            }
+        }
+        return -1;
+    }
+}
