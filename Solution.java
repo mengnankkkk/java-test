@@ -748,3 +748,50 @@ class Solution39{
         return -1;
     }
 }
+class Solution40{
+    public int findMin(int[] nums){
+        int n = nums.length;
+        int left  = -1;
+        int right = n-1;
+        while (left+1<right){
+            int mid = (left+right)>>>1;
+            if (nums[mid]<nums[n-1]){
+                right = mid;
+            }
+            else {
+                left = mid;
+            }
+        }
+        return nums[right];
+    }
+}
+class Solution41{
+    public List<Integer> findAnagrams(String s,String p) {
+        List<Integer> ans = new ArrayList<>();
+        int[] cnt = new int[26];
+        for (char c : p.toCharArray()) {
+            cnt[c - 'a']++;
+        }
+        int left = 0,right=0,required = p.length();
+        while (right<s.length()){
+            int c = s.charAt(right) -'a';
+            if (cnt[c]>0){
+                required--;
+            }
+            cnt[c]--;
+            right++;
+            if (required==0){
+                ans.add(left);
+            }
+            if (right-left==p.length()){
+                int l = s.charAt(left)-'a';
+                if (cnt[l]>=0){
+                    required++;
+                }
+                cnt[l]++;
+                left++;
+            }
+        }
+        return ans;
+    }
+}
