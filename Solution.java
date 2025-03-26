@@ -795,3 +795,60 @@ class Solution41{
         return ans;
     }
 }
+class Solution42{
+    public void setZeroes(int[][] matrix){
+        Set<Integer> row_zero = new HashSet<>();
+        Set<Integer> col_zero = new HashSet<>();
+        int row = matrix.length;
+        int col = matrix[0].length;
+        for (int i =0;i<row;i++){
+            for (int j =0;j<col;j++){
+                if (matrix[i][j]==0){
+                    row_zero.add(i);
+                    col_zero.add(j);
+                }
+            }
+        }
+        for (int i =0;i<row;i++){
+            for (int j =0;j<col;j++){
+                if (row_zero.contains(i)||col_zero.contains(j)){
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+    }
+}
+
+class Solution43 {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> res = new ArrayList<>();
+        if (matrix.length == 0) return res;
+
+        int l = 0, r = matrix[0].length - 1;
+        int t = 0, b = matrix.length - 1;
+
+        while (l <= r && t <= b) {
+            // 从左到右
+            for (int i = l; i <= r; i++) res.add(matrix[t][i]);
+            t++;  // 更新上边界
+            if (t > b) break;
+
+            // 从上到下
+            for (int i = t; i <= b; i++) res.add(matrix[i][r]);
+            r--;  // 更新右边界
+            if (l > r) break;
+
+            // 从右到左
+            for (int i = r; i >= l; i--) res.add(matrix[b][i]);
+            b--;  // 更新下边界
+            if (t > b) break;
+
+            // 从下到上
+            for (int i = b; i >= t; i--) res.add(matrix[i][l]);
+            l++;  // 更新左边界
+            if (l > r) break;
+        }
+
+        return res;
+    }
+}
