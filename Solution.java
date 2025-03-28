@@ -852,3 +852,127 @@ class Solution43 {
         return res;
     }
 }
+class Solution44{
+    public void rotate(int[][] matrix){
+        int n = matrix.length;
+        int[][] matrix_new  = new int[n][n];
+        for (int i =0;i<n;++i){
+            for (int j =0;j<n;j++){
+                matrix_new[j][n-i-1] = matrix[i][j];
+            }
+        }
+        for (int i=0;i<n;++i){
+            for (int j=0;j<n;++j){
+                matrix[i][j] = matrix_new[i][j];
+            }
+        }
+    }
+}
+class Solution45{
+    public boolean searchMatrix(int[][] matrix,int target){
+        int i = matrix.length-1,j=0;
+        while (i>=0&&j<matrix[0].length){
+            if (matrix[i][j]>target) i--;
+            else if (matrix[i][j]<target) j++;
+            else return true;
+        }
+        return false;
+    }
+}
+class Solution46{
+    public int subarraySum(int[] nums,int k){
+        int n = nums.length;
+        int [] s = new int [n+1];
+        for (int i =0;i<n;i++){
+            s[i+1] = s[i] + nums[i];
+        }
+        int ans= 0;
+        Map<Integer,Integer> cnt = new HashMap<>(n+1);
+        for (int sj:s){
+            ans+=cnt.getOrDefault(sj-k,0);
+            cnt.merge(sj,1,Integer::sum);//cnt[sj]++
+        }
+        return ans;
+    }
+}
+class Solution47{
+    public int numIslands(char[][] grid){
+        int count = 0;
+        for (int i =0;i<grid.length;i++){
+            for (int j=0;j<grid[0].length;j++){
+                if (grid[i][j] =='1'){
+                    dfs(grid,i,j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    private void dfs(char[][] grid,int i,int j){
+        if (i<0||j<0||i>=grid.length||j>=grid[0].length||grid[i][j]=='0') return;
+        grid[i][j]='0';
+        dfs(grid,i+1,j);
+        dfs(grid,i,j+1);
+        dfs(grid,i-1,j);
+        dfs(grid,i,j-1);
+
+    }
+}
+
+class Solution48 {
+    public int orangesRotting(int[][] grid) {
+        int[][] dir = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+        int m = grid.length;
+        int n = grid[0].length;
+        Queue<int[]> queue = new LinkedList<>();
+        int freshCount = 0;
+
+        // 统计新鲜橘子数量，并找到腐烂橘子的初始位置
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {  // 修正错误 j < 0
+                if (grid[i][j] == 2) {
+                    queue.offer(new int[]{i, j});
+                } else if (grid[i][j] == 1) {
+                    freshCount++;
+                }
+            }
+        }
+
+        // 没有新鲜橘子，直接返回 0
+        if (freshCount == 0) {
+            return 0;
+        }
+
+        int time = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            boolean hasRotten = false;
+            for (int i = 0; i < size; i++) {
+                int[] arr = queue.poll();
+                int x = arr[0];
+                int y = arr[1];
+
+                // 遍历 4 个方向
+                for (int j = 0; j < 4; j++) {
+                    int xNext = x + dir[j][0];
+                    int yNext = y + dir[j][1];  // 修正错误：应使用 dir[j][1]
+
+                    // 检查边界条件 & 是否是新鲜橘子
+                    if (xNext >= 0 && yNext >= 0 && xNext < m && yNext < n && grid[xNext][yNext] == 1) {
+                        grid[xNext][yNext] = 2;
+                        queue.offer(new int[]{xNext, yNext});
+                        freshCount--;
+                        hasRotten = true;
+                    }
+                }
+            }
+            // 只有在本轮有橘子腐烂时，才增加时间
+            if (hasRotten) {
+                time++;
+            }
+        }
+
+        // 如果还有新鲜橘子，返回 -1
+        return freshCount == 0 ? time : -1;
+    }
+}
