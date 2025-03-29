@@ -976,3 +976,74 @@ class Solution48 {
         return freshCount == 0 ? time : -1;
     }
 }
+class Solution49{
+    public boolean canFinsh(int numCourses,int [][] prerequisites){
+        int[] indegress  = new int[numCourses];
+        List<List<Integer>> adjacency = new ArrayList<>();
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i =0;i<numCourses;i++){
+            adjacency.add(new ArrayList<>());
+        }
+        for (int[] cp:prerequisites){
+            indegress[cp[0]]++;
+            adjacency.get(cp[1]).add(cp[0]);
+        }
+        for (int i =0;i<numCourses;i++){
+            if (indegress[i]==0) queue.add(i);
+        }
+        while (!queue.isEmpty()){
+            int pre  = queue.poll();
+            numCourses--;
+            for (int cur:adjacency.get(pre))
+                if (--indegress[cur]==0) queue.add(cur);
+        }
+        return numCourses==0;
+    }
+}
+class Solution50{
+    List<Integer> nums;
+    List<List<Integer>> res;
+    void swap(int a,int b){
+        int tmp = nums.get(a);
+        nums.set(a,nums.get(b));
+        nums.set(b,tmp);
+    }
+    void dfs(int x){
+        if (x==nums.size()-1){
+            res.add(new ArrayList<>(nums));
+            return;
+        }
+        for (int i =x;i<nums.size();i++){
+            swap(i,x);
+            dfs(x+1);
+            swap(i,x);
+        }
+    }
+    public List<List<Integer>> permute(int[] nums){
+        this.res = new ArrayList<>();
+        this.nums = new ArrayList<>();
+        for (int num:nums){
+            this.nums.add(num);
+        }
+        dfs(0);
+        return res;
+    }
+}
+class Solution51{
+    public List<List<Integer>> subsets(int[] nums){
+        List<List<Integer>> res = new ArrayList<>();
+        dfs(nums,new ArrayList<>(),0,res);
+        return res;
+    }
+    public void dfs(int[] nums,List<Integer> row,int n,List<List<Integer>> res){
+        if (n ==nums.length){
+            res.add(new ArrayList<>(row));
+            return;
+        }
+        int nthNumber = nums[n];
+        dfs(nums,row,n+1,res);
+        row.add(nthNumber);
+        dfs(nums,row,n+1,res);
+        row.remove(row.size()-1);
+    }
+}
