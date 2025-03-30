@@ -1047,3 +1047,64 @@ class Solution51{
         row.remove(row.size()-1);
     }
 }
+class Solution52{
+    private String letterMap[] = {
+            " ",    //0
+            "",     //1
+            "abc",  //2
+            "def",  //3
+            "ghi",  //4
+            "jkl",  //5
+            "mno",  //6
+            "pqrs", //7
+            "tuv",  //8
+            "wxyz"  //9
+    };
+    private ArrayList<String> res;
+
+    public List<String> letterCombinations(String digits){
+        res = new ArrayList<String>();
+        if (digits.equals("")){
+            return res;
+        }
+        findCombination(digits,0,"");
+        return res;
+    }
+    private void findCombination(String digits,int index,String s){
+        if (index==digits.length()){
+            res.add(s);
+            return;
+        }
+        Character c = digits.charAt(index);
+        String letters = letterMap[c-'0'];
+        for (int i =0;i<letters.length();i++){
+            findCombination(digits,index+1,s+letters.charAt(i));
+
+        }
+        return;
+    }
+}
+class Solution53{
+    void backtrack(List<Integer> state,int target,int[] choices,int start,List<List<Integer>> res){
+        if (target==0){
+            res.add(new ArrayList<>(state));
+            return;
+        }
+        for (int i=start; i<choices.length;i++){
+            if (target-choices[i]<0){
+                break;
+            }
+            state.add(choices[i]);
+            backtrack(state,target-choices[i],choices,i,res);
+            state.remove(state.size()-1);
+        }
+    }
+    public List<List<Integer>> combinationSum(int[] candidates,int target){
+        List<Integer> state = new ArrayList<>();
+        Arrays.sort(candidates);
+        int start = 0;
+        List<List<Integer>> res = new ArrayList<>();
+        backtrack(state,target,candidates,start,res);
+        return res;
+    }
+}
