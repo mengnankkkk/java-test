@@ -1108,3 +1108,70 @@ class Solution53{
         return res;
     }
 }
+class Solution54{
+    private int n;
+    private final List<String> ans = new ArrayList<>();
+    private char[] path;
+
+    public List<String> generateParenthesis(int n){
+        this.n = n;
+        path = new char[n*2];
+        dfs(0,0);
+        return ans;
+    }
+
+
+    private void dfs(int i ,int open){
+        if (i==n*2){
+            ans.add(new String(path));
+            return;
+        }
+        if (open<n){
+            path[i] = '(';
+            dfs(i+1,open+1);
+        }
+        if (i-open<open){
+            path[i] = ')';
+            dfs(i+1,open);
+        }
+    }
+}
+class Solution55{
+    static int[][] points = new int[][]{{1, 0}, {-1, 0}, {0, -1}, {0, 1}};
+
+    public boolean exist(char[][] board,String word){
+        if (board.length==0){
+            return false;
+        }
+        char[] chars =word.toCharArray();
+        for (int i =0;i<board.length;i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (dfs(i, j, board, 0, chars)) {
+                    ;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    private  boolean dfs(int x,int y,char[][] board,int index,char[] chars){
+        if (x<0||x>board.length-1||
+        y<0||y>board[0].length-1||
+                board[x][y]!=chars[index]
+        ){
+            return false;
+        }
+        if (index==chars.length-1){
+            return true;
+        }
+        board[x][y] ='\0';
+        for (int i =0;i<4;i++){
+            if (dfs(x+points[i][0],y+points[i][1],board,index+1,chars)){
+                return true;
+            }
+        }
+        board[x][y] =chars[index];
+        return false;
+    }
+}
