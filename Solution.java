@@ -1175,3 +1175,54 @@ class Solution55{
         return false;
     }
 }
+class Solution56{
+    private final List<List<String>> ans = new ArrayList<>();
+    private final List<String> path = new ArrayList<>();
+    private String s;
+
+    public List<List<String>> partition(String s) {
+        this.s = s;
+        dfs(0);
+        return ans;
+    }
+
+    private void dfs(int i){
+        if (i==s.length()){//分割完毕
+            ans.add(new ArrayList<>(path));
+            return;
+        }
+        for (int j=i;j<s.length();j++){//枚举结束的位置
+            if (isPalindrom(i,j)){
+                path.add(s.substring(i,j+1));//分割
+                dfs(j+1);
+                path.remove(path.size()-1);//回溯
+            }
+        }
+    }
+    private boolean isPalindrom(int left,int right){
+        while (left<right){
+            if (s.charAt(left++)!=s.charAt(right--)){
+                return false;
+            }
+        }
+        return true;
+    }
+}
+class Solution57{
+    public boolean isValid(String s){
+        if (s.isEmpty())
+            return true;
+        Stack<Character> stack = new Stack<Character>();
+        for (char c:s.toCharArray()){
+            if (c=='(')
+                stack.push(')');
+            else if (c=='{')
+                stack.push('}');
+            else if (c=='[')
+                stack.push(']');
+            else if (stack.empty()||c!=stack.pop())
+                return false;
+        }
+       return stack.empty();
+    }
+}
