@@ -1243,3 +1243,68 @@ class Solution101{
         return memo[i] = Math.max(notChoose,choose);
     }
 }
+class Solution58{
+    private Stack<Integer> stack;
+    private Stack<Integer> min_stack;
+    public void setMin_stack(){
+        stack = new Stack<>();
+        min_stack = new Stack<>();
+    }
+    public void push(int x){
+        stack.push(x);
+        if (min_stack.isEmpty()||x<=min_stack.peek())
+            min_stack.push(x);
+    }
+    public void pop(){
+        if (stack.pop().equals(min_stack.peek()))
+            min_stack.pop();
+    }
+    public int top(){
+        return stack.peek();
+    }
+    public int getMin(){
+        return min_stack.peek();
+    }
+}
+class Solution59{
+    public String decodeString(String s){
+        Stack<Integer> countstack = new Stack<>();
+        Stack<StringBuilder> stringstack = new Stack<>();
+        StringBuilder currentString = new StringBuilder();
+        int k = 0;//重复次数
+
+
+        for (char c:s.toCharArray()){
+            if (Character.isDigit(c)){//如果c为数字的话
+                k = k*10+(c-'0');//多位数字
+            }else if (c=='['){//开始
+                countstack.push(k);
+                k=0;
+                stringstack.push(currentString);
+                currentString = new StringBuilder();
+            }else if (c==']'){//结束
+                int repeat = countstack.pop();
+                StringBuilder sb = stringstack.pop();
+                for (int i =0;i<repeat;i++){
+                    sb.append(currentString);//
+                }//开始重复
+                currentString = sb;//更新拼接之后的字符串
+            }else {
+                currentString.append(c);
+            }
+        }
+        return currentString.toString();
+    }
+}
+class Solution102{
+    public long maximumTripletValue(int[] nums){
+        long ans = 0,mxDiff = 0;
+        int mx = 0;
+        for (int x:nums){
+            ans = Math.max(ans,mxDiff*x);
+            mxDiff = Math.max(mx-x,mxDiff);
+            mx  = Math.max(mx,x);
+        }
+        return ans;
+    }
+}
