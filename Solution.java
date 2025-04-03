@@ -4,6 +4,7 @@ import java.security.PublicKey;
 import java.time.temporal.Temporal;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 class ListNode {
@@ -1308,3 +1309,84 @@ class Solution102{
         return ans;
     }
 }
+class Solution60{
+    public int[] dailyTemperatures1(int[] T) {
+        int length = T.length;
+        int[] result = new int[length];
+
+        for (int i = length - 2; i >= 0; i--) {
+            for (int j = i + 1; j < length; j += result[j]) {
+                if (T[j] > T[i]) {
+                    result[i] = j - i;
+                    break;
+                } else if (result[j] == 0) {
+                    result[i] = 0;
+                    break;
+
+                }
+            }
+        }
+        return result;
+    }
+    public int[] dailyTemperatures(int[] temperatures){
+        int n  = temperatures.length;
+        int[] ans = new int[n];
+
+        Deque<Integer> st  = new ArrayDeque<>();
+
+        for (int i =n-1;i>=0;i--){
+            int t = temperatures[i];
+            while (!st.isEmpty()&&t>=temperatures[st.peek()]){
+                st.pop();
+            }
+            if (!st.isEmpty()){
+                ans[i] = st.peek()-i;
+            }
+            st.push(i);
+        }
+        return ans;
+
+    }
+}
+class Solution61{
+    public int findKthLargest(int[] nums,int k){
+        Arrays.sort(nums);
+        return nums[nums.length-k];
+    }
+}
+class Solution62{
+    public int[] topKFrequent(int[] nums,int k){
+        // 统计每个数字出现的次数
+        Map<Integer,Integer> counter = IntStream.of(nums).boxed().collect(Collectors.toMap(e->e,e->1,Integer::sum));
+        // 定义小根堆，根据数字频率自小到大排序
+        Queue<Integer> pq = new PriorityQueue<>((v1,v2)->counter.get(v1)-counter.get(v2));
+        counter.forEach((num,cnt)->{
+            if (pq.size()<k){
+                pq.offer(num);
+            }else if (counter.get(pq.peek())<cnt){
+                pq.poll();
+                pq.offer(num);
+            }
+        });
+        int[] res = new int[k];
+        int idx = 0;
+        for (int num:pq){
+            res[idx++] = num;
+        }
+        return res;
+    }
+}
+class Solution103{
+    public long maximumTripletValue(int[] nums){
+        long ans = 0;
+        int maxDiff = 0;
+        int preMax = 0;
+        for (int x:nums){
+            ans = Math.max(ans,(long) maxDiff*x);
+            maxDiff = Math.max(maxDiff,preMax-x);
+            preMax = Math.max(preMax,x);
+        }
+        return ans;
+    }
+}
+
