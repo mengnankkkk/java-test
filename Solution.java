@@ -1,4 +1,5 @@
 import com.oracle.xmlns.internal.webservices.jaxws_databinding.XmlWebEndpoint;
+import javafx.util.Pair;
 
 import java.security.PublicKey;
 import java.time.temporal.Temporal;
@@ -1422,5 +1423,24 @@ class Solution65{
             }
         }
         return steps;
+    }
+}
+class Solution104{
+    public TreeNode lcaDeepestLeaves(TreeNode root){
+        return dfs(root).getValue();
+    }
+    private Pair<Integer,TreeNode> dfs(TreeNode node){
+        if (node==null){
+            return new Pair<>(0,null);
+        }
+        Pair<Integer,TreeNode> left = dfs(node.left);
+        Pair<Integer,TreeNode> right = dfs(node.right);
+        if (left.getKey()>right.getKey()){
+            return new Pair<>(left.getKey()+1,left.getValue());
+        }
+        if (left.getKey()<right.getKey()){
+            return new Pair<>(right.getKey()+1,right.getValue());
+        }
+        return new Pair<>(left.getKey()+1,node);
     }
 }
