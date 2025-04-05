@@ -1444,3 +1444,41 @@ class Solution104{
         return new Pair<>(left.getKey()+1,node);
     }
 }
+class Solution105{
+    public int subsetXORSum(int[] nums){
+        int or = 0;
+        for (int x:nums){
+            or |=x;
+        }
+        return or<<(nums.length-1);
+    }
+}
+class Solution66{
+    public List<Integer> partitionLabels(String S){
+        char[] s = S.toCharArray();
+        int n = s.length;
+        int [] last = new int[26];
+        for (int i =0;i<n;i++){
+            last[s[i]-'a']  = i;
+        }
+        List<Integer> ans = new ArrayList<>();
+         int start = 0,end =0;
+        for (int i =0;i<n;i++){
+            end = Math.max(end,last[s[i]-'a']);
+            if (end == i){
+                ans.add(end-start+1);
+                start = i+1;
+            }
+        }
+        return ans;
+    }
+}
+class Solution67{
+    public int  singleNumber(int[] nums){
+        int x=0;
+        for (int num:nums){
+            x^=num;
+        }
+        return x;
+    }
+}
