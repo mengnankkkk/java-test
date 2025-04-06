@@ -1492,3 +1492,62 @@ class Solution68{
         return x;
     }
 }
+class Solution106{
+    public List<Integer> largestDivisibleSubset(int[] nums){
+        Arrays.sort(nums);
+        int n  = nums.length;
+        int[] f = new int[n];
+        Arrays.fill(f,1);
+        int k =0;
+        for (int i=0;i<n;i++){
+            for (int j =0;j<i;j++){
+                if (nums[i]%nums[j]==0){
+                    f[i] = Math.max(f[i],f[j]+1);
+                }
+            }
+            if (f[k]<f[i]){
+                k=i;
+            }
+
+        }
+        int m =f[k];
+        List<Integer> ans = new ArrayList<>();
+        for (int i =k;m>0;--i){
+            if (nums[k]%nums[i]==0&&f[i]==m){
+                ans.add(nums[i]);
+                k=i;
+                --m;
+            }
+        }
+        return ans;
+    }
+}
+class Solution69{
+    public void sortColors(int[] nums) {
+        int len = nums.length;
+        if (len<2){
+            return;
+        }
+        int zero  = -1;
+        int two = len-1;
+        int i =0;
+        while (i<=two){
+            if (nums[i]==0){
+                zero++;
+                swap(nums,i,zero);
+                i++;
+            }else if (nums[i]==1){
+                i++;
+            }else {
+                swap(nums,i,two);
+                two--;
+            }
+        }
+
+    }
+    private void swap(int[] nums,int index1,int index2){
+        int temp = nums[index1];
+        nums[index1] = nums[index2];
+        nums[index2] = temp;
+    }
+}
