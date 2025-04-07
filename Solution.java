@@ -7,6 +7,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
+
 
 class ListNode {
     int val;
@@ -1578,3 +1581,72 @@ class Solution70{
         reverse(nums,i+1,n-1);
     }
 }
+class Solution71{
+    public int findDuolicate(int[] nums){
+        int s = 0;
+        int f = 0;
+        while (true){
+            f = nums[f];
+            f = nums[f];
+            s = nums[s];
+            if (s == f) break;
+        }
+        int ptr = 0;
+        while (ptr!=s){
+            ptr = nums[ptr];
+            s = nums[s];
+        }
+        return ptr;
+    }
+}
+class Solution72 {
+    public int climbStairs(int n){
+        int a = 1,b = 1,sum;
+        for(int i = 0;i<n-1;i++){
+            sum = a + b;
+            a = b;
+            b = sum;//a就是n-2，b就是n-1
+        }
+        return b;
+    }
+}
+class Solution73{
+    public List<List<Integer>> generate(int numRows){
+        List<List<Integer>> c = new ArrayList<>(numRows);
+        if (numRows <= 0) return c;
+        for (int i =1;i<numRows;i++){//每一行的实现
+            List<Integer> row = new ArrayList<>(i+1);
+            row.add(1);//第一个元素
+            for (int j =1;j<i;j++){//相加的实现
+                row.add(c.get(i-1).get(j-1)+c.get(i-1).get(j));
+            }
+            row.add(1);//最后一个元素
+            c.add(row);
+        }
+        return c;
+    }
+}
+class Solution107{
+    public boolean canPartition(int[] nums){
+        int s= 0;
+        for (int num:nums){
+            s+=num;//总的和
+        }
+        if (s%2!=0){
+            return false;
+        }
+        s/=2;
+        int n = nums.length;
+        boolean[][] f = new boolean[n+1][s+1];
+        f[0][0] = true;//初始态
+        for (int i =0;i<n;i++){
+            int x = nums[i];
+            for (int j =0;j<=s;j++){
+                f[i+1][j] = j>=x&&f[i][j-x]||f[i][j];
+            }
+        }
+        return f[n][s];
+    }
+}
+
+
