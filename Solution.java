@@ -1648,5 +1648,23 @@ class Solution107{
         return f[n][s];
     }
 }
+class Solution74 {
+    public int rob(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        int N = nums.length;
+        int[] dp = new int[N + 1]; // 创建 DP 数组，dp[i] 代表抢劫前 i 间房子时的最大金额
 
+        dp[0] = 0;         // 不抢任何房子
+        dp[1] = nums[0];   // 只有一间房子时，抢它
+
+        for (int k = 2; k <= N; k++) {
+            dp[k] = Math.max(dp[k - 1], nums[k - 1] + dp[k - 2]);
+            // 选择：不抢当前房子(dp[k-1])，或抢当前房子(nums[k-1] + dp[k-2])
+        }
+
+        return dp[N]; // 最后一个状态就是最大金额
+    }
+}
 
