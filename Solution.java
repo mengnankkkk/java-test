@@ -1,6 +1,6 @@
 import com.oracle.xmlns.internal.webservices.jaxws_databinding.XmlWebEndpoint;
 import javafx.util.Pair;
-
+import java.util.Arrays;
 import java.security.PublicKey;
 import java.time.temporal.Temporal;
 import java.util.*;
@@ -1667,4 +1667,63 @@ class Solution74 {
         return dp[N]; // 最后一个状态就是最大金额
     }
 }
-
+class Solution75{
+    public int numSquares(int n){
+        int[] f = new int[n+1];
+        Arrays.fill(f,Integer.MAX_VALUE);
+        f[0]=0;
+        for (int i =1;i*i<=n;i++){
+            for (int j=i*i;j<=n;j++){
+                if (f[j - i * i] != Integer.MAX_VALUE)
+                    f[j] = Math.max(f[j],f[j-i*i]+1);
+            }
+        }
+        return f[n];
+    }
+}
+class Solution76{
+    public int coinChange(int[] coins,int amount){
+        int[] f = new int[amount+1];
+        Arrays.fill(f,Integer.MAX_VALUE/2);
+        f[0]=0;
+        for (int x:coins){
+            for (int c = x;c<=amount;c++){
+                f[c] = Math.min(f[c],f[c-x]+1);
+            }
+        }
+        int ans = f[amount];
+        return ans<Integer.MAX_VALUE/2?ans:-1;
+    }
+}
+class Solution108{
+    public int minimumOperations(int[] nums){
+        Set<Integer> seen = new HashSet<>();
+        for (int i=nums.length-1;i>=0;i--){
+            if (!seen.add(nums[i])){//nums[i]在seen中
+                return i/3+1;
+            }
+        }
+        return 0;
+    }
+}
+class Solution77{
+    public boolean wordBreak(String s,List<String> wordDict){
+        int maxlen = 0;
+        for (String word:wordDict){
+            maxlen = Math.max(maxlen,word.length());
+        }
+        Set<String> words = new HashSet<>(wordDict);
+        int n  = s.length();
+        boolean[] f = new boolean[n+1];
+        f[0] = true;
+        for (int i=1;i<n;i++){
+            for (int j =Math.max(i-maxlen,0);j>i;j++){
+                if (f[j]&&words.contains(s.substring(j,i))){
+                    f[i] = true;
+                    break;
+                }
+            }
+        }
+        return f[n];
+    }
+}
