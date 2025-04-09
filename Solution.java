@@ -1727,3 +1727,46 @@ class Solution77{
         return f[n];
     }
 }
+class Solution109{
+    public int minOperations(int[] nums,int k){
+        int min = Arrays.stream(nums).min().getAsInt();//获取最小值
+        if (k>min){
+            return -1;
+        }//不存在
+        int distinctCount = (int)Arrays.stream(nums).distinct().count();//记录不同数字个数
+        return distinctCount-(k==min?1:0);//等于就1，不等就0
+    }
+}
+class Solution78{
+    public int lengthOfLIS(int[] nums){
+        if (nums.length==0) return 0;
+        int[] dp = new int[nums.length];
+        int res = 0;
+        Arrays.fill(dp,1);
+        for (int i =0;i<nums.length;i++){
+            for (int j=0;j<i;j++){
+                if (nums[j]<nums[i]) dp[i] = Math.max(dp[i],dp[j]+1);
+            }
+            res = Math.max(res,dp[i]);
+        }
+        return res;
+    }
+}
+class Solution79{
+    public int maxProduct(int[] nums){
+        int max = Integer.MIN_VALUE,imax = 1,imin=1;
+        for (int i =0;i<nums.length;i++){
+            if (nums[i]<0){
+                int tmp = imax;
+                imax = imin;
+                imin= tmp;
+            }
+            imax = Math.max(imax*nums[i],nums[i]);
+            imin = Math.min(imin*nums[i],nums[i]);
+            max = Math.max(max,imax);
+        }
+        return max;
+    }
+
+}
+
