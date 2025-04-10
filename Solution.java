@@ -1,5 +1,7 @@
 import com.oracle.xmlns.internal.webservices.jaxws_databinding.XmlWebEndpoint;
 import javafx.util.Pair;
+import sun.font.DelegatingShape;
+
 import java.util.Arrays;
 import java.security.PublicKey;
 import java.time.temporal.Temporal;
@@ -1769,4 +1771,72 @@ class Solution79{
     }
 
 }
+class Solution110{
+    private Map<String ,Integer> memo  = new HashMap<>();
+    public int numberOfPowerfulInt(int start,int finish,int limit,String s){
+        String low = Integer.toString(start-1);
+        String high = Integer.toString(finish);
+        int n = high.length();
+        low = String.format("%0" + n + "d", Integer.parseInt(low));
+        int need = n-s.length();
+
+        return dfs(0,true,high,s,need,limit)-dfs(0,true,low,s,need,limit);
+
+    }
+
+    private int dfs(int idx,boolean limitHight,String num,String s,int need,int limit){
+        if (idx==num.length()){
+            return 1;
+        }
+        String key = idx + "-" + limitHight + "-" + num.substring(idx);
+        if (memo.containsKey(key)){
+            return memo.get(key);
+        }
+        int hi = limitHight?num.charAt(idx)-'0':9;
+        int hilimit = Math.min(hi,limit);
+        int res = 0;
+
+
+        if (idx<need){
+            for (int d=0;d<=hilimit;d++){
+                res+=dfs(idx+1,limitHight&&d==hi,num,s,need,limit);
+            }
+        }else {
+            int x = s.charAt(idx-need)-'0';
+            if (x<=hilimit){
+                res=dfs(idx+1,limitHight&&x==hi,num,s,need,limit);
+            }
+        }
+        memo.put(key,res);
+        return res;
+    }
+
+}
+class Solution80{
+    public int uniquePaths(int m,int n){
+        int[][] dp = new int[m][n];
+        for (int i =0;i<n;i++) dp[0][i] =1;
+        for (int i=0;i<m;i++) dp[i][0] = 1;
+        for (int i =1;i<m;i++){
+            for (int j=1;j<n;j++){
+                dp[i][j] = dp[i-1][j]+dp[i][j-1];
+            }
+        }
+        return dp[m-1][n-1];
+    }
+}
+class Solution81{
+    public int minPathSum(int[][] grid){
+        for(int i =0;i<grid.length;i++){
+            for (int j =0;j<grid[0].length;j++){
+                if (i==0&&j==0) continue;
+                else if (i==0) grid[i][j] = grid[i][j-1]+grid[i][j];
+                else if (j==0) grid[i][j] = grid[i-1][j]+grid[i][j];
+                else grid[i][j] += Math.min(grid[i - 1][j], grid[i][j - 1]);
+            }
+        }
+        return grid[grid.length-1][grid[0].length-1];
+    }
+}
+
 
