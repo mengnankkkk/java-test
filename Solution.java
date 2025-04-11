@@ -1,6 +1,8 @@
 import com.oracle.xmlns.internal.webservices.jaxws_databinding.XmlWebEndpoint;
 import javafx.util.Pair;
+import org.omg.PortableInterceptor.INACTIVE;
 import sun.font.DelegatingShape;
+import sun.plugin.net.protocol.jar.CachedJarURLConnection;
 
 import java.util.Arrays;
 import java.security.PublicKey;
@@ -1837,6 +1839,117 @@ class Solution81{
         }
         return grid[grid.length-1][grid[0].length-1];
     }
+}
+class Solution111{
+    public int countSymmetricIntegers(int low,int high){
+        int ans = 0;
+        for (int x=low;x<=high;++x){
+            ans +=f(x);
+        }
+        return ans;
+    }
+    private int f(int x){
+        String s = ""+x;
+        int n  = s.length();
+        if (n%2==1){
+            return 0;
+        }
+        int a=0,b=0;
+        for (int i=0;i<n/2;++i){
+            a +=s.charAt(i)-'0';
+        }
+        for (int i=n/2;i<n;++i){
+            b +=s.charAt(i)-'0';
+        }
+        return a==b ?1:0;
+    }
+
+}
+class Solution82 {
+    public String longestPalindrome(String s) {
+        int n = s.length();
+        if (n == 0) return "";
+
+        // 预处理字符串
+        char[] t = new char[n * 2 + 3];
+        Arrays.fill(t, '#');
+        t[0] = '^';
+        t[n * 2 + 2] = '$';
+        for (int i = 0; i < n; i++) {
+            t[i * 2 + 2] = s.charAt(i);
+        }
+
+        int[] halfLen = new int[t.length]; // 这里大小应该与 t 一致
+        int maxI = 0;
+        int boxM = 0, boxR = 0;
+
+        // Manacher's Algorithm
+        for (int i = 1; i < t.length - 1; i++) {
+            // 计算当前点的初始回文半径
+            int hl = (i < boxR) ? Math.min(halfLen[2 * boxM - i], boxR - i) : 1;
+
+            // 尝试扩展回文半径
+            while (t[i - hl] == t[i + hl]) {
+                hl++;
+            }
+
+            halfLen[i] = hl;
+
+            // 更新右边界
+            if (i + hl > boxR) {
+                boxM = i;
+                boxR = i + hl;
+            }
+
+            // 更新最长回文中心
+            if (halfLen[i] > halfLen[maxI]) {
+                maxI = i;
+            }
+        }
+
+        // 计算原字符串中的起始索引
+        int start = (maxI - halfLen[maxI]) / 2;
+        int end = start + halfLen[maxI] - 1;
+
+        return s.substring(start, end);
+    }
+}
+class Solution83{
+    public int longestCommonSubsequence(String text1,String text2){
+        char[] s = text1.toCharArray();
+        char[] t = text2.toCharArray();
+        int n = s.length;
+        int m = t.length;
+        int[][] f = new int[n+1][m+1];
+        for (int i =0;i<n;i++){
+            for (int j =0;j<m;j++){
+                f[i+1][j+1] = s[i]==t[j]?f[i][j]+1:
+                        Math.max(f[i][j+1],f[i+1][j]);
+            }
+        }
+        return f[n][m];
+    }
+}
+class Solution84{
+    public int minDistance(String text1,String text2){
+        char[] t = text2.toCharArray();
+        int m = t.length;
+        int[] f = new int[m+1];
+        for (int j=1;j<=m;j++){
+            f[j] = j;
+        }
+        for (char x:text1.toCharArray()){
+            int pre = f[0];
+            f[0]++;
+            for (int j =0;j<m;j++){
+                int tmp = f[j+1];
+                f[j+1] = x==t[j]?pre:Math.min(Math.min(f[j + 1], f[j]), pre) + 1;
+                pre = tmp;
+            }
+        }
+        return f[m];
+    }
+
 }
 
 
