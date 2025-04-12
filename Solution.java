@@ -1951,5 +1951,39 @@ class Solution84{
     }
 
 }
+class Solution112{
+    public long countGoodIntegers(int n,int k){
+        int[] factorial = new int[n+1];
+        factorial[0]=1;
+        for (int i =1;i<=n;i++){
+            factorial[i]=factorial[i-1]*i;
+        }//阶乘
+        long ans = 0;
+        Set<String> vis = new HashSet<>();//去重
+        int base = (int)Math.pow(10,(n-1)/2);//前半部分的起始值
+        for (int i=base;i<base*10;i++){
+            String s = Integer.toString(i);
+            s+=new StringBuilder(s).reverse().substring(n%2);//构造回文
+            if (Long.parseLong(s)%k>0){
+                continue;
+            }
+            char[] sortedS = s.toCharArray();
+            Arrays.sort(sortedS);
+            if (!vis.add(new String(sortedS))){
+                continue;
+            }//去重
+            int[] cnt = new int[10];//次数
+             for (char c:sortedS){
+                 cnt[c-'0']++;
+            }
+             int res = (n-cnt[0])*factorial[n-1];//不能以0为开头，然后乘以(n-1)!
+             for (int c:cnt){
+                 res/=factorial[c];
+             }//去掉重复数字
+             ans+=res;
+        }
+        return ans;
+    }
+}
 
 
