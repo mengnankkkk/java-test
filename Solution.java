@@ -1,12 +1,6 @@
-import com.oracle.xmlns.internal.webservices.jaxws_databinding.XmlWebEndpoint;
 import javafx.util.Pair;
-import org.omg.PortableInterceptor.INACTIVE;
-import sun.font.DelegatingShape;
-import sun.plugin.net.protocol.jar.CachedJarURLConnection;
 
 import java.util.Arrays;
-import java.security.PublicKey;
-import java.time.temporal.Temporal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -2018,6 +2012,42 @@ class Solution85{
         return ans;
     }
 }
+class Solution114{
+    public int countGoodTriplets(int[] arr,int a,int b,int c){
+        int n = arr.length;
+        int ans = 0;
+        for (int i = 0;i<n;i++){
+            for (int j=i+1;j<n;j++){
+                for (int k=j+1;k<n;k++){
+                    if (Math.abs(arr[i]-arr[j])<=a&&Math.abs(arr[j]-arr[k])<=b&&Math.abs(arr[i]-arr[k])<=c){
+                        ans++;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}
+class Solution86{
+    public int[] maxSlidingWindow(int[] nums, int k ){
+        if (nums.length==0||k==0) return new int[0];
+        Deque<Integer> deque = new LinkedList<>();
+        int[] res = new int[nums.length-k+1];
+        for (int j =0,i=1-k;j<nums.length;i++,j++){
+            if (i>0&&deque.peekFirst()==nums[i-1])
+                deque.removeFirst();
+            while (!deque.isEmpty()&&deque.peekLast()<nums[j])
+                deque.removeLast();
+            deque.addLast(nums[j]);
+            if (i>=0)
+                res[i] =deque.peekFirst();
+
+        }
+        return res;
+    }
+
+}
+
 
 
 
