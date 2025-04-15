@@ -2047,6 +2047,44 @@ class Solution86{
     }
 
 }
+class Solution115{
+    int n;
+    int[] tree = new int [10010];
+    public long goodTriplets(int[] nums1,int[] nums2){
+        n = nums1.length;
+        long ans =0;
+        Map<Integer,Integer> num2idx = new HashMap<>();
+        for (int i=0;i<n;i++){
+            num2idx.put(nums1[i],i);
+        }
+        for (int i=0;i<n;i++){
+            nums2[i] = num2idx.get(nums2[i]);
+        }
+        for (int i =0;i<n;i++){
+            int l = query(nums2[i]+1);
+            int t = i-l;
+            int r = (n - nums2[i] - 1) - t;
+            add(nums2[i]+1,1);
+            ans+=1L*l*r;
+        }
+        return ans;
+    }
+    int lowbit(int x){
+        return x&-x;
+    }
+    int query(int x){
+        int ans = 0;
+        for (int i=x;i>0;i-=lowbit(i)) ans+=tree[i];
+        return ans;
+    }
+    void add(int x,int u){
+        for (int i=x;i<=n;i+=lowbit(i)) tree[i]+=u;
+    }
+
+}
+
+
+
 
 
 
