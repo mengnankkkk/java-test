@@ -2082,6 +2082,28 @@ class Solution115{
     }
 
 }
+class Solution116{
+    public long countGood(int[] nums,int k){
+        long ans= 0;
+        Map<Integer,Integer> cnt = new HashMap<>();
+        int pairs= 0;
+        int left = 0;
+        for (int x:nums){
+            int c = cnt.getOrDefault(x,0);
+            pairs+=c;
+            cnt.put(x,c+1);
+            while (pairs>=k){//至少k对
+                x=nums[left];
+                c= cnt.get(x);
+                pairs -=(c-1);
+                cnt.put(x,c-1);
+                left++;//右移动
+            }
+            ans+=left;
+        }
+        return ans;
+    }
+}
 
 
 
