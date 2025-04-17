@@ -2104,6 +2104,43 @@ class Solution116{
         return ans;
     }
 }
+class Solution117{
+    public int countPairs(int[] nums,int k){
+        int ans =0;
+        for (int j=1;j<nums.length;++j){
+            for(int i=0;i<j;++i){
+                ans +=nums[i]==nums[j]&&(i*j%k)==0?1:0;
+            }
+        }
+        return ans;
+    }
+}
+class Solution87{
+    public int firstMissingPositive(int[] nums){
+        int n = nums.length;
+        Set<Integer> set  =new HashSet<>();
+        int min = Integer.MAX_VALUE;
+        for (int num:nums){
+            if (num<min){
+                min = num;
+            }
+            set.add(num);
+
+        }//找到最小值
+        if (min>1&&!set.contains(1)) return 1;
+        while (set.contains(min)){
+            min++;
+            if (min<0) min = 1;
+            if (set.contains(min)) min++;
+            else {
+                if (min<=0) min++;
+            }//将负数Min++直到为1
+        }
+        return min>0?min:1;//不在集合中，大于0直接返回
+    }
+}
+
+
 
 
 
