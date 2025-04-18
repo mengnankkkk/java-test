@@ -2139,6 +2139,33 @@ class Solution87{
         return min>0?min:1;//不在集合中，大于0直接返回
     }
 }
+class Solution118{
+    public long countBadPairs(int[] nums){
+        int n = nums.length;
+        long ans  = (long)n*(n-1)/2;
+        Map<Integer,Integer> cnt = new HashMap<>();
+        for (int i =0;i<n;i++){
+            int x = nums[i]-i;
+            int c = cnt.getOrDefault(x,0);
+            ans -=c;
+            cnt.put(x,c+1);
+        }
+        return ans;
+    }
+}
+class Solution118a{
+    public int numIdenticalPairs(int[] nums){
+        int n = nums.length;
+        int ans = 0;
+        Map<Integer,Integer> cnt = new HashMap<>();
+        for (int x:nums){
+            int c = cnt.getOrDefault(x,0);
+            ans+=c;
+            cnt.put(x,c+1);
+        }
+        return ans;
+    }
+}
 
 
 
