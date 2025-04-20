@@ -2208,6 +2208,55 @@ class Solution704{
         return -1;
     }
 }
+class Solution120{
+    public int numRabbits(int[] answers){
+        int ans= 0;
+        Map<Integer,Integer> left = new HashMap<>();
+        for (int x:answers){
+            int c = left.getOrDefault(x,0);
+            if (c==0){
+                ans+=x+1;
+                left.put(x,x);
+            }else {
+                left.put(x,c-1);
+            }
+        }
+        return ans;
+    }
+}
+class Solution744{
+    public char nextGreatestLetter(char[] letters, char target){
+        int l =0,r=letters.length-1;
+        while (l<r){
+            int mid=(l+r)>>1;
+            if (letters[mid]>target) r = mid;
+            else l=mid+1;
+        }
+        return letters[l]>target?letters[l]:letters[0];
+    }
+}
+class Solution2529 {
+    public int maximumCount(int[] nums) {
+        int n = nums.length;
+        int negativeCount = findFirstIndex(nums, 0); // 第一个 >= 0 的位置就是负数个数
+        int positiveCount = n - findFirstIndex(nums, 1); // 第一个 > 0 的位置就是正数个数
+        return Math.max(negativeCount, positiveCount);
+    }
+
+    // 返回第一个 >= target 的索引
+    private int findFirstIndex(int[] nums, int target) {
+        int l = 0, r = nums.length;
+        while (l < r) {
+            int mid = l + ((r - l) >> 1); // 防止溢出
+            if (nums[mid] < target) {
+                l = mid + 1;
+            } else {
+                r = mid;
+            }
+        }
+        return l;
+    }
+}
 
 
 
