@@ -1,6 +1,5 @@
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 
 public class leetcode {
 }
@@ -151,4 +150,77 @@ class Solution1399{
         return ans;
 
     }
+}
+class Solution2799{
+    public int countCompleteSubarraysA(int[] nums){
+        Set<Integer> set = new HashSet<>();
+        for (int x:nums){
+            set.add(x);
+        }
+        int k  = set.size();
+        Map<Integer,Integer> cnt =  new HashMap<>();
+        int ans = 0;
+        int left = 0;
+        for (int x:nums){
+            cnt.merge(x,1,Integer::sum);
+                while (cnt.size()==k){
+                    int out = nums[left];
+                    if (cnt.merge(out,-1,Integer::sum)==0){
+                        cnt.remove(out);
+                    }
+                    left++;
+                }
+                ans +=left;
+        }
+        return ans;
+    }
+    public int countCompleteSubarraysB(int[] nums){
+        Set<Integer> set = new HashSet<>();
+        for (int x:nums){
+            set.add(x);
+        }
+        int res = 0;
+        int left = 0;
+        Map<Integer,Integer> map = new HashMap<>();
+        int count = 0;
+        for (int right = 0;right<nums.length;right++){
+            map.put(nums[right],map.getOrDefault(nums[right],0)+1);
+            while (map.keySet().size()==set.size()){
+                res+=nums.length-right;
+                map.put(nums[left],map.get(nums[left]-1));
+                if (map.get(nums[left])==0) map.remove(nums[left]);
+                left++;
+            }
+        }
+        return res;
+    }
+}
+class RangeFreQuery{
+    private int lowBound(List<Integer> a,int target){
+        int left = -1,right = a.size();
+        while (left+1<right){
+            int mid = (left+right)>>>1;
+            if (a.get(mid)<target){
+                left = mid;
+            }else {
+                right = mid;
+            }
+        }
+        return right;
+    }
+    private final Map<Integer, List<Integer>> pos = new HashMap<>();
+    public RangeFreQuery(int[] arr){
+        for (int i=0;i<arr.length;i++){
+            pos.computeIfAbsent(arr[i],k->new ArrayList<>()).add(i);
+        }
+
+    }
+    public int query(int left,int right,int value){
+        List<Integer> a = pos.get(value);
+        if (a==null){
+            return 0;
+        }
+        return lowBound(a,right+1)-lowBound(a,left);
+    }
+
 }
