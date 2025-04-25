@@ -224,3 +224,67 @@ class RangeFreQuery{
     }
 
 }
+class Solution2845{
+    public long countInterestingSubarrays8(List<Integer> nums, int modulo, int k){
+        int n  = nums.size();
+        int[] prefix = new int[n+1];
+        for (int i =1;i<=n;i++){
+            prefix[i] = prefix[i-1]+(nums.get(i-1)%modulo==k?1:0);
+
+        }
+        long count = 0;
+        for (int l =0;l<n;l++){
+            for (int r = l;r<n;r++){
+                int cnt = prefix[r+1] -prefix[l];
+                if (cnt%modulo==k){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    public long countInterestingSubarrays(List<Integer> nums, int modulo, int k){
+        int n  = nums.size();
+        int[] prefix = new int[n+1];
+        for (int i =1;i<=n;i++){
+            prefix[i] = prefix[i-1]+(nums.get(i-1)%modulo==k?1:0);
+        }
+        Map<Integer,Integer> countMap = new HashMap<>();
+        countMap.put(0,1);
+        long ans = 0;
+        for (int i =1;i<=n;i++){
+            int currentMod = prefix[i]%modulo;
+            int target = (currentMod-k+modulo)%modulo;
+            ans += countMap.getOrDefault(target,0);
+            countMap.put(currentMod,countMap.getOrDefault(currentMod,0)+1);//更新
+        }
+        return ans;
+
+    }
+}
+class Solution3488{
+    public List<Integer> solveQueries(int[] nums, int[] queries){
+        Map<Integer,List<Integer>> indices = new HashMap<>();
+        for (int i =0;i<nums.length;i++){
+            indices.computeIfAbsent(nums[i],k->new ArrayList<>()).add(i);
+        }//构建hash表，indices存储
+
+        int n = nums.length;
+        for (List<Integer> p :indices.values()){
+            int i0 = p.get(0);
+            p.add(0,p.get(p.size()-1)-n);//循环向左的哨兵
+            p.add(i0+n);//循环向右的哨兵
+        }
+        List<Integer> ans  = new ArrayList<>(queries.length);
+        for (int i :queries){
+            List<Integer> p = indices.get(nums[i]);
+            if (p.size()==3){
+                ans.add(-1);//没有，只有一次
+            }else {
+                int j = Collections.binarySearch(p,i);//二分查找位置，i在p的位置
+                ans.add(Math.min(i-p.get(j-1),p.get(j+1)-i));//比较前一个和后一个
+            }
+        }
+        return ans;
+    }
+}
