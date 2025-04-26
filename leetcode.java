@@ -288,3 +288,47 @@ class Solution3488{
         return ans;
     }
 }
+class Solution2444{
+    public long countSubarrays(int[] nums, int minK, int maxK){
+        long ans = 0;
+        int minI = -1,maxI = -1,i0=-1;
+        for (int i =0;i<nums.length;i++){
+            int x = nums[i];
+            if (x==minK){
+                minI = i;
+            }
+            if (x==maxK){
+                maxI = i;
+            }
+            if (x<minK||x>maxK){
+                i0=i;//i0不包含在里面
+            }
+            ans +=Math.max(Math.min(minI,maxI)-i0,0);
+        }
+        return ans;
+    }
+}
+class Solution2563{
+    public long countFairPairs(int[] nums,int lower, int upper){
+        Arrays.sort(nums);
+        long ans = 0;
+        for (int j=0;j<nums.length;j++){
+            int r = lowerBound(nums,j,upper-nums[j]+1);
+            int l = lowerBound(nums,j,lower-nums[j]);
+            ans += r-l;
+        }
+        return ans;
+    }
+    private int lowerBound(int[] nums,int right,int target){
+        int left=-1;
+        while (left+1<right){
+            int mid = (left+right)>>>1;
+            if (nums[mid]>=target){
+                right=mid;
+            }else {
+                left=mid;
+            }
+        }
+        return right;
+    }
+}
