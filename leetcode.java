@@ -330,5 +330,33 @@ class Solution2563{
             }
         }
         return right;
+    }//开区间的二分查找
+
+}
+class Solution2070{
+    private int upperBound(int[][] items, int target){
+        int left = -1;
+        int right = items.length;
+        while (left+1<right){
+            int mid = (left+right)>>>1;
+            if (items[mid][0]>target){
+                    right =mid;
+            }
+            else{
+                left = mid;
+            }
+        }
+        return right;
+    }
+    public int[] maximumBeauty(int[][] items, int[] queries){
+        Arrays.sort(items,(a,b)->a[0]-b[0]);//排序规则
+        for (int i =1;i<items.length;i++){
+            items[i][1] = Math.max(items[i][1],items[i-1][1]);//更新美丽值，是前一个位置的最大美丽值
+        }
+        for (int i =0;i<queries.length;i++){
+            int j = upperBound(items,queries[i]);
+            queries[i] =j>0?items[j-1][1]:0;//查找到了，就是前一个的最大美丽值，不是的话就是0
+        }
+        return queries;
     }
 }
