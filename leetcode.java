@@ -1,3 +1,4 @@
+import javax.sound.sampled.Line;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -358,5 +359,89 @@ class Solution2070{
             queries[i] =j>0?items[j-1][1]:0;//查找到了，就是前一个的最大美丽值，不是的话就是0
         }
         return queries;
+    }
+}
+class Solution3392{
+    public int countSubarrays(int[] nums){
+        int ans = 0;
+        for (int i =2;i<nums.length;i++){
+            if ((nums[i-2]+nums[i])*2==nums[i-1]){
+                ans++;
+            }
+        }
+        return ans;
+    }
+}
+class SnapshotArray{
+    private int curSnapId;
+    private final Map<Integer,List<int[]>> history = new HashMap<>();
+
+    public SnapshotArray(int length){
+
+    }
+    public void set(int index,int val){
+        history.computeIfAbsent(index,k->new ArrayList<>()).add(new int[]{curSnapId,val});
+    }
+    public int snap(){
+        return curSnapId++;
+    }
+    public int get(int index,int snapId){
+        if (!history.containsKey(index)){
+            return 0;
+        }
+        List<int[]> h = history.get(index);
+        int j  = search(h,snapId);
+        return j<0?0:h.get(j)[1];
+    }
+    private int search(List<int[]> h,int x){
+        int left = -1;
+        int right = h.size();
+        while (left+1<right){
+            int mid = (left+right)>>>1;
+            if (h.get(mid)[0]<=x){
+                left = mid;
+            }else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+}
+class TimeMap {
+    private final Map<String, List<Info>> tmap;
+
+    static class Info {
+        String value;
+        int timestamp;
+
+        public Info(String value, int timestamp){
+            this.value = value;
+            this.timestamp = timestamp;
+        }
+    }
+
+    public TimeMap() {
+        tmap = new HashMap<>();
+    }
+
+    public void set(String key, String value, int timestamp) {
+        tmap.computeIfAbsent(key,k -> new ArrayList<>()).add(new Info(value, timestamp));
+    }
+
+    public String get(String key, int timestamp) {
+        if (!tmap.containsKey(key)){
+            return "";
+        }
+        List<Info> tmp = tmap.get(key);
+        int left = -1, right = tmp.size();
+        while (left + 1 < right){
+            int mid = (left + right) >>> 1;
+            if (tmp.get(mid).timestamp > timestamp){
+                right = mid;
+            } else {
+                left = mid;
+            }
+        }
+        return left < 0 ? "" : tmp.get(left).value;
     }
 }
