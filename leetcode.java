@@ -2,8 +2,7 @@ import javax.sound.sampled.Line;
 import java.lang.reflect.Array;
 import java.util.*;
 
-public class leetcode {
-}
+
 class Solution2300{
     public int[] successfulPairs(int[] spells, int[] potions, long success){
         Arrays.sort(potions);
@@ -443,5 +442,53 @@ class TimeMap {
             }
         }
         return left < 0 ? "" : tmp.get(left).value;
+    }
+}
+class Solution2302{
+    public long countSubarrays(int[] nums,long k){
+        long ans = 0;
+        long sum = 0;
+        int left = 0;
+        for (int right = 0;right<nums.length;right++){
+            sum +=nums[right];
+            while (sum*(right-left+1)>=k){
+                sum -=nums[left];
+                left++;//下一项
+            }
+            ans +=right-left+1;
+        }
+        return ans;
+    }
+}
+class Solution658{
+    public List<Integer> findClosestElements(int[] arr, int k, int x){
+        List<Integer> list = new ArrayList<>();//存放数据
+        int n = arr.length;
+        int left = 0;
+        int right  = n-k;
+        while (left<=right){
+            int mid = (left+right)>>>1;
+            if (mid+k<n&&x-arr[mid]>arr[mid+k]-x){
+                left= mid+1;
+            }else {
+                right = mid-1;
+            }
+        }
+        for (int i =left;i<left+k;i++){//找到<=x
+            list.add(arr[i]);
+        }
+        return list;
+    }
+}
+class Solution1287{
+    public int findSpecialInteger(int[] arr){
+        int n  = arr.length;
+        int l  = 0,r = n/4;
+        while (r<n){
+            if (arr[l]==arr[r]) return arr[r];
+            l++;
+            r++;
+        }
+        return -1;
     }
 }
