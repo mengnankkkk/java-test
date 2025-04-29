@@ -492,3 +492,31 @@ class Solution1287{
         return -1;
     }
 }
+class Solution2962{
+    public long countSubarrays(int[] nums, int k){
+        int mx =0;
+        for (int x:nums){
+            mx = Math.max(mx,x);//找到最大值
+        }
+        long ans = 0;
+        int cntMx = 0,left = 0;
+        for (int x:nums){
+            if (x==mx){
+                cntMx++;
+            }
+            while (cntMx==k){
+                if (nums[left]==mx){
+                    cntMx--;//窗口出去的话
+                }
+                left++;//移动
+            }
+            ans +=left;//数量为left
+        }
+        return ans;
+    }
+}
+
+
+
+
+
