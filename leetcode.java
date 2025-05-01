@@ -515,7 +515,105 @@ class Solution2962{
         return ans;
     }
 }
+class Solution2071{
+    public int maxTaskAssign(int[] tasks, int[] workers, int pills, int strength){
+        Arrays.sort(tasks);
+        Arrays.sort(workers);
 
+        int left  = 0;
+        int right = Math.min(tasks.length,workers.length)+1;
+        while (left+1<right){
+            int mid = (left+right)>>>1;
+            if (check(tasks,workers,pills,strength,mid)){
+                left = mid;
+            }else {
+                right = mid;
+            }
+
+        }
+        return left;
+
+    }
+    private boolean check(int[] tasks, int[] workers, int pills, int strength, int k){
+        Deque<Integer> validTasks = new ArrayDeque<>();
+        int i =0;
+        for (int j =workers.length-k;j<workers.length;j++){
+            int w = workers[j];
+            while (i<k&&tasks[i]<=w+strength){
+                validTasks.add(tasks[i]);
+                i++;
+
+            }
+            if (validTasks.isEmpty()){
+                return false;
+            }
+            if(w>=validTasks.peekFirst()){
+                validTasks.pollFirst();
+            }else{
+                if (pills==0) return false;
+                pills--;
+                validTasks.pollLast();
+            }
+
+        }
+        return true;
+    }
+}
+class Solution1456{
+    public int maxVowels(String S,int k ){
+        char[] s = S.toCharArray();
+        int ans  = 0;
+        int vowel  = 0;
+
+        for (int i =0;i<s.length;i++){
+            if (s[i] == 'a' || s[i] == 'e' || s[i] == 'i' || s[i] == 'o' || s[i] == 'u'){
+                vowel++;
+            }
+            if (i<k-1){//窗口大小不到k
+                continue;
+            }
+            ans = Math.max(ans,vowel);
+            char out = s[i-k+1];
+            if (out == 'a' || out == 'e' || out == 'i' || out == 'o' || out == 'u'){
+                vowel--;
+            }
+        }
+        return ans;
+
+    }
+}
+class Solution643{
+    public double findMaxAverage(int[] nums, int k){
+        int maxS = Integer.MIN_VALUE;
+        int s=  0;
+        for (int i =0;i<nums.length;i++){
+            s +=nums[i];
+            if (i<k-1){
+                continue;
+            }
+            maxS = Math.max(maxS,s);
+            s -=nums[i-k+1];
+        }
+        return (double) maxS/k;
+    }
+}
+class Solution1343{
+    public int numOfSubarrays(int[] arr, int k, int threshold){
+        int ans = 0;
+        int s=  0;
+        for (int i =0;i<arr.length;i++){
+            s +=arr[i];
+            if (i<k-1){
+                continue;
+            }
+            if (s>=threshold*k){
+                ans++;
+            }
+            s -=arr[i-k+1];
+        }
+        return ans;
+    }
+}
 
 
 
