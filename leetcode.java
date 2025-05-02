@@ -1,5 +1,3 @@
-import javax.sound.sampled.Line;
-import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -612,6 +610,119 @@ class Solution1343{
             s -=arr[i-k+1];
         }
         return ans;
+    }
+}
+class Solution838{
+    public String pushDominoes(String dominoes){
+        char[] s = ("L"+dominoes+"R").toCharArray();
+        int pre = 0;
+        for (int i =1;i<s.length;i++){
+            if (s[i]=='.'){
+                continue;
+            }//没推动
+            if (s[i]==s[pre]){
+                Arrays.fill(s,pre+1,i,s[i]);//从pre+1到i都变成s[i]
+            }else if (s[i]=='L'){
+                Arrays.fill(s,pre+1,(pre+i+1)/2,'R');//把前一半的点全部变成 R，后一半的点全部变成 L。
+                Arrays.fill(s,(pre+i)/2+1,i,'L');
+
+            }
+            pre = i;
+        }
+        return new String(s,1,s.length-2);//返回的时候去掉L与R
+    }
+}
+class Solution2090{
+    public int[] getAveragesA(int[] nums, int k){
+        int n = nums.length;
+        int[] avgs = new int [n];
+        Arrays.fill(avgs,-1);
+        long s= 0;
+        for (int i=0;i<n;i++){
+            s +=nums[i];
+            if (i<k*2){
+                continue;
+            }
+            avgs[i-k] = (int)(s/(k*2+1));
+            s -=nums[i-k*2];
+        }
+        return avgs;
+    }
+    public int[] getAverages(int[] nums, int k){
+        int n = nums.length;
+        int l = 2*k+1;
+        int[] res = new int [n];
+        for (int i =0;i<n;i++){
+            res[i] = -1;
+        }
+        if (l>n){
+            return res;
+        }
+        long sum  = 0;
+        for (int i=0;i<l;i++){
+            sum +=nums[i];
+        }
+        res[k] = (int)(sum/l);
+        for (int i=l;i<n;i++){
+            sum +=nums[i]-nums[i-l];
+            res[i-k] = (int)(sum/l);
+        }
+        return res;
+    }
+}
+class Solution2841{
+    public long maxSum(List<Integer> nums, int m, int k){
+        Integer[] a = nums.toArray(new Integer[0]);
+        long ans= 0;
+        long s =0;
+        Map<Integer,Integer> cnt  = new HashMap<>();
+
+        for (int i =0;i<a.length;i++){
+            s +=a[i];
+            cnt.merge(a[i],1,Integer::sum);
+            int left = i-k+1;
+            if (left<0){
+                continue;
+            }
+            if (cnt.size()>=m){
+                ans = Math.max(ans,s);
+            }
+            int out = a[left];
+            s -=out;
+            int c = cnt.get(out);
+            if (c>1){
+                cnt.put(out,c-1);
+            }else {
+                cnt.remove(out);
+            }
+
+        }
+        return ans;
+    }
+}
+class Solution3439 {
+    public int maxFreeTime(int eventTime, int k, int[] startTime, int[] endTime) {
+        int ans = 0;
+        int s = 0;
+        for (int i = 0; i <= startTime.length; i++) {
+            s += get(i, eventTime, startTime, endTime);
+            if (i >= k) {
+                ans = Math.max(ans, s); // ✅ 更新最大值
+                s -= get(i - k, eventTime, startTime, endTime);
+            }
+        }
+        return ans;
+    }
+
+    private int get(int i, int eventTime, int[] startTime, int[] endTime) {
+        if (i == 0) {
+            return startTime[0]; // 第一个活动前的空闲时间
+        }
+        int n = startTime.length;
+        if (i == n) {
+            return eventTime - endTime[n - 1]; // 所有活动结束后的空闲时间
+        }
+        return startTime[i] - endTime[i - 1]; // 活动之间的空闲时间
     }
 }
 
