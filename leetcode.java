@@ -725,7 +725,139 @@ class Solution3439 {
         return startTime[i] - endTime[i - 1]; // 活动之间的空闲时间
     }
 }
+class Solution1007{
+    public int minDominoRotations(int[] tops, int[] bottoms){
+        int ans = Math.min(minRot(tops,bottoms,tops[0]),minRot(tops,bottoms,bottoms[0]));
+        return ans == Integer.MAX_VALUE?-1:ans;
+    }
+    private int minRot(int[] tops,int[] bottoms,int target){
+        int totop = 0;
+        int tobottom = 0;
+        for (int i =0;i< tops.length;i++){
+            int x = tops[i];
+            int y = bottoms[i];
+            if (x!=target&&y!=target){
+                return Integer.MAX_VALUE;
+            }
+            if (x!=target){
+                totop++;
+            }
+            else if (y!=target){
+                tobottom++;
+            }
+        }
+        return Math.min(tobottom,totop);
+    }
+}
+class Solution438{
+    public List<Integer> findAnagramsA(String s, String p){
+        List<Integer> ans = new ArrayList<>();
+        if (s.length()<p.length()) return ans;
+        int[] cnt = new int[26];
+        for (char c:p.toCharArray()){
+            cnt[c-'a']++;
+        }
+        int left = 0,right  = 0,required= p.length();
+        while (right<s.length()){
+            int c = s.charAt(required)-'a';
+            if (cnt[c]>0){
+                required--;
+            }
+            cnt[c]--;
+            right++;
+            if (required==0){
+                ans.add(left);
+            }
+            if (right-left==p.length()){
+                int l = s.charAt(left)-'a';
+                if (cnt[l]>=0){
+                    required++;
+                }
+                cnt[l]++;
+                left++;
+            }
+        }
+        return ans;
+    }
+    public List<Integer> findAnagrams(String s, String p){
+        List<Integer> ans = new ArrayList<>();
+        int[] cntP = new int[26];//p种每种字母的出现次数
+        int[] cntS = new int[26];//子串每种字母的出现次数
+        for (char c:p.toCharArray()){
+            cntP[c-'a']++;
+        }
+        for (int right=0;right<s.length();right++){
+            cntS[s.charAt(right)-'a']++;
+            int left = right-p.length()+1;
+            if (left<0){
+                continue;
+            }
+            if (Arrays.equals(cntP,cntS)){
+                ans.add(left);
+            }
+            cntS[s.charAt(left)-'a']--;
+        }
+        return ans;
+    }
+}
+class Solution567{
+    public boolean checkInclusionA(String s1, String s2){
+        int n  = s1.length();
+        int m = s2.length();
+        if (n>m){
+            return false;
+        }
+        int[] cnt = new int[26];
+        for (char c:s1.toCharArray()){
+            cnt[c-'a']++;
+        }
+        int[] cur = new int[26];
+        for (int i =0;i<n;i++){
+            cur[s2.charAt(i)-'a']++;
+        }
+        if (check(cnt,cur)){
+            return true;
+        }
+        for (int i =n;i<m;i++){
+            cur[s2.charAt(i)-'a']++;
+            cur[s2.charAt(i-n)-'a']--;
+            if (check(cnt,cur)){
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean check(int[] cnt1, int[] cnt2){
+        for (int i=0;i<26;i++){
+            if (cnt1[i]!=cnt2[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean checkInclusion(String s1, String s2){
+        int n =s1.length(),m= s2.length();
+        if (n>m) return false;
+        int[] cntS1 = new int[26];
+        int[] cntS2 = new int[26];
 
+        for (char c:s1.toCharArray()){
+            cntS1[c-'a']++;
+        }
+        for (int right=0;right<m;right++){
+            cntS2[s2.charAt(right)-'a']++;
+            int left =right-n+1;
+            if (left<0){
+                continue;
+            }
+            if (Arrays.equals(cntS1,cntS2)){
+                return true;
+            }
+            cntS2[s2.charAt(left)-'a']--;
+        }
+        return false;
+    }
+}
 
 
 
