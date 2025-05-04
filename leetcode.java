@@ -858,6 +858,65 @@ class Solution567{
         return false;
     }
 }
+class Solution1128{
+    public int numEquivDominoPairs(int[][] dominoes){
+        int ans  =0;
+        int[][] cnt = new int[10][10];
+        for (int[] d :dominoes){
+            int a = Math.min(d[0],d[1]);
+            int b = Math.max(d[0],d[1]);
+            ans += cnt[a][b]++;
+        }
+        return ans;
+    }
+}
+class Solution3A{
+    public int lengthOfLongestSubstring(String s){
+        int n = s.length(),ans = 0;
+        Map<Character,Integer> map = new HashMap<>();
+        for (int end= 0,start = 0;end<n;end++){
+            char alpha = s.charAt(end);
+            if (map.containsKey(alpha)){
+                start = Math.max(map.get(alpha),start);
+            }
+            ans = Math.max(ans,end-start+1);
+            map.put(s.charAt(end),end+1);
+        }
+        return ans;
+    }
+}
+class Solution3090{
+    public int maximumLengthSubstring(String S){
+        char[] s=S.toCharArray();
+        int ans = 0;
+        int left = 0;
+        int[] cnt = new int [26];
+        for (int i=0;i<s.length;i++){
+            int b = s[i]-'a';
+            cnt[b]++;
+            while (cnt[b]>2){
+                cnt[s[left++]-'a']--;
+            }
+            ans = Math.max(ans,i-left+1);
+                }
+        return ans;
+    }
+}
+class Solution1493{
+   public int longestSubarray(int[] nums){
+        int n  = nums.length;
+        int l=-1,zero = -1;
+        int ans = 0;
+        for (int i =0;i<n;i++){
+            if (nums[i]==0){
+                l = zero+1;
+                zero = i;
+            }
+            ans = Math.max(ans,i-l);
+        }
+        return Math.min(ans,n-1);
+    }
+}
 
 
 
