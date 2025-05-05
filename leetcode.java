@@ -1,3 +1,4 @@
+import java.rmi.MarshalException;
 import java.util.*;
 
 
@@ -918,5 +919,107 @@ class Solution1493{
     }
 }
 
+class Solution3536 {
+    public int maxProduct(int n) {
+        int[] count = new int[10]; // 用于统计每个数字出现的次数
+        List<Integer> digits = new ArrayList<>();
 
+        // 提取每一位数字，并统计次数
+        while (n > 0) {
+            int digit = n % 10;
+            digits.add(digit);
+            count[digit]++;
+            n /= 10;
+        }
+
+        int ans = 0;
+        for (int i = 0; i < digits.size(); i++) {
+            for (int j = 0; j < digits.size(); j++) {
+                int a = digits.get(i);
+                int b = digits.get(j);
+
+                if (a == b && count[a] < 2) continue; // 相同数字必须出现至少两次
+                ans = Math.max(ans, a * b);
+            }
+        }
+
+        return ans;
+    }
+}
+class Solution790{
+    private static final int MOD = 1_000_000_007;
+    public int numTilings(int n ){
+        if (n==1){
+            return 1;
+        }
+        long [] f = new long[n+1];
+        f[0] = f[1] = 1;
+        f[2] = 2;
+        for (int i =3;i<=n;i++){
+            f[i] = (f[i-1]*2+f[i-3])%MOD;
+        }
+        return (int) f[n];
+    }
+}
+class Solution940{
+    public int totalFruit(int[] fruits){
+        int ans=  0;
+        int left  =0;
+        Map<Integer,Integer> cnt = new HashMap<>();
+        for (int right = 0;right<fruits.length;right++){
+            cnt.merge(fruits[right],1,Integer::sum);
+            while (cnt.size()>2){
+                int out = fruits[left];
+                cnt.merge(out,-1,Integer::sum);
+                if (cnt.get(out)==0){
+                    cnt.remove(out);
+                }
+                left++;
+            }
+            ans = Math.max(ans,right-left+1);
+        }
+        return ans;
+    }
+}
+class Solution1695{
+    public int maximumUniqueSubarrayA(int[] nums){
+        int n = nums.length;
+        Map<Integer,Integer> map = new HashMap<>();
+        int l =0,sum = 0,ans = 0;
+        for (int i =0;i<n;i++){
+            sum +=nums[i];
+            if(map.merge(nums[i],1,Integer::sum)==1){
+                ans = Math.max(ans,sum);
+            }else {
+                while (true){
+                    if (map.get(nums[l])==1){
+                        sum -=nums[l];
+                    }else {
+                        sum -=nums[l];
+                        map.merge(nums[l++],-1,Integer::sum);
+                        break;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+    public int maximumUniqueSubarray(int[] nums){
+        int sum = 0;
+        int max = 0;
+        HashSet<Integer> set = new HashSet<Integer>();
+        int left = 0;
+        for (int right = 0;right<nums.length;right++){
+            while (set.contains(nums[right])){
+                sum -=nums[left];
+                set.remove(nums[left]);
+                left++;
+            }
+            set.add(nums[right]);
+            sum +=nums[right];
+            max = Math.max(max,sum);
+        }
+        return max;
+    }
+}
 
