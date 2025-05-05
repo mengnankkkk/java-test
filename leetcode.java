@@ -1,3 +1,4 @@
+import java.rmi.MarshalException;
 import java.util.*;
 
 
@@ -858,6 +859,167 @@ class Solution567{
         return false;
     }
 }
+class Solution1128{
+    public int numEquivDominoPairs(int[][] dominoes){
+        int ans  =0;
+        int[][] cnt = new int[10][10];
+        for (int[] d :dominoes){
+            int a = Math.min(d[0],d[1]);
+            int b = Math.max(d[0],d[1]);
+            ans += cnt[a][b]++;
+        }
+        return ans;
+    }
+}
+class Solution3A{
+    public int lengthOfLongestSubstring(String s){
+        int n = s.length(),ans = 0;
+        Map<Character,Integer> map = new HashMap<>();
+        for (int end= 0,start = 0;end<n;end++){
+            char alpha = s.charAt(end);
+            if (map.containsKey(alpha)){
+                start = Math.max(map.get(alpha),start);
+            }
+            ans = Math.max(ans,end-start+1);
+            map.put(s.charAt(end),end+1);
+        }
+        return ans;
+    }
+}
+class Solution3090{
+    public int maximumLengthSubstring(String S){
+        char[] s=S.toCharArray();
+        int ans = 0;
+        int left = 0;
+        int[] cnt = new int [26];
+        for (int i=0;i<s.length;i++){
+            int b = s[i]-'a';
+            cnt[b]++;
+            while (cnt[b]>2){
+                cnt[s[left++]-'a']--;
+            }
+            ans = Math.max(ans,i-left+1);
+                }
+        return ans;
+    }
+}
+class Solution1493{
+   public int longestSubarray(int[] nums){
+        int n  = nums.length;
+        int l=-1,zero = -1;
+        int ans = 0;
+        for (int i =0;i<n;i++){
+            if (nums[i]==0){
+                l = zero+1;
+                zero = i;
+            }
+            ans = Math.max(ans,i-l);
+        }
+        return Math.min(ans,n-1);
+    }
+}
 
+class Solution3536 {
+    public int maxProduct(int n) {
+        int[] count = new int[10]; // 用于统计每个数字出现的次数
+        List<Integer> digits = new ArrayList<>();
 
+        // 提取每一位数字，并统计次数
+        while (n > 0) {
+            int digit = n % 10;
+            digits.add(digit);
+            count[digit]++;
+            n /= 10;
+        }
+
+        int ans = 0;
+        for (int i = 0; i < digits.size(); i++) {
+            for (int j = 0; j < digits.size(); j++) {
+                int a = digits.get(i);
+                int b = digits.get(j);
+
+                if (a == b && count[a] < 2) continue; // 相同数字必须出现至少两次
+                ans = Math.max(ans, a * b);
+            }
+        }
+
+        return ans;
+    }
+}
+class Solution790{
+    private static final int MOD = 1_000_000_007;
+    public int numTilings(int n ){
+        if (n==1){
+            return 1;
+        }
+        long [] f = new long[n+1];
+        f[0] = f[1] = 1;
+        f[2] = 2;
+        for (int i =3;i<=n;i++){
+            f[i] = (f[i-1]*2+f[i-3])%MOD;
+        }
+        return (int) f[n];
+    }
+}
+class Solution940{
+    public int totalFruit(int[] fruits){
+        int ans=  0;
+        int left  =0;
+        Map<Integer,Integer> cnt = new HashMap<>();
+        for (int right = 0;right<fruits.length;right++){
+            cnt.merge(fruits[right],1,Integer::sum);
+            while (cnt.size()>2){
+                int out = fruits[left];
+                cnt.merge(out,-1,Integer::sum);
+                if (cnt.get(out)==0){
+                    cnt.remove(out);
+                }
+                left++;
+            }
+            ans = Math.max(ans,right-left+1);
+        }
+        return ans;
+    }
+}
+class Solution1695{
+    public int maximumUniqueSubarrayA(int[] nums){
+        int n = nums.length;
+        Map<Integer,Integer> map = new HashMap<>();
+        int l =0,sum = 0,ans = 0;
+        for (int i =0;i<n;i++){
+            sum +=nums[i];
+            if(map.merge(nums[i],1,Integer::sum)==1){
+                ans = Math.max(ans,sum);
+            }else {
+                while (true){
+                    if (map.get(nums[l])==1){
+                        sum -=nums[l];
+                    }else {
+                        sum -=nums[l];
+                        map.merge(nums[l++],-1,Integer::sum);
+                        break;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+    public int maximumUniqueSubarray(int[] nums){
+        int sum = 0;
+        int max = 0;
+        HashSet<Integer> set = new HashSet<Integer>();
+        int left = 0;
+        for (int right = 0;right<nums.length;right++){
+            while (set.contains(nums[right])){
+                sum -=nums[left];
+                set.remove(nums[left]);
+                left++;
+            }
+            set.add(nums[right]);
+            sum +=nums[right];
+            max = Math.max(max,sum);
+        }
+        return max;
+    }
+}
 
