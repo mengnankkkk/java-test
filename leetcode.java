@@ -1,5 +1,6 @@
 import java.rmi.MarshalException;
 import java.util.*;
+import java.util.jar.JarEntry;
 
 
 class Solution2300{
@@ -1022,4 +1023,57 @@ class Solution1695{
         return max;
     }
 }
+class Solution1920{
+    public int[] buildArray(int[] nums){
+        int[] ans = new int[nums.length];
+        for (int i =0;i<nums.length;i++){
+            ans[i] = nums[nums[i]];
+        }
+        return ans;
+    }
+}
+class Solution2958{
+    public int maxSubarrayLength(int[] nums, int k){
+        int ans = 0, left= 0;
+        Map<Integer,Integer> cnt = new HashMap<>();
+        for (int right = 0;right<nums.length;right++){
+            cnt.merge(nums[right],1,Integer::sum);
+            while (cnt.get(nums[right])>k){
+                cnt.merge(nums[left++],-1,Integer::sum);
+            }
+            ans = Math.max(ans,right-left+1);
+        }
+        return ans;
+    }
+}
+class Solution2024{
+    public int maxConsecutiveAnswers(String answerKey, int k){
+        char[] s= answerKey.toCharArray();
+        int ans = 0;
+        int left  =0;
+        int[] cnt = new int [2];
+        for (int right = 0;right<s.length;right++){
+            cnt[s[right] >>1&1]++;
+            while (cnt[0]>k&&cnt[1]>k){
+                cnt[s[left++]>>1&1]--;
+            }
+            ans  = Math.max(ans,right-left+1);
+        }
+        return ans;
+    }
+}
+class Solution1004{
+    public int longestOnes(int[] nums, int k){
+        int ans=0,cnt0= 0,left=0;
+        for (int right = 0;right<nums.length;right++){
+            cnt0 +=1-nums[right];
+            while (cnt0>k){
+                cnt0 -=1-nums[left++];
+            }
+            ans = Math.max(ans,right-left+1);
+        }
+        return ans;
+    }
+}
+
 
