@@ -1075,5 +1075,110 @@ class Solution1004{
         return ans;
     }
 }
+class Solution3341{
+    public int minTimeToReach(int[][] moveTime) {
+        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        PriorityQueue<int[]> heap = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        heap.offer(new int[]{0, 0, 0});
+
+        int n = moveTime.length, m = moveTime[0].length;
+        int[][] time = new int[n][m];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(time[i], Integer.MAX_VALUE);
+        }
+        time[0][0] = 0;
+
+        while (!heap.isEmpty()) {
+            int[] curr = heap.poll();
+            int t = curr[0], x = curr[1], y = curr[2];
+            if (t > time[x][y]) {
+                continue;
+            }
+            for (int[] dir : dirs) {
+                int nx = x + dir[0], ny = y + dir[1];
+                if (0 <= nx && nx < n && 0 <= ny && ny < m) {
+                    int nt;
+                    if (t < moveTime[nx][ny]) { // 需要等待
+                        nt = 1 + moveTime[nx][ny];
+                    } else { // 否则，直接进入
+                        nt = t + 1;
+                    }
+                    if (nt < time[nx][ny]) { // 当前的更优路径
+                        time[nx][ny] = nt;
+                        heap.offer(new int[]{nt, nx, ny});
+                    }
+                }
+            }
+        }
+        return time[n-1][m-1];
+    }
+}
+class Solution209{
+    public int minSubArrayLen(int target, int[] nums){
+        int n = nums.length;
+        int ans = n+1;
+        int sum = 0,left = 0;
+        for (int right = 0;right<n;right++){
+            sum +=nums[right];
+            while (sum>=target){
+                ans = Math.min(ans,right-left+1);
+                sum -=nums[left++];
+            }
+        }
+        return ans<=n?ans:0;
+    }
+}
+class Solution2904{
+    public String shortestBeautifulSubstring(String S, int k){
+        if (S.replace("0","").length()<k){
+            return "";
+        }
+        char[] s = S.toCharArray();
+        String ans = S;
+        int cnt1 = 0,left = 0;
+        for (int right = 0;right<s.length;right++){
+            cnt1 +=s[right]-'0';
+            while (cnt1>k||s[left]=='0'){
+                cnt1 -=s[left++]-'0';
+            }
+            if (cnt1==k){
+                String t = S.substring(left,right+1);
+                if (t.length()<ans.length()||t.length()==ans.length()&&t.compareTo(ans)<0){
+                    ans = t;
+                }
+            }
+        }
+        return ans;
+    }
+}
+class Solution1234{
+    public int balancedString(String S){
+        char[] s= S.toCharArray();
+        int[] cnt = new int['X'];
+        for (char c:s){
+            cnt[c]++;
+        }
+        int n = s.length;
+        int m =n/4;
+        if (cnt['Q'] == m && cnt['W'] == m && cnt['E'] == m && cnt['R'] == m) {
+            return 0; // 已经符合要求啦
+        }
+        int ans  = n;
+        int left = 0;
+        for (int right = 0;right<n;right++){
+            cnt[s[right]]--;
+            while (cnt['Q'] <= m && cnt['W'] <= m && cnt['E'] <= m && cnt['R'] <= m){
+                ans = Math.min(ans,right-left+1);
+                cnt[s[left]]++;
+                left++;
+            }
+        }
+        return ans;
+    }
+}
+
+
+
+
 
 
