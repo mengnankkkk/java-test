@@ -163,14 +163,14 @@ class Solution2799{
         int left = 0;
         for (int x:nums){
             cnt.merge(x,1,Integer::sum);
-                while (cnt.size()==k){
-                    int out = nums[left];
-                    if (cnt.merge(out,-1,Integer::sum)==0){
-                        cnt.remove(out);
-                    }
-                    left++;
+            while (cnt.size()==k){
+                int out = nums[left];
+                if (cnt.merge(out,-1,Integer::sum)==0){
+                    cnt.remove(out);
                 }
-                ans +=left;
+                left++;
+            }
+            ans +=left;
         }
         return ans;
     }
@@ -340,7 +340,7 @@ class Solution2070{
         while (left+1<right){
             int mid = (left+right)>>>1;
             if (items[mid][0]>target){
-                    right =mid;
+                right =mid;
             }
             else{
                 left = mid;
@@ -900,12 +900,12 @@ class Solution3090{
                 cnt[s[left++]-'a']--;
             }
             ans = Math.max(ans,i-left+1);
-                }
+        }
         return ans;
     }
 }
 class Solution1493{
-   public int longestSubarray(int[] nums){
+    public int longestSubarray(int[] nums){
         int n  = nums.length;
         int l=-1,zero = -1;
         int ans = 0;
@@ -1075,110 +1075,79 @@ class Solution1004{
         return ans;
     }
 }
-class Solution3341{
-    public int minTimeToReach(int[][] moveTime) {
-        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-        PriorityQueue<int[]> heap = new PriorityQueue<>((a, b) -> a[0] - b[0]);
-        heap.offer(new int[]{0, 0, 0});
-
-        int n = moveTime.length, m = moveTime[0].length;
-        int[][] time = new int[n][m];
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(time[i], Integer.MAX_VALUE);
-        }
-        time[0][0] = 0;
-
-        while (!heap.isEmpty()) {
-            int[] curr = heap.poll();
-            int t = curr[0], x = curr[1], y = curr[2];
-            if (t > time[x][y]) {
-                continue;
-            }
-            for (int[] dir : dirs) {
-                int nx = x + dir[0], ny = y + dir[1];
-                if (0 <= nx && nx < n && 0 <= ny && ny < m) {
-                    int nt;
-                    if (t < moveTime[nx][ny]) { // 需要等待
-                        nt = 1 + moveTime[nx][ny];
-                    } else { // 否则，直接进入
-                        nt = t + 1;
-                    }
-                    if (nt < time[nx][ny]) { // 当前的更优路径
-                        time[nx][ny] = nt;
-                        heap.offer(new int[]{nt, nx, ny});
-                    }
-                }
-            }
-        }
-        return time[n-1][m-1];
-    }
-}
-class Solution209{
-    public int minSubArrayLen(int target, int[] nums){
-        int n = nums.length;
-        int ans = n+1;
-        int sum = 0,left = 0;
-        for (int right = 0;right<n;right++){
-            sum +=nums[right];
-            while (sum>=target){
-                ans = Math.min(ans,right-left+1);
-                sum -=nums[left++];
-            }
-        }
-        return ans<=n?ans:0;
-    }
-}
-class Solution2904{
-    public String shortestBeautifulSubstring(String S, int k){
-        if (S.replace("0","").length()<k){
-            return "";
-        }
+class Solution1358{
+    public int numberOfSubstrings(String S){
         char[] s = S.toCharArray();
-        String ans = S;
-        int cnt1 = 0,left = 0;
-        for (int right = 0;right<s.length;right++){
-            cnt1 +=s[right]-'0';
-            while (cnt1>k||s[left]=='0'){
-                cnt1 -=s[left++]-'0';
+        int ans = 0;
+        int left = 0;
+        int[] cnt = new int[3];
+        for (char c:s){
+            cnt[c-'a']++;
+            while (cnt[0]>0&&cnt[1]>0&&cnt[2]>0){
+                cnt[s[left]-'a']--;//左边端口值的出现次数减少
+                left++;//收缩窗口
             }
-            if (cnt1==k){
-                String t = S.substring(left,right+1);
-                if (t.length()<ans.length()||t.length()==ans.length()&&t.compareTo(ans)<0){
-                    ans = t;
-                }
-            }
+            ans +=left;
         }
         return ans;
     }
 }
-class Solution1234{
-    public int balancedString(String S){
-        char[] s= S.toCharArray();
-        int[] cnt = new int['X'];
-        for (char c:s){
-            cnt[c]++;
+class Solution2962A{
+    public long countSubarrays(int[] nums, int k){
+        int mx = 0;
+        for (int x:nums){
+            mx = Math.max(mx,x);
         }
-        int n = s.length;
-        int m =n/4;
-        if (cnt['Q'] == m && cnt['W'] == m && cnt['E'] == m && cnt['R'] == m) {
-            return 0; // 已经符合要求啦
-        }
-        int ans  = n;
-        int left = 0;
-        for (int right = 0;right<n;right++){
-            cnt[s[right]]--;
-            while (cnt['Q'] <= m && cnt['W'] <= m && cnt['E'] <= m && cnt['R'] <= m){
-                ans = Math.min(ans,right-left+1);
-                cnt[s[left]]++;
+        long ans  =0;
+        int cntMx=  0,left = 0;
+        for (int x:nums){
+            if (x==mx){
+                cntMx++;
+            }
+            while (cntMx==k){
+                if (nums[left]==mx){
+                    cntMx--;
+                }
                 left++;
             }
+            ans +=left;
         }
         return ans;
     }
 }
-
-
-
-
-
-
+class Solution2926B{
+    public long countSubarrays(int[] nums, int k){
+        int mx = Arrays.stream(nums).max().getAsInt();
+        int n = nums.length;
+        long ans = 0;
+        int cnt =0,left = 0;
+        for (int x:nums){
+            while (left<n&&cnt<k){
+                cnt +=nums[left++]==mx?1:0;
+            }
+            if (cnt<k){
+                break;
+            }
+            ans +=n-left+1;
+            cnt -=x==mx?1:0;
+        }
+        return ans;
+    }
+}
+class Solution3325{
+    int numberOfSubstrings(String S, int k){
+        char[] s= S.toCharArray();
+        int ans= 0 ;
+        int left = 0;
+        int [] cnt = new int[26];
+        for (char c:s){
+            cnt[c-'a']++;
+            while (cnt[c-'a']>=k){
+                cnt[s[left]-'a']--;
+                left++;
+            }
+            ans +=left;
+        }
+        return ans;
+    }
+}
