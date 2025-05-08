@@ -1075,5 +1075,80 @@ class Solution1004{
         return ans;
     }
 }
-
+class Solution1358{
+    public int numberOfSubstrings(String S){
+        char[] s = S.toCharArray();
+        int ans = 0;
+        int left = 0;
+        int[] cnt = new int[3];
+        for (char c:s){
+            cnt[c-'a']++;
+            while (cnt[0]>0&&cnt[1]>0&&cnt[2]>0){
+                cnt[s[left]-'a']--;//左边端口值的出现次数减少
+                left++;//收缩窗口
+            }
+            ans +=left;
+        }
+        return ans;
+    }
+}
+class Solution2962A{
+    public long countSubarrays(int[] nums, int k){
+        int mx = 0;
+        for (int x:nums){
+            mx = Math.max(mx,x);
+        }
+        long ans  =0;
+        int cntMx=  0,left = 0;
+        for (int x:nums){
+            if (x==mx){
+                cntMx++;
+            }
+            while (cntMx==k){
+                if (nums[left]==mx){
+                    cntMx--;
+                }
+                left++;
+            }
+            ans +=left;
+        }
+        return ans;
+    }
+}
+class Solution2926B{
+    public long countSubarrays(int[] nums, int k){
+        int mx = Arrays.stream(nums).max().getAsInt();
+        int n = nums.length;
+        long ans = 0;
+        int cnt =0,left = 0;
+        for (int x:nums){
+            while (left<n&&cnt<k){
+                cnt +=nums[left++]==mx?1:0;
+            }
+            if (cnt<k){
+                break;
+            }
+            ans +=n-left+1;
+            cnt -=x==mx?1:0;
+        }
+        return ans;
+    }
+}
+class Solution3325{
+    int numberOfSubstrings(String S, int k){
+        char[] s= S.toCharArray();
+        int ans= 0 ;
+        int left = 0;
+        int [] cnt = new int[26];
+        for (char c:s){
+            cnt[c-'a']++;
+            while (cnt[c-'a']>=k){
+                cnt[s[left]-'a']--;
+                left++;
+            }
+            ans +=left;
+        }
+        return ans;
+    }
+}
 
