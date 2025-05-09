@@ -1151,3 +1151,99 @@ class Solution3325{
         return ans;
     }
 }
+class Solution2799A{
+    public int countCompleteSubarrays(int[] nums){
+        Set<Integer> set = new HashSet<>();
+        for (int num:nums){
+            set.add(num);
+        }
+        int distinct = set.size();
+        Map<Integer,Integer> windows = new HashMap<>();
+        int result = 0;
+        int left = 0;
+        for (int right =0;right<nums.length;right++){
+            windows.merge(nums[right],1,Integer::sum);
+            while (windows.size()==distinct){
+                int leftnum = nums[left];
+                int newCount = windows.get(leftnum)-1;
+                if (newCount==0){
+                    windows.remove(leftnum);
+                }else {
+                    windows.put(leftnum,newCount);
+                }
+                left++;
+            }
+            result +=left;
+        }
+        return result;
+    }
+}
+class Solution2537{
+    public long countGood(int[] nums, int k){
+        long ans  = 0;
+        Map<Integer,Integer> cnt = new HashMap<>();
+        int p = 0;
+        int left =0;
+        for (int x:nums){
+            int c = cnt.getOrDefault(x,0);
+            p +=c;
+            cnt.put(x,c+1);
+            while (p>=k){
+                x = nums[left];
+                c = cnt.get(x);
+                p -=c-1;
+                cnt.put(x,c-1);
+                left++;
+            }
+            ans +=left;
+        }
+        return ans;
+    }
+    public long countGoodA(int[] nums, int k){
+        Map<Integer,Integer> cnt = new HashMap<>();
+        long ans = 0;
+        long p  = 0;
+        int left = 0;
+        for (int right=  0;right<nums.length;right++){
+            int c = cnt.getOrDefault(nums[right],0);
+            cnt.put(nums[right],c+1);
+
+            }
+return ans;
+        }
+}
+class Solution713{
+    public int numSubarrayProductLessThanK(int[] nums, int k){
+        if (k<=1){
+            return 0;
+        }
+        int ans= 0;
+        int x = 1;
+        int left  = 0;
+        for (int right = 0;right<nums.length;right++){
+            x *=nums[right];
+            while (x>=k){
+                x /=nums[left++];
+            }
+            ans +=right-left+1;
+        }
+        return ans;
+    }
+}
+class Solution3258{
+    public int countKConstraintSubstrings(String S, int k){
+        char[] s = S.toCharArray();
+        int ans=0,left = 0;
+        int[] cnt = new int[2];
+        for (int right =0;right<s.length;right++){
+            cnt[s[right]&1]++;
+            while (cnt[0]>k&&cnt[1]>k){
+                cnt[s[left]&1]--;
+                left++;
+            }
+            ans +=right-left+1;
+        }
+        return ans;
+    }
+}
+
