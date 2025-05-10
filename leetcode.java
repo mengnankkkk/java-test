@@ -1,3 +1,5 @@
+import javafx.util.Pair;
+
 import java.rmi.MarshalException;
 import java.util.*;
 import java.util.jar.JarEntry;
@@ -1244,6 +1246,83 @@ class Solution3258{
             ans +=right-left+1;
         }
         return ans;
+    }
+}
+class Solution2918 {
+    public long minSum(int[] nums1, int[] nums2) {
+        long sa = 0, za = 0, sb = 0, zb = 0;
+        for (int x : nums1) {
+            sa += x;
+            if (x == 0) za++;
+        }
+        for (int x : nums2) {
+            sb += x;
+            if (x == 0) zb++;
+        }
+        if (za == 0 && zb == 0) return sa == sb ? sa : -1;
+        if (za == 0) {
+            if (sb + zb > sa) return -1;
+            return sa;
+        }
+        if (zb == 0) {
+            if (sa + za > sb) return -1;
+            return sb;
+        }
+        return Math.max(sa + za, sb + zb);
+    }
+}
+class Solution2302A{
+    public long countSubarrays(int[] nums, long k){
+        long ans=0,sum=0;
+        int left = 0;
+        for (int right = 0;right<nums.length;right++){
+            sum +=nums[right];
+            while (sum*(right-left+1)>=k){
+                sum -=nums[left++];
+
+            }
+            ans +=right-left+1;
+        }
+        return ans;
+    }
+
+}
+class Solution2762{
+    public long continuousSubarrays(int[] nums){
+        long ans = 0;
+        TreeMap<Integer,Integer> t = new TreeMap<>();
+        int left = 0;
+        for (int right = 0;right<nums.length;right++){
+            t.merge(nums[right],1,Integer::sum);
+            while (t.lastKey()-t.firstKey()>2){
+                int out = nums[left];
+                int c = t.get(out);
+                if (c==1){
+                    t.remove(out);
+                }else {
+                    t.put(out,c-1);
+                }
+                left++;
+            }
+            ans +=right-left+1;
+        }
+        return ans;
+    }
+}
+class SolutionLCO68{
+    public int beautifulBouquet(int[] flowers, int cnt){
+        long ans= 0;
+        Map<Integer,Integer> c = new HashMap<>();
+        int left = 0;
+        for (int right= 0;right<flowers.length;right++){
+            int x = flowers[right];
+            c.merge(x,1,Integer::sum);
+            while (c.get(x)>cnt){
+                c.merge(flowers[left++],-1,Integer::sum);
+            }
+            ans +=right-left+1;
+        }
+        return (int) (ans%1_000_000_007);
     }
 }
 
