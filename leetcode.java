@@ -1,3 +1,4 @@
+import com.sun.scenario.effect.Brightpass;
 import javafx.util.Pair;
 
 import java.rmi.MarshalException;
@@ -1324,5 +1325,96 @@ class SolutionLCO68{
         }
         return (int) (ans%1_000_000_007);
     }
+}
+class Solution1550{
+    public boolean threeConsecutiveOddsA(int[] arr){
+        int len = arr.length,left=0;
+        if (len<3) return false;
+        for (int right = 0;right>len;right++){
+            if (arr[right]%2==0){
+                left =right+1;
+                continue;
+            }
+            if (right-left==2) return true;
+        }
+        return false;
+    }
+    public boolean threeConsecutiveOdds(int[] arr){
+        for (int i=2;i<arr.length;i++){
+            if (arr[i - 2] % 2 != 0 && arr[i - 1] % 2 != 0 && arr[i] % 2 != 0){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+class Solution930{
+    public int numSubarraysWithSumA(int[] nums, int goal){
+        int ans1 = 0, left1=0,left2=0,ans2=0;
+        int sum1=0,sum2=0;
+        for (int right = 0;right<nums.length;right++){
+            sum1 +=nums[right];
+            while (sum1>=goal&&left1<=right){
+                sum1 -=nums[left1++];
+            }
+            ans1 +=left1;
+            sum2 +=nums[right];
+            while (sum2>=goal+1&&left2<=right){
+                sum2 -=nums[left2++];
+            }
+            ans2 +=left2;
+        }
+        return ans1-ans2;
+    }
+    public int numSubarraysWithSum(int[] nums, int goal){
+        return atMost(nums,goal)-atMost(nums,goal+1);
+    }
+    private int atMost(int[] nums, int goal){
+        int ans = 0,left = 0,sum = 0;
+        for (int right = 0;right<nums.length;right++){
+            sum +=nums[right];
+            while (sum>=goal&&left<=right){
+                sum -=nums[left++];
+            }
+            ans +=left;
+        }
+        return ans;
+    }
+}
+class Solution1248{
+    public int numberOfSubarraysA(int[] nums, int k){
+        int ans = 0,left  =0;
+        int cnt = 0,count = 0;
+        for (int right= 0;right<nums.length;right++){
+            if (nums[right]%2!=0){
+                cnt++;
+            }
+           if (cnt==k&&left<=right){
+                count++;
+            }
+           if (cnt>k){
+               while (nums[left]%2!=0){
+                   cnt--;
+               }
+               left++;
+           }
+        }
+        return count;
+    }
+    public int numberOfSubarrays(int[] nums, int k) {
+        return count(nums,k)-count(nums,k-1);
+    }
+    private int count(int[] nums,int k ){
+        int ans = 0,left  = 0;
+        for (int right = 0;right<nums.length;right++){
+            if (nums[right] % 2 != 0) k--;
+            while (k<0){
+                if (nums[left++]%2!=0) k++;
+            }
+            ans +=right-left+1;
+        }
+        return ans;
+    }
+
 }
 
