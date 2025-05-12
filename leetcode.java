@@ -1415,6 +1415,67 @@ class Solution1248{
         }
         return ans;
     }
-
 }
-
+class Solution2094{
+    public int[] findEvenNumbers(int[] digits){
+        int[] cnt = new int[10];
+        for (int d:digits){
+            cnt[d]++;
+        }
+        List<Integer> ans = new ArrayList<>();
+        for (int i =100;i<1000;i+=2){
+            int[] c = new int[10];
+            for(int x = i;x>0;x/=10){
+                int d = x%10;
+                if (++c[d]>cnt[d]){
+                    continue;
+                }
+            }
+            ans.add(i);
+        }
+        return ans.stream().mapToInt(i->i).toArray();
+    }
+}
+class Solution344{
+    public void reverseString(char[] s){
+        int n = s.length;
+        for (int left=0,right=n-1;left<right;left++,right--){
+            char tmp = s[left];
+            s[left] = s[right];
+            s[right] = tmp;
+        }
+    }
+}
+class Solution125{
+    public boolean isPalindrome(String s){
+        int n = s.length();
+        int left = 0;
+        int right = n-1;
+        while (left<right){
+            if (!Character.isLetterOrDigit(s.charAt(left))){
+                left++;
+            }else if (!Character.isLetterOrDigit(s.charAt(right))){
+                right--;
+            }else if (Character.toLowerCase(s.charAt(left))==Character.toLowerCase(s.charAt(right))){
+                left++;
+                right--;
+            }else {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+class Solution1750{
+    public int minimumLength(String S){
+        char[] s = S.toCharArray();
+        int n = s.length;
+        int left = 0,right = n-1;
+        while (left<right&&s[left]==s[right]){
+            char c = s[left];
+            while (left<=right&&s[left]==c) left++;
+            while (left<=right&&s[right]==c) right--;
+        }
+        return right-left+1;
+    }
+}
