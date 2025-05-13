@@ -1,3 +1,4 @@
+import com.sun.jmx.snmp.SnmpNull;
 import com.sun.scenario.effect.Brightpass;
 import javafx.util.Pair;
 
@@ -1477,5 +1478,121 @@ class Solution1750{
             while (left<=right&&s[right]==c) right--;
         }
         return right-left+1;
+    }
+}
+class Solution3335{
+    public int lengthAfterTransformations(String s, int t){
+        int mod = (int) 1e9+7;
+        long[] book = new long[26];
+        long ret = s.length();
+        for (char c:s.toCharArray()){
+            book[c-'a']++;
+        }
+        for (int i=0;i<t;i++){
+            int ida = 25-(i%26);
+            if (book[ida]>0){
+                int idb = (ida+1) % 26;
+                book[idb] = (book[idb] + book[ida]) % mod;
+                ret= (ret+book[ida])%mod;
+            }
+        }
+        return (int) ret;
+    }
+}
+class Solution2105{
+    public int minimumRefill(int[] plants, int capacityA, int capacityB){
+        int ans = 0;
+        int a = capacityA;
+        int b = capacityB;
+        int i =0,j = plants.length-1;
+        while (i<j){
+            if (a<plants[i]){
+                ans++;
+                a = capacityA;
+            }
+            a -=plants[i++];
+            if (b<plants[j]){
+                ans++;
+                b  = capacityB;
+            }
+            b -=plants[j--];
+        }
+        if (i==j&&Math.max(a,b)<plants[i]){
+            ans++;
+        }
+        return ans;
+    }
+}
+class Solution977{
+    public int[] sortedSquares(int[] nums){
+        int n = nums.length;
+        int[] ans = new int[n];
+        int i =0,j=n-1;
+        for (int p =n-1;p>=0;p--){
+            int x = nums[i]* nums[i];
+            int y = nums[j]*nums[j];
+            if (x>y){
+                ans[p] = x;
+                i++;
+            }else {
+                ans[p] = y;
+                j--;
+            }
+        }
+        return ans;
+    }
+}
+class Solution658B{
+    public List<Integer> findClosestElementsA(int[] arr, int k, int x){
+        int n = arr.length;
+        List<Integer> list = new ArrayList<>();
+        int left = 0,right = n-k;
+        while (left<=right){
+            int mid = (left+right)>>>1;
+            if (mid+k<n&&x-arr[mid]>arr[mid+k]-x){
+                left = mid+1;
+            }else {
+                right = mid-1;
+            }
+        }
+        for (int i =left;i<left+k;i++){
+            list.add(arr[i]);
+        }
+        return list;
+    }
+    public List<Integer> findClosestElements(int[] arr, int k, int x){
+        int n = arr.length;
+        List<Integer> list = new ArrayList<>();
+        int left = 0,right = n-1;
+        int del  = n-k;
+        while (del>0){
+            if (x-arr[left]>arr[right]-x){
+                left++;
+            }else {
+                right--;
+            }
+            del--;
+        }
+        for (int i =left;i<left+k;i++){
+            list.add(arr[i]);
+        }
+        return list;
+    }
+}
+class Solution1471{
+    public int[] getStrongest(int[] arr, int k){
+        int n  = arr.length;
+        Arrays.sort(arr);
+       int m = arr[(n-1)/2];
+       int left = 0,right = n-1;
+       int[] ans = new int[k];
+      while (k-->0){
+           if (m-arr[left]>arr[right]-m){
+               ans[k] = arr[left++];
+           }else {
+               ans[k] = arr[right--];
+           }
+       }
+       return ans;
     }
 }
