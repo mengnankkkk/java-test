@@ -1596,3 +1596,50 @@ class Solution1471{
        return ans;
     }
 }
+class Solution167{
+    public int[] twoSum(int[] numbers, int target){
+        int left = 0,right = numbers.length-1;
+        while (true){
+            int s= numbers[left]+numbers[right];
+            if (s==target){
+                return new int[]{left+1,right+1};
+            }
+            if (s>target){
+                right--;
+            }else {
+                left++;
+            }
+        }
+    }
+}
+class Solution2824{
+    public int countPairs(List<Integer> nums, int target){
+        Collections.sort(nums);
+        int ans = 0,left = 0,right = nums.size()-1;
+        while (left<right){
+            if (nums.get(left)+nums.get(right)<target){
+                ans +=right-left;
+                left++;
+            }else {
+                right--;
+            }
+        }
+        return ans;
+    }
+}
+class Solutionlcp28{
+    public int purchasePlans(int[] nums, int target){
+        Arrays.sort(nums);
+        int ans = 0,left = 0,right = nums.length-1;
+        while (left<right){
+            if (nums[left]+nums[right]<target){
+                ans +=right-left;
+                left++;
+            }else {
+                right--;
+            }
+            ans %=1_000_000_007;
+        }
+        return ans;
+    }
+}
