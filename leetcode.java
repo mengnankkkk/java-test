@@ -1643,3 +1643,80 @@ class Solutionlcp28{
         return ans;
     }
 }
+class Solution2900{
+    public List<String> getLongestSubsequence(String[] words, int[] groups){
+        List<String> ans = new ArrayList<>();
+        int n  = groups.length;
+        for (int i =0;i<n;i++){
+            if (i==n-1||groups[i]!=groups[i+1]){
+                ans.add(words[i]);
+            }
+        }
+        return ans;
+    }
+}
+class Solution1616{
+    private boolean isPalindrome(String s, int i, int j){
+        while (i<j&&s.charAt(i)==s.charAt(j)){
+            ++i;
+            --j;
+        }
+        return i>=j;
+    }
+    private boolean check(String a, String b){
+        int i =0,j=a.length()-1;
+        while (i<j&&a.charAt(i)==b.charAt(j)){
+            ++i;
+            --j;
+        }
+        return isPalindrome(a,i,j)||isPalindrome(b,i,j);
+    }
+    public boolean checkPalindromeFormation(String a, String b){
+        return check(a,b)||check(b,a);
+    }
+}
+class Solution611{
+    public int triangleNumber(int[] nums){
+        Arrays.sort(nums);
+        int n = nums.length;
+        int ans=  0;
+        for (int i =0;i<n;i++){
+            int a = nums[i];
+            if (a==0){
+                continue;
+            }
+            int j = i+1;
+            for (int k=i+2;k<n;k++){
+                while (nums[k]-nums[j]>=a){
+                    j++;
+                }
+                ans +=k-j;
+            }
+        }
+        return ans;
+    }
+
+}
+class Solution581{
+    public int findUnsortedSubarray(int[] nums){
+        int n  = nums.length;
+        int max = Integer.MIN_VALUE;
+        int min  = Integer.MAX_VALUE;
+        int left=-1,right = -1;
+        for (int i = 0;i<n;i++){
+            if (nums[i]>=max){
+                max = nums[i];
+            }else {
+                right = i;
+            }
+        }
+        for (int i =n-1;i>=0;i--){
+            if (nums[i]<=min){
+                min = nums[i];
+            }else {
+                left = i;
+            }
+        }
+        return right ==-1?0:right-left+1;
+    }
+}
