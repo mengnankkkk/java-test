@@ -1720,3 +1720,50 @@ class Solution581{
         return right ==-1?0:right-left+1;
     }
 }
+class Solution1574{
+    public int findLengthOfShortestSubarray(int[] arr){
+        int n  =arr.length,right = n-1;
+        //找到第一个下降的位置
+        while (right>0&&arr[right-1]<=arr[right]){
+            right--;
+        }
+        if (right==0) return 0;
+        int ans = right;
+        for (int left = 0;left<n ; ++left){
+            if (left>0&&arr[left]<arr[left-1]) break;//保证left是递增的
+            while (right<n&&arr[right]<arr[left]){
+                right++;//找到right保证arr[left]<=arr[right]
+            }
+            //删除 arr[left+1..right-1] 的长度为 right - left - 1
+            ans = Math.min(ans,right-left-1);
+        }
+        return ans;
+    }
+}
+class Solution1793{
+    public int maximumScore(int[] nums, int k){
+        int n  = nums.length;
+        int ans = nums[k],minH = nums[k];
+        int i=k,j=k;
+        for (int t = 0;t<n-1;t++){
+            if (j==n-1||i>0&&nums[i-1]>nums[j+1]){
+                minH = Math.min(minH,nums[--i]);
+            }else {
+                minH = Math.min(minH,nums[++j]);
+            }
+            ans = Math.max(ans,minH*(j-i+1));
+        }
+        return ans;
+    }
+}
+class Solution27{
+    public int removeElement(int[] nums, int val){
+        int stackSize = 0;
+        for (int x:nums){
+            if (x!=val){
+                nums[stackSize++] =x;
+            }
+        }
+        return stackSize;
+    }
+}
