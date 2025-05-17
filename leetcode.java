@@ -1756,7 +1756,7 @@ class Solution1793{
         return ans;
     }
 }
-class Solution27{
+class Solution27A{
     public int removeElement(int[] nums, int val){
         int stackSize = 0;
         for (int x:nums){
@@ -1765,5 +1765,43 @@ class Solution27{
             }
         }
         return stackSize;
+    }
+}
+class Solution75A{
+    public void sortColors(int[] nums){
+        int p0 = 0;
+        int p1 = 0;
+        for (int i=0;i<nums.length;i++){
+            int x = nums[i];
+            nums[i]  =2;
+            if (x<=1){
+                nums[p1++] = 1;
+            }
+            if (x==0){
+                nums[p0++] = 0;
+            }
+        }
+    }
+}
+class Solution26A{
+    public int removeDuplicates(int[] nums){
+        int k = 1;
+        for (int i =1;i<nums.length;i++){
+            if (nums[i]!=nums[i-1]){
+                nums[k++] = nums[i];
+            }
+        }
+        return k;
+    }
+}
+class Solution80A{
+    public int removeDuplicates(int[] nums){
+        int stackSize = 2;
+        for (int i =2;i<nums.length;i++){
+            if (nums[i]!=nums[stackSize-2]){
+                nums[stackSize++] = nums[i];
+            }
+        }
+        return Math.min(stackSize,nums.length);
     }
 }
