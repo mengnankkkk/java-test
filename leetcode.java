@@ -1805,3 +1805,54 @@ class Solution80A{
         return Math.min(stackSize,nums.length);
     }
 }
+class Solution283{
+    public void moveZeroes(int[] nums){
+        int stackSize = 0;
+        for (int x:nums){
+            if (x!=0){
+                nums[stackSize++] = x;
+            }
+        }
+        Arrays.fill(nums,stackSize,nums.length,0);
+    }
+}
+class Solution905{
+    public int[] sortArrayByParity(int[] nums){
+        int i =0,j=nums.length-1;
+        while (i<j){
+            if (nums[i]%2==0){
+                i++;
+            }
+            else if (nums[j]%2==1){
+                j--;
+            }else {
+                int tmp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = tmp;
+                i++;
+                j--;
+            }
+        }
+        return nums;
+    }
+}
+class Solution922{
+    public int[] sortArrayByParityII(int[] nums){
+        int i=0;int j =1;
+        while (i<nums.length){
+            if (nums[i]%2==0){
+                i +=2;
+            }else if (nums[j]%2==1){
+                j +=2;
+            }
+            else {
+                int tmp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = tmp;
+                i +=2;
+                j+=2;
+            }
+        }
+        return nums;
+    }
+}
