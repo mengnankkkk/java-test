@@ -1856,3 +1856,60 @@ class Solution922{
         return nums;
     }
 }
+class Solution1089{
+    public void duplicateZeros(int[] arr){
+        int n  = arr.length;
+        int countZeros = 0;
+        for (int i =0;i<n;i++){
+            if (arr[i] ==0){
+                countZeros++;
+            }
+        }
+        int i = n-1;
+        int j = n+countZeros-1;
+        while (i>=0){
+            if (arr[i]==0){
+                if (j<n) arr[j] = 0;
+                j--;
+            }
+            if (j<n){
+                arr[j] = arr[i];
+            }
+            i--;
+            j--;
+        }
+    }
+}
+class Solution442{
+    public List<Integer> findDuplicates(int[] nums){
+        List<Integer> duplicates = new ArrayList<Integer>();
+        int n = nums.length;
+        for (int i=0;i<n;i++){
+            int num  = nums[i];
+            int index = Math.abs(num)-1;
+            if (nums[index]>0){
+                nums[index] -=nums[index];
+            }else {
+                duplicates.add(index+1);
+            }
+        }
+        return duplicates;
+    }
+}
+class Solution448{
+    public List<Integer> findDisappearedNumbers(int[] nums){
+        List<Integer> res = new ArrayList<Integer>();
+        for (int i =0;i< nums.length;++i){
+            int index= Math.abs(nums[i])-1;
+            if (nums[index]>0){
+                nums[index] *=-1;
+            }
+        }
+        for (int i=0;i<nums.length;++i){
+            if (nums[i]>0){
+                res.add(i+1);
+            }
+        }
+        return res;
+    }
+}
