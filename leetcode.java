@@ -1913,3 +1913,62 @@ class Solution448{
         return res;
     }
 }
+class  Solution2109{
+    public String addSpaces(String s, int[] spaces){
+        StringBuilder ans = new StringBuilder(s.length()+spaces.length);
+        int j= 0;
+        for (int i = 0;i<s.length();i++){
+            if (j<spaces.length&&spaces[j]==i){
+                ans.append(' ');
+                j++;
+            }
+            ans.append(s.charAt(i));
+        }
+        return ans.toString();
+    }
+}
+class Solution2540{
+    public int getCommon(int[] nums1, int[] nums2){
+        int i =0,j=0;
+        while (i<nums1.length&&j<nums2.length){
+            int a = nums1[i],b = nums2[j];
+            if (a==b) return a;
+            if (a<b) i++;
+            else j++;
+        }
+        return -1;
+    }
+}
+class Solution88{
+    public void merge(int[] nums1, int m, int[] nums2, int n){
+        int p1 = m-1;
+        int p2 = n-1;
+        int p = m+n-1;
+        while (p2>=0){
+            if (p1>=0&&nums1[p1]>nums2[p2]){
+                nums1[p--] = nums1[p1--];
+            }
+            else {
+                nums1[p--] = nums2[p2--];
+            }
+        }
+    }
+}
+class SolutionLCP88{
+    public int breakfastNumber(int[] staple, int[] drinks, int x){
+        Arrays.sort(staple);
+        Arrays.sort(drinks);
+        int mod = 1_000_000_007;
+        int res = 0;
+        int j  = drinks.length-1;
+
+        for (int i=0;i<staple.length;i++){
+            if (staple[i]>x) break;
+            while (j>=0&&staple[i]+drinks[j]>x){
+                j--;
+            }
+            res = (res+(j+1))%mod;
+        }
+        return res;
+    }
+}
