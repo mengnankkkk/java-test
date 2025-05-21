@@ -1972,3 +1972,60 @@ class SolutionLCP88{
         return res;
     }
 }
+class Solution1855 {
+    public int maxDistance(int[] nums1, int[] nums2) {
+        int p1 = 0;
+        int p2 = 0;
+        int res = 0;
+        while (p1 < nums1.length && p2 <nums2.length){
+            if(nums1[p1] > nums2[p2]){  //无效
+                if(p1 == p2){
+                    p1++;
+                    p2++;
+                }else p1++;
+            }else {     //有效
+                res =Math.max(res,p2-p1);
+                p2++;
+            }
+        }
+        return res;
+    }
+}
+class Solution925{
+    public boolean isLongPressedName(String name, String typed){
+        int i=0,j=0;
+        while (j<typed.length()){
+            if (i<name.length()&&typed.charAt(j) ==name.charAt(i)){
+                i++;
+                j++;
+            }else if (j>0&&typed.charAt(j)==typed.charAt(j-1)){
+                j++;
+            }else {
+                return false;
+            }
+        }
+        return i ==name.length();
+    }
+}
+class Solution2337{
+    public boolean canChange(String start, String target){
+        if (!start.replace("_","").equals(target.replace("_",""))){
+            return false;
+        }
+        for (int i =0,j=0;i<start.length();i++){
+            if (start.charAt(i)=='_'){
+                continue;
+            }
+            while (target.charAt(j)=='_'){
+                j++;
+            }
+            if (i!=j&&(start.charAt(i)=='L')==(i<j)){
+                return false;
+            }
+            j++;
+        }
+        return true;
+    }
+}
+
+
