@@ -2027,5 +2027,54 @@ class Solution2337{
         return true;
     }
 }
+class Solution392{
+    public boolean isSubsequence(String s, String t){
+        if (s.isEmpty()) return true;
+        int i = 0;
+        for (char c:t.toCharArray()){
+            if (s.charAt(i)==c&&++i==s.length()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+}
+class Solution524{
+    public boolean isSubsequence(String t, String s){
+        int indext = 0,indexs=0;
+        while (indext<t.length()&&indexs<s.length()){
+            if (t.charAt(indext)==s.charAt(indexs)){
+                indext++;
+            }
+            indexs++;
+        }
+        return indext ==t.length();
+    }
+    public String findLongestWord(String s, List<String> d){
+        String result = "";
+        for (String t:d){
+            if (isSubsequence(t,s)){
+                if (result.length()<t.length()||(result.length()==t.length()&&result.compareTo(t)>0)) {
+                    result = t;
+                }
+            }
+        }
+        return result;
+    }
+}
+class Solution2486{
+    public int appendCharacters(String s, String t){
+        char[]cp = t.toCharArray();
+        char[]cs = s.toCharArray();
+        int k =0,n=cp.length;
+        for (char c:cs){
+            if (k<n&&cp[k]==c) k++;
+        }
+        return n-k;
+    }
+}
+
+
 
 
