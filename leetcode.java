@@ -2074,6 +2074,73 @@ class Solution2486{
         return n-k;
     }
 }
+class Solution2825{
+    public boolean canMakeSubsequence(String str1, String str2){
+        char[] s1  = str1.toCharArray();
+        char[] s2 = str2.toCharArray();
+        int i=0,j=0;
+        while (i<s1.length&&j<s2.length){
+            char a  =s1[i];
+            char b = s2[j];
+            if (a==b||(a-'a'+1)%26==(b-'a')){
+                j++;
+            }
+            i++;
+        }
+        return j==s2.length;
+    }
+}
+class Solution1023{
+    private boolean check(String s,String t){
+        int m = s.length(),n = t.length();
+        int i  =0,j=0;
+        for (;j<n;++i,++j){
+            while (i<m&&s.charAt(i)!=t.charAt(j)&&Character.isLowerCase(s.charAt(i))){
+                ++i;
+            }
+            if (i==m||s.charAt(i)!=t.charAt(j)){
+                return false;
+            }
+        }
+        while (i<m&&Character.isLowerCase(s.charAt(i))){
+            ++i;
+        }
+        return i==m;
+    }
+    public List<Boolean> camelMatch(String[] queries, String pattern){
+        List<Boolean> ans  = new ArrayList<>();
+        for (String q:queries){
+            ans.add(check(q,pattern));
+        }
+        return ans;
+    }
+}
+class Solution522{
+    private boolean isSubseq(String s, String t){
+        int i =0;
+        for (char c:t.toCharArray()){
+            if (s.charAt(i)==c&&++i==s.length()){
+                return true;
+            }
+        }
+        return false;
+    }
+    public int findLUSlength(String[] strs){
+        Arrays.sort(strs,(a,b)->b.length()-a.length());
+        for (int i =0;i<strs.length;i++){
+            boolean isSub = false;
+            for (int j  = 0;j<strs.length;j++){
+                if (i==j) continue;
+                if (isSubseq(strs[i],strs[j])){
+                    isSub  = true;
+                    break;
+                }
+            }
+            if (!isSub) return strs[i].length();
+        }
+        return -1;
+    }
+}
 
 
 
