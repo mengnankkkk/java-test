@@ -1,6 +1,7 @@
 import com.sun.jmx.snmp.SnmpNull;
 import com.sun.scenario.effect.Brightpass;
 import javafx.util.Pair;
+import sun.security.krb5.internal.crypto.Aes128;
 
 import java.rmi.MarshalException;
 import java.util.*;
@@ -2139,6 +2140,97 @@ class Solution522{
             if (!isSub) return strs[i].length();
         }
         return -1;
+    }
+}
+class Solution2942{
+    public List<Integer> findWordsContaining(String[] words, char x){
+        List<Integer> ans = new ArrayList<>();
+        for(int i =0;i< words.length;i++){
+            if (words[i].indexOf(x)>=0){
+                ans.add(i);
+            }
+        }
+        return ans;
+    }
+}
+class Solution2367{
+    public int arithmeticTripletsA(int[] nums, int diff){
+        int ans = 0;
+        HashSet set = new HashSet<Integer>();
+        for (int x:nums) set.add(x);
+        for (int x:nums){
+            if (set.contains(x-diff)&&set.contains(x+diff))
+                ++ans;
+        }
+        return ans;
+    }
+    public int arithmeticTriplets(int[] nums, int diff){
+        int ans = 0,i=0,j=1;
+        for (int x:nums){
+            while (nums[j]+diff<x){
+                ++j;
+            }
+            if (nums[j]+diff>x){
+                continue;
+            }
+            while (nums[i]+diff*2<x){
+                ++i;
+            }
+            if (nums[i]+diff*2==x){
+                ++ans;
+            }
+
+        }
+        return ans;
+    }
+}
+class Solution2536{
+    public long countFairPairs(int[] nums, int lower, int upper){
+        Arrays.sort(nums);
+        long ans  = 0;
+        int l  = nums.length;
+        int r  = nums.length;
+        for (int j =0;j<nums.length;j++){
+            while (r>0&&nums[r-1]>upper-nums[j]){
+                r--;
+            }
+            while (l>0&&nums[l-1]>=lower-nums[j]){
+                l--;
+            }
+            ans +=Math.min(r,j)-Math.min(l,j);
+        }
+        return ans;
+    }
+}
+class Solution1446{
+    public int maxPower(String s){
+        int n  = s.length(),ans = 1;
+        for (int i=0;i<n;){
+            int j  = i;
+            while (s.charAt(i)==s.charAt(j)&&j<n) j++;
+            ans = Math.max(ans,j-i);
+            i = j;
+        }
+        return ans;
+    }
+}
+class Solution1869{
+    public boolean checkZeroOnes(String s){
+        int n  = s.length();
+        int max1=  0,max0=0;
+        for (int i =0;i<n;){
+            int j =i;
+            while (j<n&&s.charAt(j)==s.charAt(i)) j++;
+            int len=  j-i;
+
+            if (s.charAt(i)=='1'){
+                max1 = Math.max(max1,len);
+            }else {
+                max0=Math.max(max0,len);
+            }
+            i=j;
+        }
+        return max1>max0;
     }
 }
 
