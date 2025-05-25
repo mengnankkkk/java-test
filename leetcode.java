@@ -2233,6 +2233,74 @@ class Solution1869{
         return max1>max0;
     }
 }
+class Solution2331{
+    public int longestPalindrome(String[] words){
+        int ans  = 0;
+        int n = words.length;
+        Map<String,Integer> map = new HashMap<>();
+        for (int i =0;i<n;i++){
+            StringBuilder sb =  new StringBuilder(words[i]);
+            String s = sb.reverse().toString();
+            if (map.getOrDefault(s,0)>0){
+                ans +=4;
+                map.put(s,map.get(s)-1);
+            }else {
+                map.put(words[i],map.getOrDefault(words[i],0)+1);
+            }
+        }
+        for (String key:map.keySet()){
+            if (map.get(key)>0&&key.charAt(0)==key.charAt(1)){
+                ans +=2;
+                break;
+            }
+        }
+        return ans;
+    }
+}
+class Solution2414{
+    public int longestContinuousSubstring(String S){
+        char[] s = S.toCharArray();
+        int ans = 1;
+        int cnt = 1;
+        for (int i=1;i<s.length;i++){
+            if (s[i-1]+1==s[i]){
+                ans = Math.max(ans,++cnt);
+            }else {
+                cnt = 1;
+            }
+        }
+        return ans;
+    }
+}
+class Solution1957{
+    public String makeFancyString(String s){
+        StringBuilder res = new StringBuilder();
+        for (char ch:s.toCharArray()){
+            int n =res.length();
+            if (n>=2&&ch==res.charAt(n-1)&&ch==res.charAt(n-2)){
+                continue;
+            }
+            res.append(ch);
+        }
+        return res.toString();
+    }
+}
+class Solution674{
+    public int findLengthOfLCIS(int[] nums){
+        int l =0;
+        int r  = 0;
+        int len = 0;
+        while (r<nums.length){
+            if (r==l||nums[r-1]<nums[r]){
+                len = Math.max(len,r-l+1);
+                r++;
+            }else {
+                l = r;
+            }
+        }
+        return len;
+    }
+}
 
 
 
