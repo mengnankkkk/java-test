@@ -2233,6 +2233,121 @@ class Solution1869{
         return max1>max0;
     }
 }
+class Solution2331{
+    public int longestPalindrome(String[] words){
+        int ans  = 0;
+        int n = words.length;
+        Map<String,Integer> map = new HashMap<>();
+        for (int i =0;i<n;i++){
+            StringBuilder sb =  new StringBuilder(words[i]);
+            String s = sb.reverse().toString();
+            if (map.getOrDefault(s,0)>0){
+                ans +=4;
+                map.put(s,map.get(s)-1);
+            }else {
+                map.put(words[i],map.getOrDefault(words[i],0)+1);
+            }
+        }
+        for (String key:map.keySet()){
+            if (map.get(key)>0&&key.charAt(0)==key.charAt(1)){
+                ans +=2;
+                break;
+            }
+        }
+        return ans;
+    }
+}
+class Solution2414{
+    public int longestContinuousSubstring(String S){
+        char[] s = S.toCharArray();
+        int ans = 1;
+        int cnt = 1;
+        for (int i=1;i<s.length;i++){
+            if (s[i-1]+1==s[i]){
+                ans = Math.max(ans,++cnt);
+            }else {
+                cnt = 1;
+            }
+        }
+        return ans;
+    }
+}
+class Solution1957{
+    public String makeFancyString(String s){
+        StringBuilder res = new StringBuilder();
+        for (char ch:s.toCharArray()){
+            int n =res.length();
+            if (n>=2&&ch==res.charAt(n-1)&&ch==res.charAt(n-2)){
+                continue;
+            }
+            res.append(ch);
+        }
+        return res.toString();
+    }
+}
+class Solution674{
+    public int findLengthOfLCIS(int[] nums){
+        int l =0;
+        int r  = 0;
+        int len = 0;
+        while (r<nums.length){
+            if (r==l||nums[r-1]<nums[r]){
+                len = Math.max(len,r-l+1);
+                r++;
+            }else {
+                l = r;
+            }
+        }
+        return len;
+    }
+}
+class Solution978{
+    public int maxTurbulenceSize(int[] arr){
+        int ans = 1, left = 0;
+        for (int right = 1;right<arr.length;right++){
+            int c = Integer.compare(arr[right-1],arr[right]);
+            if (right==arr.length-1||c*Integer.compare(arr[right],arr[right+1])!=-1){
+                if (c!=0){
+                    ans = Math.max(ans,right-left+1);
+                }
+                left = right;
+            }
+
+        }
+        return ans;
+    }
+}
+class Solution2110{
+    public long getDescentPeriods(int[] prices){
+        long ans = 0;
+        for (int right = 0,left = 0;right<prices.length;right++){
+            while (left!=right&&prices[right]-prices[right-1]!=-1){
+                left  =right;
+            }
+            ans +=right-left+1L;
+        }
+        return ans;
+    }
+}
+class Solution2765{
+    public int alternatingSubarray(int[] nums){
+        int ans = -1,i=0,n = nums.length;
+        while (i<n-1){
+            if (nums[i+1]-nums[i]!=1){
+                i++;
+                continue;
+            }
+            int i0 = i;
+            i +=2;
+            while (i<n&&nums[i]==nums[i-2]){
+                i++;
+            }
+            ans = Math.max(ans,i-i0);
+            i--;
+        }
+        return ans;
+    }
+}
 
 
 
