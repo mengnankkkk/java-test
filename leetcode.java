@@ -2301,6 +2301,53 @@ class Solution674{
         return len;
     }
 }
+class Solution978{
+    public int maxTurbulenceSize(int[] arr){
+        int ans = 1, left = 0;
+        for (int right = 1;right<arr.length;right++){
+            int c = Integer.compare(arr[right-1],arr[right]);
+            if (right==arr.length-1||c*Integer.compare(arr[right],arr[right+1])!=-1){
+                if (c!=0){
+                    ans = Math.max(ans,right-left+1);
+                }
+                left = right;
+            }
+
+        }
+        return ans;
+    }
+}
+class Solution2110{
+    public long getDescentPeriods(int[] prices){
+        long ans = 0;
+        for (int right = 0,left = 0;right<prices.length;right++){
+            while (left!=right&&prices[right]-prices[right-1]!=-1){
+                left  =right;
+            }
+            ans +=right-left+1L;
+        }
+        return ans;
+    }
+}
+class Solution2765{
+    public int alternatingSubarray(int[] nums){
+        int ans = -1,i=0,n = nums.length;
+        while (i<n-1){
+            if (nums[i+1]-nums[i]!=1){
+                i++;
+                continue;
+            }
+            int i0 = i;
+            i +=2;
+            while (i<n&&nums[i]==nums[i-2]){
+                i++;
+            }
+            ans = Math.max(ans,i-i0);
+            i--;
+        }
+        return ans;
+    }
+}
 
 
 
