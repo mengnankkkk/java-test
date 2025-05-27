@@ -2348,6 +2348,76 @@ class Solution2765{
         return ans;
     }
 }
+class Solution70A{
+    public int climbStairs(int n ){
+        int[] memo  = new int[n+1];
+        return dfs(n,memo);
+    }
+    private int dfs(int i,int[] memo){
+        if  (i<=1){
+            return 1;
+        }
+        if  (memo[i]!=0){
+            return memo[i];
+        }
+        return memo[i] = dfs(i-1,memo)+dfs(i-2,memo);
+    }
+
+}
+class Solution746{
+    public int minCostClimbingStairs(int[] cost){
+        int n = cost.length;
+        int [] memo = new int [n+1];
+        Arrays.fill(memo,-1);
+        return dfs(n,memo,cost);
+    }
+    private int dfs(int i ,int[] memo,int[] cost){
+        if (i<=1){
+            return 0;
+        }
+        if (memo[i]!=-1){
+            return memo[i];
+        }
+        int res1 = dfs(i-1,memo,cost)+cost[i-1];
+        int res2 = dfs(i-2,memo,cost)+cost[i-2];
+        return memo[i] = Math.min(res2,res1);
+    }
+}
+class Solution377{
+    public int combinationSum4(int[] nums, int target){
+        int[] memo = new int[target+1];
+        Arrays.fill(memo,-1);
+        return dfs(target,nums,memo);
+    }
+    private int dfs(int i,int[] nums,int[] memo){
+        if (i==0) return 1;
+        if (memo[i]!=-1){
+            return memo[i];
+        }
+        int res = 0;
+        for (int x:nums){
+            if (x<=i){
+                res +=dfs(i-x,nums,memo);
+            }
+        }
+        return memo[i]  = res;
+    }
+}
+class Solution2466{
+    public int countGoodStrings(int low, int high, int zero, int one){
+        int ans = 0;
+        final int MOD = 1_000_000_007;
+        int [] f = new int[high+1];
+        f[0]= 1;
+        for (int i=1;i<=high;i++){
+            if (i>=zero) f[i] = f[i-zero];
+            if (i>=one) f[i] = (f[i]+f[i-one])%MOD;
+            if (i>=low) ans = (ans+f[i])%MOD;
+        }
+        return ans;
+    }
+}
+
 
 
 
