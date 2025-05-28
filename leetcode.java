@@ -3,6 +3,7 @@ import com.sun.scenario.effect.Brightpass;
 import javafx.util.Pair;
 import sun.security.krb5.internal.crypto.Aes128;
 
+import javax.swing.*;
 import java.rmi.MarshalException;
 import java.util.*;
 import java.util.jar.JarEntry;
@@ -877,7 +878,7 @@ class Solution1128{
         return ans;
     }
 }
-class Solution3A{
+class Solution3AA{
     public int lengthOfLongestSubstring(String s){
         int n = s.length(),ans = 0;
         Map<Character,Integer> map = new HashMap<>();
@@ -2417,6 +2418,76 @@ class Solution2466{
         return ans;
     }
 }
+class Solution3AAA{
+    public int lengthOfLongestSubstring(String s){
+        Map<Character,Integer> cnt = new HashMap<>();
+        int left = -1,res = 0,n = s.length();
+        for (int right = 0;right<n;right++){
+            if (cnt.containsKey(s.charAt(right))){
+                left = Math.max(left,cnt.get(s.charAt(right)));
+            }
+            cnt.put(s.charAt(right),right);
+            res = Math.max(res,right-left);
+        }
+        return res;
+    }
+}
+class LRUCacheA extends LinkedHashMap<Integer,Integer>{
+    private int capacity;
+    public LRUCacheA(int capacity) {
+        super(capacity,0.75F,true);
+        this.capacity = capacity;
+    }
+
+    public int get(int key) {
+        return super.getOrDefault(key,-1);
+    }
+
+    public void put(int key, int value) {
+        super.put(key,value);
+    }
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<Integer,Integer> eldest){
+        return size()>capacity;
+    }
+}
+class Solution206A {
+    public ListNode reverseList(ListNode head) {
+        ListNode pre = null;
+        ListNode cur = head;
+        while (cur != null) {
+            ListNode nxt = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = nxt;
+        }
+        return pre;
+    }
+}
+class Solution25A{
+    public ListNode reverseKGroup(ListNode head, int k){
+        int n =0;
+        for (ListNode cur = head;cur!=null;cur =cur.next){
+            n++;//计数器
+        }
+        ListNode dummy = new ListNode(0,head),preHead = dummy;
+        ListNode pre = null,cur = head;
+        for (;n>=k;n-=k){//重复n-k次
+            for (int i = 0;i<k;++i){
+                ListNode  next = cur.next;
+                cur.next = pre;
+                pre =cur;
+                cur  = next;
+            }
+            ListNode tail = preHead.next;//反转区间的结尾
+            tail.next = cur;//下个区间
+            preHead.next = pre;//区间的新head
+            preHead = tail;//到达结尾进行下一个
+        }
+        return dummy.next;
+    }
+}
+
 
 
 
