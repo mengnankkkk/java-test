@@ -13,7 +13,7 @@ import java.util.List;
 class ListNode {
     int val;
     ListNode next;
-    ListNode(int x) { val = x; next = null; }
+    ListNode(int x, ListNode head) { val = x; next = null; }
 }
 
 // 1. 两数之和
@@ -203,7 +203,7 @@ class Solution12 {
 
 class Solution13 {
             public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-                ListNode pre = new ListNode(0);
+                ListNode pre = new ListNode(0, head);
                 ListNode cur = pre;
                 int carry = 0;
                 while (l1 != null || l2 != null) {
@@ -213,7 +213,7 @@ class Solution13 {
 
                     carry = sum / 10;
                     sum = sum % 10;
-                    cur.next = new ListNode(sum);
+                    cur.next = new ListNode(sum, head);
 
                     cur = cur.next;
                     if (l1 != null) {
@@ -224,14 +224,14 @@ class Solution13 {
                     }
                 }
                 if (carry == 1) {
-                    cur.next = new ListNode(carry);
+                    cur.next = new ListNode(carry, head);
                 }
                 return pre.next;
             }
         }
         class Solution14 {
             public ListNode removeNthFromEnd(ListNode head, int n) {
-                ListNode pre = new ListNode(0);
+                ListNode pre = new ListNode(0, head);
                 pre.next = head;
                 ListNode start = pre, end = pre;
                 while (n != 0) {
@@ -257,7 +257,7 @@ class Solution15 {
         return next;
     }
     public ListNode swapPairs2(ListNode head){
-        ListNode pre = new ListNode(0);
+        ListNode pre = new ListNode(0, head);
         pre.next = head;
         ListNode tmp = pre;
         while (tmp.next!=null&&tmp.next.next!=null){
@@ -319,10 +319,10 @@ class Solution17{
             cur = cur.next;
         }
         Arrays.sort(arr);
-        ListNode listNode = new ListNode(arr[0]);
+        ListNode listNode = new ListNode(arr[0], head);
         cur = listNode;
         for (int i=1;i<arr.length;i++){
-            cur.next = new ListNode(arr[i]);
+            cur.next = new ListNode(arr[i], head);
             cur = cur.next;
         }
         return listNode;
