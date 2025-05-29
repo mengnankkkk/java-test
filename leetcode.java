@@ -2487,8 +2487,153 @@ class Solution25A{
         return dummy.next;
     }
 }
+class Solution15A{
+    public List<List<Integer>> threeSum(int[] nums){
+        Arrays.sort(nums);
+        List<List<Integer>> ans = new ArrayList<>();
+        int n  = nums.length;
+        for (int i =0;i<n-2;i++){
+            int x = nums[i];
+            if (i>0&&x==nums[i-1]) continue;//跳过重复数组
+            if (x+nums[i+1]+nums[i+2]>0) continue;//没负数就别看了
+            if (x+nums[n-2]+nums[n-1]<0) continue;//每个正数也不看了
+            int j = i+1;
+            int k  = n-1;
+            while (j<k){
+                int s= x+nums[j]+nums[k];
+                if (s>0){
+                    k--;
+                }else if (s<0){
+                    j++;
+                }else {
+                    //ans.add(List.of(x, nums[j], nums[k]));
+                    for (j++;j<k&&nums[j]==nums[j-1];j++);//去重
+                    for (k--;k>j&&nums[k]==nums[k+1];k--);//去重
 
 
+                }
+            }
+        }
+        return ans;
+    }
+}
+class Solution53A{
+    public int maxSubArray(int[] nums){
+        int ans = nums[0];
+        int sum = 0;
+        for (int x:nums){
+            if (sum>0){
+                sum +=x;
+            }else {
+                sum = x;
+            }
+            ans = Math.max(sum,ans);
+        }
+        return ans;
+    }
+}
+class Solution912{
+    private static final int INSERTION_SORT_THRESHOLD = 7;
+    private static final Random RANDOM  = new Random();
+
+    public int[] sortArray(int[] nums){
+        int len  = nums.length;
+        quickSort(nums,0,len-1);
+        return nums;
+    }
+    private void quickSort(int[] nums,int left,int right){
+        if (right-left<=INSERTION_SORT_THRESHOLD){
+            insertSort(nums,left,right);
+            return;
+        }
+        int pIndex = partition(nums,left,right);
+        quickSort(nums,left,pIndex-1);
+        quickSort(nums,pIndex+1,right);
+    }
+    private void insertSort(int[] nums,int left,int right){
+        for (int i = left+1;i<=right;i++){
+            int tmp = nums[i];
+            int j = i;
+            while (j>left&&nums[j-1]>tmp){
+                nums[j] = nums[j-1];
+                j--;
+            }
+            nums[j] = tmp;
+
+        }
+    }
+    private int partition(int[] nums, int left, int right){
+        int randomIndex = left+RANDOM.nextInt(right-left+1);
+        swap(nums,randomIndex,left);
+
+        int pivot = nums[left];
+        int lt = left+1;
+        int gt = right;
+        while (true) {
+            while (lt <= right && nums[lt] < pivot) {
+                lt++;
+            }
+
+            while (gt > left && nums[gt] > pivot) {
+                gt--;
+            }
+
+            if (lt >= gt) {
+                break;
+            }
+
+            // 细节：相等的元素通过交换，等概率分到数组的两边
+            swap(nums, lt, gt);
+            lt++;
+            gt--;
+        }
+        swap(nums, left, gt);
+        return gt;
+
+    }
+    private void swap(int[] nums, int index1, int index2) {
+        int temp = nums[index1];
+        nums[index1] = nums[index2];
+        nums[index2] = temp;
+    }
+
+}
+class Solution21A{
+    public ListNode mergeTowLists(ListNode l1, ListNode l2){
+        if (l1==null){
+            return l2;
+        }
+        else if (l2==null){
+            return l1;
+        }
+        else if (l1.val<l2.val){
+            l1.next  = mergeTowLists(l1.next,l2);
+            return l1;
+        }else {
+            l2.next = mergeTowLists(l1,l2.next);
+            return l2;
+        }
+    }
+}
+class Solution5A{
+    public String longestPalindrome(String s){
+        String res = "";
+        for (int i =0;i<s.length();i++){
+            String s1 = expend(s,i,i+1);
+            String s2 = expend(s,i,i);
+            res = res.length()>s1.length()?res:s1;
+            res = res.length()>s2.length()?res:s2;
+        }
+        return res;
+    }
+    private String expend(String s,int l,int r){
+        while (l>=0&&r<s.length()&&s.charAt(l)==s.charAt(r)){
+            l--;
+            r++;
+        }
+        return s.substring(l+1,r);
+    }
+}
 
 
 
