@@ -2634,6 +2634,90 @@ class Solution5A{
         return s.substring(l+1,r);
     }
 }
+class Solution102A{
+    public List<List<Integer>> levelOrder(TreeNode root){
+        List<List<Integer>> res = new ArrayList<>();
+        Queue<TreeNode> queue   = new ArrayDeque<>();
+        if (root!=null){
+            queue.add(root);
+        }
+        while (!queue.isEmpty()){
+            int n = queue.size();
+            List<Integer> level = new ArrayList<>();
+            for (int i=0;i<n;i++){
+                TreeNode node = queue.poll();
+                level.add(node.val);
+                if (node.left!=null){
+                    queue.add(node.left);
+                }
+                if (node.right!=null){
+                    queue.add(node.right);
+                }
+            }
+            res.add(level);
+        }
+        return res;
+    }
+}
+class Solution1A{
+    public int[] twoSum(int[] nums,int target){
+        Map<Integer,Integer> map  = new HashMap<>();
+        for (int i=0;i<nums.length;i++){
+            if (map.containsKey(target-nums[i])){
+                return new int[] {map.get(target-nums[i]),i};
+            }
+            map.put(nums[i],i);
+        }
+        throw new IllegalArgumentException("No two sum solution");
+    }
+}
+class Solution33A{
+    private boolean check(int[] nums, int target, int i){
+        int x = nums[i];
+        int end = nums[nums.length-1];
+        if (x>end){
+            return target>end&&x>=target;
+        }
+        return target>end||x>=target;
+    }
+    public int search(int[] nums, int target){
+        int left = -1;
+        int right = nums.length-1;
+        while (left+1<right){
+            int mid = (left+right)>>>1;
+            if (check(nums,target,mid)){
+                right = mid;
+            }else{
+                left = mid;
+            }
+        }
+        return nums[right]==target?right:-1;
+    }
+}
+class Solution200{
+    public int numIslands(char[][] grid){
+        int ans = 0;
+        for (int i =0;i<grid.length;i++){
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j]=='1'){
+                    dfs(grid,i,j);
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+    private void dfs(char[][] grid,int i,int j){
+        if (i<0||i>=grid.length||j<0||j>=grid[0].length||grid[i][j]!='1'){
+            return;
+        }
+        grid[i][j]='2';
+        dfs(grid,i,j-1);
+        dfs(grid,i,j+1);
+        dfs(grid,i-1,j);
+        dfs(grid,i+1,j);
+    }
+}
 
 
 
