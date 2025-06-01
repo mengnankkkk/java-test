@@ -2718,7 +2718,73 @@ class Solution200{
         dfs(grid,i+1,j);
     }
 }
+class Solution2929{
+    public  long distributeCandies(int n, int limit){
+        if (n>3*limit) return 0;
+        long res = 0;
+        for (int i=Math.max(0,n-2*limit);i<=Math.min(n,limit);++i){
+            res  +=(Math.min(limit,n-i)-Math.max(0,n-i-limit)+1);
+        }
+        return res;
+    }
+}
+class Solutoion46{
+    public List<List<Integer>> permute(int[] nums){
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> path = Arrays.asList(new Integer[nums.length]);
+        boolean[] onPath = new boolean[nums.length];
+        dfs(0,nums,ans,path,onPath);
+        return ans;
+     }
+     private void dfs(int i,int[] nums,List<List<Integer>> ans,List<Integer> path,boolean[] onPath){
+        if (i==nums.length){
+            ans.add(new ArrayList<>(path));
+            return;
+        }
+        for (int j=0;j<nums.length;j++){
+            if (!onPath[j]){
+                path.set(i,nums[j]);
+                onPath[j] = true;
+                dfs(i+1,nums,ans,path,onPath);
+                onPath[j] = false;
+            }
+        }
+     }
+}
+class Solution88A{
+    public void merge(int[] nums1, int m, int[] nums2, int n){
+        int p1 = m-1;
+        int p2 = n-1;
+        int p =m+n-1;
+        while (p2>=0){
+            if (p1>=0&&nums1[p1]>=nums2[p2]){
+                nums1[p--] = nums1[p1--];
+            }
+            else {
+                nums1[p--] = nums2[p2--];
+            }
+        }
+    }
+}
+class Solution20{
+    public boolean isValid(String s){
+        if (s.isEmpty()){
+            return true;
+        }
+        Stack<Character> stack = new Stack<Character>();
+        for (char c :s.toCharArray()){
+            if (c=='(') stack.push(')');
+            else if (c=='{') stack.push('}');
+            else if (c=='[') stack.push(']');
+            else if (stack.isEmpty()||c!=stack.pop()){
+                return false;
+            }
 
+        }
+        return stack.isEmpty();
+    }
+
+}
 
 
 
