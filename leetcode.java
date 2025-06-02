@@ -2766,7 +2766,7 @@ class Solution88A{
         }
     }
 }
-class Solution20{
+class Solution20A{
     public boolean isValid(String s){
         if (s.isEmpty()){
             return true;
@@ -2785,6 +2785,98 @@ class Solution20{
     }
 
 }
+class Solution135{
+    public int candy(int[] ratings){
+        int[] left = new int[ratings.length];
+        int[] right = new int[ratings.length];
+        Arrays.fill(left,1);
+        Arrays.fill(right,1);
+        for (int i =1;i<ratings.length;i++){
+            if (ratings[i]>ratings[i-1]) left[i] = left[i-1]+1;
+        }
+        int count = left[ratings.length-1];
+        for (int i=ratings.length-2;i>=0;i--){
+            if (ratings[i]>ratings[i+1]) right[i] = right[i+1]+1;
+            count +=Math.max(left[i],right[i]);
+        }
+        return count;
+    }
+}
+class Solution121{
+    public int maxProfit(int[] prices){
+        int cost = Integer.MAX_VALUE,profit = 0;
+        for (int p:prices){
+            cost = Math.min(cost,p);
+            profit = Math.max(profit,p-cost);
+        }
+        return profit;
+    }
+}
+class Solution103A{
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root){
 
+        List<List<Integer>> ans = new ArrayList<>();
+        Queue<TreeNode> q = new ArrayDeque<>();
+
+        if(root!=null) q.add(root);
+        while (!q.isEmpty()){
+            int n = q.size();
+            List<Integer> vals = new ArrayList<>(n);
+            while (n-->0){
+                TreeNode node = q.poll();
+                vals.add(node.val);
+                if (node.left!=null) q.add(node.left);
+                if (node.right!=null) q.add(node.right);
+            }
+            if (ans.size()%2>0) Collections.reverse(vals);
+            ans.add(vals);
+        }
+        return ans;
+
+    }
+}
+class Solution236{
+    public TreeNode lowestCommonAncestor(TreeNode root,TreeNode p,TreeNode q){
+        if (root==null||root==q||root==p) return root;
+        TreeNode left = lowestCommonAncestor(root.left,p,q);
+        TreeNode right = lowestCommonAncestor(root.right,p,q);
+        if (left==null) return right;
+        if (right==null) return left;
+        return root;
+    }
+}
+class Solution141{
+    public boolean hasCycle(ListNode head) {
+        ListNode fast = head, slow = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (slow == fast) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+class Solution92{
+    public ListNode reverseBetween(ListNode head, int left, int right){
+        ListNode dummy = new ListNode(0,head);
+        ListNode p0 = dummy;
+        for (int i=0;i<left-1;i++){
+            p0= p0.next;
+        }
+        ListNode pre = null;
+        ListNode cur = p0.next;
+        for (int i = 0;i<right-left+1;i++){
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur= next;
+        }
+        p0.next.next = cur;
+        p0.next = pre;
+        return dummy.next;
+    }
+}
 
 
