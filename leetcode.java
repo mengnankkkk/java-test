@@ -2878,5 +2878,84 @@ class Solution92{
         return dummy.next;
     }
 }
+class Solution1298{
+    private int ans = 0;
+    public int maxCandies(int[] status, int[] candies, int[][] keys, int[][] containedBoxes, int[] initialBoxes){
+        int[] hasKey = status;
+        boolean[] hasBox = new boolean[status.length];
+        for (int x:initialBoxes){
+            hasBox[x] = true;
+        }
+        for (int x:initialBoxes){
+            if (hasBox[x]&&hasKey[x]==1){
+                dfs(x,candies,keys,containedBoxes,hasKey,hasBox);
+            }
+        }
+        return ans;
+    }
+    private void dfs(int x, int[] candies, int[][] keys, int[][] containedBoxes, int[] hasKey, boolean[] hasBox){
+        ans +=candies[x];
+        hasBox[x]= false;
+        for (int y:keys[x]){
+            hasKey[y] = 1;
+            if (hasBox[y]){
+                dfs(y,candies,keys,containedBoxes,hasKey,hasBox);
+            }
+        }
+        for (int y:containedBoxes[x]){
+            hasBox[y] = true;
+            if (hasKey[y]==1){
+                dfs(y, candies, keys, containedBoxes, hasKey, hasBox);
+            }
+        }
+    }
+}
+class Solution54A{
+    public List<Integer> spiralOrder(int[][] matrix){
+        List<Integer> res = new ArrayList<>();
+        if (matrix.length==0) return res;
+        int l =0,r = matrix[0].length-1;
+        int t = 0,b = matrix.length-1;
+
+        while (l<=r&&t<=b){
+            for (int i = l;i<=r;i++) res.add(matrix[t][i]);
+            t++;
+            if (t>b) break;
+
+            for (int i =t;i<=b;i++) res.add(matrix[i][r]);
+            r--;
+            if (l>r) break;
+
+            for (int i=r;i>=l;i--) res.add(matrix[b][i]);
+            b--;
+            if (t>b) break;
+
+            for (int i =b;i>=t;i--) res.add(matrix[i][l]);
+            l++;
+            if (l>r) break;
+        }
+        return res;
+    }
+}
+class Solution300{
+    public int lengthOfLIS(int[] nums){
+        int[] res = new int[nums.length];
+        int k = 0;
+        res[0] = nums[0];
+        for (int i  =1;i<nums.length;i++){
+            if (nums[i]>res[k]){
+                res[++k] = nums[i];
+                continue;
+            }
+            for (int j = 0;j<=k;j++){
+                if (res[j]>=nums[i]){
+                    res[j] =nums[i];
+                    break;
+                }
+            }
+        }
+        return k+1;
+    }
+}
 
 
