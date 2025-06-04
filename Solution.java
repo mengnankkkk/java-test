@@ -14,6 +14,10 @@ class ListNode {
     int val;
     ListNode next;
     ListNode(int x, ListNode head) { val = x; next = null; }
+
+    public ListNode() {
+
+    }
 }
 
 // 1. 两数之和

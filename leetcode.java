@@ -2957,5 +2957,114 @@ class Solution300{
         return k+1;
     }
 }
+class Solution3403{
 
+    public String answerString(String word, int numFriends) {
+        if (numFriends == 1) {
+            return word;
+        }
+        int n = word.length();
+        String ans = "";
+        for (int i = 0; i < n; ++i) {
+            String t = word.substring(i, Math.min(n, i + n - (numFriends - 1)));
+            if (ans.compareTo(t) < 0) {
+                ans = t;
+            }
+        }
+        return ans;
+    }
+}
+class Solution23A{
+    public ListNode mergeKLists(ListNode[] lists){
+        int m =  lists.length;
+        if (m==0){
+            return null;
+        }
+        for (int step = 1;step<m;step*=2){
+            for (int i =0;i<m-step;i+=step*2){
+                lists[i] =  meryTwoLists(lists[i],lists[i+step]);
+            }
+        }
+        return lists[0];
+    }
+    private ListNode meryTwoLists(ListNode list1,ListNode list2){
+        ListNode dummy = new ListNode();
+        ListNode cur = dummy;
+        while (list1!=null&&list2!=null){
+            if (list1.val<list2.val){
+                cur.next = list1;
+                list1 = list1.next;
+            }else {
+                cur.next = list2;
+                list2 = list2.next;
+            }
+            cur = cur.next;
+        }
+        cur.next = list1!=null?list1:list2;
+        return dummy.next;
+    }
+}
+class Solution143{
+    public ListNode middleNode(ListNode head){
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast.next!=null&&fast.next.next!=null){
+            slow =slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+    public ListNode reverseList(ListNode head){
+        ListNode pre = null;
+        ListNode cur = head;
+        while (cur!=null){
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+    public void mergeList(ListNode l1, ListNode l2){
+        ListNode l1_temp;
+        ListNode l2_temp;
+        while (l1!=null&&l2!=null){
+            l1_temp = l1.next;
+            l2_temp = l2.next;
+
+            l1.next = l2;
+            l1 = l1_temp;
+
+            l2.next = l1;
+            l2 = l2_temp;
+        }
+    }
+    public void reorderList(ListNode head){
+        if (head==null){
+            return;
+        }
+        ListNode mid = middleNode(head);
+        ListNode l1 =head;
+        ListNode l2 = mid.next;
+        mid.next = null;
+        l2 = reverseList(l2);
+        mergeList(l1,l2);
+    }
+}
+class Solution415{
+    public String addStrings(String num1, String num2){
+        StringBuilder res = new StringBuilder("");
+        int i =  num1.length()-1, j = num2.length()-1,carry = 0;
+        while (i>=0||j>=0){
+            int n1 = i>=0?num1.charAt(i)-'0':0;
+            int n2 = j>=0?num2.charAt(j)-'0':0;
+            int tmp = n1+n2+carry;
+            carry = tmp/10;
+            res.append(tmp%10);
+            i--;j--;
+        }
+        if (carry==1) res.append(1);
+        return res.reverse().toString();
+    }
+}
 
