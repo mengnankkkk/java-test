@@ -3067,4 +3067,69 @@ class Solution415{
         return res.reverse().toString();
     }
 }
+class Solution56A{
+    public int[][] merge(int[][] intervals){
+        Arrays.sort(intervals,(p,q)->p[0]-q[0]);
+        List<int[]> ans = new ArrayList<>();
+        for(int[] p:intervals){
+            int m = ans.size();
+            if (m>0&&p[0]<=ans.get(m-1)[1]){
+                ans.get(m-1)[1] = Math.max(ans.get(m-1)[1],p[1]);
+            }else {
+                ans.add(p);
+            }
+        }
+        return ans.toArray(new int[ans.size()][]);
+    }
+}
+class Solution160{
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB){
+        if (headA==null||headB==null) return null;
+        ListNode A = headA,B=headB;
+        while (A!=B){
+            A=(A!=null)?A.next:headB;
+            B=(B!=null)?B.next:headA;
+        }
+        return A;
+    }
+}
+class Solution42A{
+    public int trap(int[] height){
+        int left = 0,right = height.length-1;
+        int preMax= 0,SubMax = 0;
+        int ans = 0;
+        while (left<right){
+            preMax = Math.max(height[left],preMax);
+            SubMax = Math.max(height[right],SubMax);
+            ans +=preMax<SubMax?preMax-height[left++]:SubMax-height[right--];
+
+        }
+        return ans;
+    }
+    public int trapA(int[] height){
+        int index = 0,peak = 0;
+        for (int i=0;i<height.length;i++){
+            if (height[i]>peak){
+                peak = height[i];
+                index = i;
+            }
+        }
+        int ans = 0;
+        int peakInterL =0;
+        for (int i=0;i<index;i++){
+            if (height[i]>peakInterL){
+                peakInterL = height[i];
+            }
+            ans +=(peakInterL-height[i]);
+        }
+        int peakInterR = 0;
+        for (int i = height.length-1;i>index;i--){
+            if (height[i]>peakInterR){
+                peakInterR = height[i];
+            }
+            ans +=(peakInterR-height[i]);
+        }
+        return ans;
+    }
+}
 
