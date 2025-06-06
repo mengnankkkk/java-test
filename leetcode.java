@@ -3132,4 +3132,93 @@ class Solution42A{
         return ans;
     }
 }
+class Solution2334{
+    public String robotWithString(String s){
+        int n  = s.length();
+        char[] sufMin = new char[n+1];
+        sufMin[n]  = Character.MAX_VALUE;
+        for (int i=n-1;i>=0;i--){
+            sufMin[i] = (char) Math.min(sufMin[i+1],s.charAt(i));
+        }//
+        StringBuilder ans = new StringBuilder();
+        Deque<Character> st = new ArrayDeque<>();
+        for (int i =0;i<n;i++){
+            st.push(s.charAt(i));
+            while (!st.isEmpty()&&st.peek()<=sufMin[i+1]){
+                ans.append(st.pop());
+            }
+        }
+        return ans.toString();
+    }
+}
+class Solution124{
+    private int ans = Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        dfs(root);
+        return ans;
+    }
+    private int dfs(TreeNode node){
+        if (node==null) return 0;
+        int LVal = dfs(node.left);
+        int RVal = dfs(node.right);
+        ans  = Math.max(ans,LVal+RVal+node.val);
+        return Math.max(Math.max(LVal,RVal)+node.val,0);
+    }
+}
+class Solution142{
+    public ListNode detectCycle(ListNode head){
+        ListNode fast= head,slow  =head;
+        while (fast!=null&&fast.next!=null){
+            fast = fast.next.next;
+            slow  = slow.next;
+            if (fast==slow){
+                fast = head;
+                while (slow!=fast){
+                    slow = slow.next;
+                    fast = fast.next;
+                }
+                return fast;
+            }
+        }
+        return null;
+    }
+}
+class Solution93{
+    private List<String> ans = new ArrayList<>();
+    private List<String> segments = new ArrayList<>();
+
+    public List<String> restoreIpAddresses(String s){
+        if (s.length()<4||s.length()>12){
+            return ans;
+        }
+        dfs(s,0,segments);
+        return ans;
+    }
+    private void dfs(String s,int index,List<String> segments){
+        if (segments.size()==4){
+            if (index==s.length()){
+                ans.add(String.join(".",segments));
+            }
+            return;
+        }
+        for (int len = 1;len<=3;len++){
+            if (index+len>s.length()){
+                break;
+            }
+            String segment = s.substring(index,index+len);
+            if (isValid(segment)) {
+                segments.add(segment);
+                dfs(s, index + len, segments);
+                segments.remove(segments.size() - 1);  //恢复现场
+            }
+        }
+    }
+    private boolean isValid(String segment){
+        if (segment.length() > 1 && segment.startsWith("0")){
+            return false;
+        }
+        int num = Integer.parseInt(segment);
+        return num >= 0 && num <= 255;
+    }
+}
 
