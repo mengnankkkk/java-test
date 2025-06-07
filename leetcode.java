@@ -3221,4 +3221,115 @@ class Solution93{
         return num >= 0 && num <= 255;
     }
 }
+class Solution3170{
+    public String clearStars(String S){
+        char[] s = S.toCharArray();
+        List<Integer>[] stacks = new ArrayList[26];
+        Arrays.setAll(stacks,i->new ArrayList<>());
+        for (int i=0;i<s.length;i++){
+            if(s[i]!='*'){
+                stacks[s[i]-'a'].add(i);
+                continue;
+            }
+            for (List<Integer> st:stacks){
+                if (!st.isEmpty()){
+                    st.remove(st.size()-1);
+                    break;
+                }
+            }
+        }
+        List<Integer> idx = new ArrayList<>();
+        for (List<Integer> st:stacks){
+            idx.addAll(st);
+        }
+        Collections.sort(idx);
+        StringBuilder ans = new StringBuilder(idx.size());
+        for (int i:idx){
+            ans.append(s[i]);
+        }
+        return ans.toString();
+    }
+}
+class Solution1143{
+    private char[] s,t;
+    private int[][] memo;
+    public int longestCommonSubsequence(String text1, String text2){
+        s =text1.toCharArray();
+        t = text2.toCharArray();
+        int n  =s.length;
+        int m = t.length;
+        memo = new int[n][m];
+        for (int[] row:memo){
+            Arrays.fill(row,-1);
+        }
+        return dfs(n-1,m-1);
+    }
+    private int dfs(int i ,int j){
+        if (i<0||j<0) return 0;
+        if (memo[i][j]!=-1) return memo[i][j];
+        if (s[i]==t[j]) return memo[i][j] = dfs(i-1,j-1)+1;
+        return memo[i][j] = Math.max(dfs(i-1,j),dfs(i,j-1));
 
+    }
+    public int longestCommonSubsequenceA(String text1, String text2){
+        s =text1.toCharArray();
+        t = text2.toCharArray();
+        int n  =s.length;
+        int m = t.length;
+        int[][] f = new int[n+1][m+1];
+        for (int i =0;i<n;i++){
+            for (int j=0;j<m;j++){
+                f[i+1][j+1] = s[i] == t[j]?f[i][j]+1:Math.max(f[i][j+1],f[i+1][j]);
+            }
+        }
+        return f[n][m];
+    }
+    public int longestCommonSubsequenceB(String text1, String text2){
+        char[] t = text2.toCharArray();
+        int m = t.length;
+        int[] f = new int[m + 1];
+        for (char x:text1.toCharArray()){
+            int pre=  0;
+            for (int j=0;j<m;j++){
+                int tmp = f[j+1];
+                f[j+1] = x==t[j]?pre+1:Math.max(f[j+1],f[j]);
+                pre = tmp;
+            }
+        }
+        return f[m];
+    }
+}
+class  Solution19A{
+    public ListNode removeNthFromEnd(ListNode head, int n){
+        ListNode dummy = new ListNode(0,head);
+        ListNode left = dummy;
+        ListNode right = dummy;
+        while (n-->0){
+            right = right.next;
+        }
+        while (right.next!=null){
+            left = left.next;
+            right = right.next;
+        }
+        left.next = left.next.next;
+        return dummy.next;
+    }
+}
+class Solution82A{
+    public ListNode deleteDuplicates(ListNode head){
+        ListNode dummy = new ListNode(0,head);
+        ListNode cur = dummy;
+        while (cur.next!=null&&cur.next.next!=null) {
+            int val = cur.next.val;
+            if (cur.next.next.val==val){
+                while (cur.next != null && cur.next.next != null && cur.next.val == val)
+                {
+                    cur.next= cur.next.next;
+                }
+            }else {
+                cur = cur.next;
+            }
+        }
+        return dummy.next;
+    }
+}
