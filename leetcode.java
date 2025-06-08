@@ -3333,3 +3333,91 @@ class Solution82A{
         return dummy.next;
     }
 }
+class Solution386{
+    List<Integer> ans  = new ArrayList<>();
+    public List<Integer> lexicalOrder(int n){
+        for (int i=1;i<=9;i++) dfs(i,n);
+        return ans;
+    }
+    void dfs(int cur,int limit){
+        if (cur>limit) return;
+        ans.add(cur);
+        for (int i=0;i<=9;i++) dfs(cur*10+i,limit);
+    }
+}
+class Solution199{
+    public List<Integer> rightSideView(TreeNode root){
+        List<Integer> ans = new ArrayList<>();
+        dfs(root,0,ans);
+        return ans;
+    }
+    private void dfs(TreeNode root,int depth,List<Integer> ans){
+        if (root==null) return ;
+        if (depth==ans.size()){
+            ans.add(root.val);
+        }
+        dfs(root.right,depth+1,ans);
+        dfs(root.left,depth+1,ans);
+    }
+}
+class Solution94{
+    public List<Integer> inorderTraversal(TreeNode root){
+        List<Integer> ans = new ArrayList<>();
+        dfs(root,ans);
+        return ans;
+    }
+    private void dfs(TreeNode root,List<Integer> ans){
+        if (root==null) return;
+        dfs(root.left,ans);
+        ans.add(root.val);
+        dfs(root.right,ans);
+    }
+}
+class Solution704A{
+    public int search(int[] nums, int target){
+        int left = 0,right = nums.length-1;
+        while (left<=right){
+            int mid = (left+right)>>>1;
+            if (nums[mid]<target){
+                left = mid+1;
+            }else if (nums[mid]==target){
+                return mid;
+            }else {
+                right = mid-1;
+            }
+        }
+        return -1;
+    }
+}
+class MyQueue {
+    private Stack<Integer> A;
+    private Stack<Integer> B;
+
+    public MyQueue() {
+        A = new Stack<>();
+        B = new Stack<>();
+    }
+
+    public void push(int x) {
+        A.push(x);
+    }
+
+    public int pop() {
+        int peek =peek();
+        B.pop();
+        return peek;
+    }
+
+    public int peek() {
+        if (!B.isEmpty()) return B.peek();
+        if (A.isEmpty()) return -1;
+        while (!A.isEmpty()){
+            B.push(A.pop());
+        }
+        return B.peek();
+    }
+
+    public boolean empty() {
+        return A.isEmpty()&&B.isEmpty();
+    }
+}
