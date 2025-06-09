@@ -3421,3 +3421,151 @@ class MyQueue {
         return A.isEmpty()&&B.isEmpty();
     }
 }
+class Solution440{
+    int ans  = 0;
+    int count = 0;
+    public int findKthNumber(int n, int k){
+        for (int i=1;i<=9;i++) dfs(i,n,k);
+        return ans;
+    }
+    void dfs(int cur,int limit,int k){
+        if (cur>limit||ans!=-1) return;
+        count++;
+        if (count==k){
+            ans =cur;
+            return;
+        }
+
+        for (int i=0;i<=9;i++) dfs(cur*10+i,limit,k);
+    }
+}
+class Solution440A{
+    public int findKthNumber(int n, int k){
+        int node = 1;
+        k--;
+        while (k>0){
+            int size = countSubtreeSize(n,node);
+            if (size<=k){
+                node++;
+                k -=size;
+            }else {
+                node *=10;
+                k--;
+            }
+        }
+        return node;
+    }
+    private int countSubtreeSize(int n, int node){
+        int size = 0;
+        long left = node,right = node+1;
+        while (left<=n){
+            size +=Math.min(right,n+1)-left;
+            left *=10;
+            right*=10;
+        }
+        return size;
+    }
+}
+class Solution165{
+    public int compareVersion(String v1, String v2){
+        int i=0,j=0;
+        int n = v1.length(),m= v2.length();
+        while (i<n||j<m){
+            int num1 = 0,num2=0;
+            while (i<n&&v1.charAt(i)!='.') num1 = num1*10+v1.charAt(i++)-'0';
+            while (j<m&&v2.charAt(j)!='.') num2 = num2*10+v2.charAt(j++)-'0';
+            if (num1>num2) return 1;
+            else if (num1<num2) return -1;
+            i++;j++;
+
+        }
+        return 0;
+    }
+}
+class Solution148{
+    public ListNode sort(ListNode head){
+        if (head==null||head.next==null){
+            return head;
+        }
+        PriorityQueue<ListNode> queue = new PriorityQueue<>(Comparator.comparing(n->n.val));
+        for (;head!=null;head =head.next){
+            queue.offer(head);
+        }
+        ListNode result =queue.poll(),previous =result;
+        for (ListNode node = queue.poll();node!=null;node=queue.poll(),previous=previous.next){
+            previous.next = node;
+        }
+        previous.next = null;
+        return result;
+    }
+}
+
+class Solution148A {
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) return head;
+
+        ListNode s = head, f = head, ps = head;
+        while (f != null && f.next != null) {
+            f = f.next.next;
+            ps = s;
+            s = s.next;
+        }
+
+        ps.next = null;
+
+        ListNode l = sortList(head);
+        ListNode r = sortList(s);
+
+        return merge(l, r);
+    }
+
+    ListNode merge(ListNode l, ListNode r) {
+        ListNode dummy = new ListNode();
+        ListNode cur = dummy;
+
+        while (l != null && r != null) {
+            if (l.val <= r.val) {
+                cur.next = l;
+                l = l.next;
+            } else {
+                cur.next = r;
+                r = r.next;
+            }
+            cur = cur.next;
+
+        }
+        if (l == null) {
+            cur.next = r;
+        } else {
+            cur.next = l;
+        }
+        return dummy.next;
+    }
+}
+class Solution22A{
+
+    private int n;
+    private final List<String> ans = new ArrayList<>();
+    private char[] path;
+    public List<String> generateParenthesis(int n){
+        this.n = n;
+        path = new char[2*n];
+        dfs(0,0);
+        return ans;
+
+    }
+    private void dfs(int i ,int open){
+        if (i==2*n){//填补完成
+            ans.add(new String(path));
+            return;
+        }
+        if (open<n){//填补做括号
+            path[i] = '(';
+            dfs(i+1,open+1);
+        }
+        if (i-open<open){//填补右括号
+            path[i] = ')';
+            dfs(i+1,open);
+        }
+    }
+}
