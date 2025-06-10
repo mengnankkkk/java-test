@@ -3569,3 +3569,101 @@ class Solution22A{
         }
     }
 }
+class Solution3442{
+    public int maxDifference(String s){
+        int[] cnt = new int[26];
+        for (int c:s.toCharArray()){
+            cnt[c-'a']++;
+        }
+        int max1 = 0;
+        int min0 = Integer.MAX_VALUE;
+        for (int c:cnt){
+            if (c%2>0){
+                max1 = Math.max(max1,c);
+            } else if (c>0) {
+                min0 = Math.min(min0,c);
+            }
+        }
+        return max1-min0;
+    }
+}
+class Solution31A{
+    public void nextPermutation(int[] nums){
+        int n = nums.length;
+        int i = n-2;
+        while (i>=0&&nums[i]>=nums[i+1]){
+            i--;
+        }
+        if (i>=0){
+            int j = n-1;
+            while (nums[j]<=nums[i]){
+                j--;
+            }
+            swap(nums,i,j);
+        }
+        reverse(nums,i+1,n-1);
+    }
+    private void swap(int[] nums,int i,int j){
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+
+    }
+    private void reverse(int[] nums,int left,int right){
+        while (left<right){
+            swap(nums,left++,right--);
+        }
+    }
+}
+class Solution69A{
+    public int mySqrt(int x){
+        int left = 0, right = Math.min(x, 46340) + 1;
+        while (left+1<right){
+            int mid = (left+right)>>>1;
+            if (mid*mid<=x){
+                left = mid;
+            }else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+}
+class Solution239AA{
+    public int[] maxSlidingWindowA(int[] nums, int k ){
+        if (nums.length==0||k==0) return new  int[0];
+        Deque<Integer> deque = new LinkedList<>();
+        int[] res = new int[nums.length-k+1];
+        for (int j = 0,i=1-k;j<nums.length;i++,j++){
+            if (i>0&&deque.peekFirst()==nums[i-1]){
+                deque.removeFirst();
+            }
+            while (!deque.isEmpty()&&deque.peekLast()<nums[j]){
+                deque.removeLast();
+                deque.addLast(nums[j]);
+            }
+            if (i>=0)
+                res[i] =deque.peekFirst();
+        }
+        return res;
+    }
+    public int[] maxSlidingWindow(int[] nums, int k){
+        int n = nums.length;
+        int[] ans= new int[n-k+1];
+        Deque<Integer> deque= new ArrayDeque<>();
+        for (int i =0;i<n;i++){
+            while (!deque.isEmpty()&&nums[deque.getLast()]<=nums[i]){
+                deque.removeLast();
+            }
+            deque.addLast(i);
+
+            if (deque.getFirst()<=i-k){
+                deque.removeFirst();
+            }
+            if (i>=k-1){
+                ans[i-k+1] = nums[deque.getFirst()];
+            }
+        }
+        return ans;
+    }
+}
