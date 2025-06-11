@@ -1,12 +1,6 @@
-import com.sun.jmx.snmp.SnmpNull;
-import com.sun.scenario.effect.Brightpass;
-import javafx.util.Pair;
-import sun.security.krb5.internal.crypto.Aes128;
+import sun.plugin.net.protocol.jar.CachedJarURLConnection;
 
-import javax.swing.*;
-import java.rmi.MarshalException;
 import java.util.*;
-import java.util.jar.JarEntry;
 
 
 class Solution2300{
@@ -2988,7 +2982,7 @@ class Solution23A{
         return lists[0];
     }
     private ListNode meryTwoLists(ListNode list1,ListNode list2){
-        ListNode dummy = new ListNode();
+        ListNode dummy = new ListNode(0);
         ListNode cur = dummy;
         while (list1!=null&&list2!=null){
             if (list1.val<list2.val){
@@ -3520,7 +3514,7 @@ class Solution148A {
     }
 
     ListNode merge(ListNode l, ListNode r) {
-        ListNode dummy = new ListNode();
+        ListNode dummy = new ListNode(0);
         ListNode cur = dummy;
 
         while (l != null && r != null) {
@@ -3665,5 +3659,86 @@ class Solution239AA{
             }
         }
         return ans;
+    }
+}
+class Solution2E{
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2){
+        ListNode pre = new ListNode(0);
+        ListNode cur  =pre;
+        int carry = 0;
+        while (l1!=null||l2!=null){
+            int x = l1==null?0:l1.val;
+            int y = l2==null?0:l2.val;
+
+            int sum  = x+y+carry;
+
+
+            carry = sum/10;
+            sum = sum%10;
+            cur.next = new ListNode(sum);
+
+            cur =cur.next;
+            if (l1!=null)  l1 =l1.next;
+            if (l2!=null)  l2 = l2.next;
+        }
+        if (carry==1){
+            cur.next = new ListNode(carry);
+        }
+        return pre.next;
+    }
+}
+class Solution8E {
+    public int myAtoi(String s) {
+        List<Character> ans = new ArrayList<>();
+        int sign = 1;
+        for (char e:s.toCharArray()){
+            if (e==' ') continue;
+            if (e=='+') continue;
+            if (e=='-') sign = -1;
+            if (Character.isDigit(e)){
+                ans.add(e);
+            }else {
+                break;
+            }
+        }
+        if (ans.size()==0) return 0;
+        long num = 0;
+        for (char c:ans){
+            if (sign==1&&num>Integer.MAX_VALUE) return Integer.MAX_VALUE;
+            if (sign==-1&&num<Integer.MIN_VALUE) return Integer.MIN_VALUE;
+        }
+        return (int)(sign*num);
+    }
+}
+class Solution70AA{
+    public int climbStairs(int n ){
+        int[] memo = new int[n+1];
+         return dfs(n,memo);
+    }
+    private int dfs(int i,int[] memo){
+        if (i<=1) return 1;
+        if (memo[i]!=0) return memo[i];
+        return memo[i] = dfs(i-1,memo)+dfs(i-2,memo);
+    }
+}
+class Solution32A{
+    public int longestValidParentheses(String s){
+        Deque<Integer> stack = new LinkedList<Integer>();
+        int[] dp = new int[s.length()];
+        int maxlen = 0;
+        for (int i =0;i<s.length();i++){
+            if(s.charAt(i)=='('){
+                stack.push(i);
+            }else if (!stack.isEmpty()&&s.charAt(i)==')'){
+                int leftIndex = stack.pop();
+                int length = i-leftIndex+1;
+                if (leftIndex-1>=0){
+                    length+=dp[leftIndex-1];
+                }
+                dp[i] = length;
+                maxlen = Math.max(maxlen,length);
+            }
+        }
+        return maxlen;
     }
 }
