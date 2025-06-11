@@ -15,7 +15,7 @@ class ListNode {
     ListNode next;
     ListNode(int x, ListNode head) { val = x; next = null; }
 
-    public ListNode() {
+    public ListNode(int i) {
 
     }
 }
