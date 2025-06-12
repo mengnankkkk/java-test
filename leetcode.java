@@ -3742,3 +3742,62 @@ class Solution32A{
         return maxlen;
     }
 }
+class Solution322{
+    public int coinChange(int[] coins,int amount){
+        int[] f = new int[amount+1];
+        Arrays.fill(f,Integer.MAX_VALUE/2);
+        f[0]= 0;
+        for (int x:coins){
+            for (int c=x;c<=amount;c++){
+                f[c] = Math.min(f[c],f[c-x]+1);
+            }
+        }
+        int ans = f[amount];
+        return ans<Integer.MAX_VALUE/2?ans:-1;
+    }
+}
+class Solution43A{
+    public String multiply(String num1, String num2){
+        if(num1.equals("0")||num2.equals("0")) return "0";
+        int[] res = new int[num1.length()+num2.length()];
+        for (int i = num1.length()-1;i>=0;i--){
+            int n1 = num1.charAt(i)-'0';
+            for (int j = num2.length()-1;j>=0;j--){
+                int n2 = num2.charAt(j)-'0';
+                int sum = (res[i+j+1]+n1*n2);
+                res[i+j+1] =sum%10;
+                res[i+j] +=sum/10;
+            }
+        }
+        StringBuilder result =new StringBuilder();
+        for (int i =0;i<res.length;i++){
+            if (i==0&&res[i]==0) continue;
+            result.append(res[i]);
+        }
+        return result.toString();
+    }
+}
+class Solution105AA{
+    public TreeNode buildTree(int[] preorder, int[] inorder){
+        int n = preorder.length;
+        if (n==0) return null;
+        int leftSize = indexOf(inorder,preorder[0]);//左子树大小
+        int[] pre1 = Arrays.copyOfRange(preorder,1,1+leftSize);//左子树序列
+        int[] pre2 = Arrays.copyOfRange(preorder,1+leftSize,n);//右子树序列
+        int[] in1 =Arrays.copyOfRange(inorder,0,leftSize);//左子树
+        int[] in2 = Arrays.copyOfRange(inorder,1+leftSize,n);//右子树
+
+        TreeNode left = buildTree(pre1,in1);
+        TreeNode right = buildTree(pre2,in2);
+        return new TreeNode(preorder[0],left,right);
+
+
+    }
+    private int indexOf(int[] a,int x){//查找位置
+        for (int i=0;;i++){
+            if (a[i]==x){
+                return i;
+            }
+        }
+    }
+}
