@@ -1,5 +1,7 @@
+import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 import sun.plugin.net.protocol.jar.CachedJarURLConnection;
 
+import javax.swing.*;
 import java.util.*;
 
 
@@ -3800,4 +3802,77 @@ class Solution105AA{
             }
         }
     }
+}
+class SolutionLCR140 {
+    public ListNode trainingPlanA(ListNode head, int cnt) {
+        List<Integer> vals = new ArrayList<>();
+        ListNode cur = head;
+
+        // Step1: 将链表的 val 存入数组
+        while (cur != null) {
+            vals.add(cur.val);
+            cur = cur.next;
+        }
+
+        // Step2: 从 vals 的最后 cnt 位构造新链表
+        ListNode dummy = new ListNode(0);
+        ListNode p = dummy;
+        for (int i = vals.size() - cnt; i < vals.size(); i++) {
+            p.next = new ListNode(vals.get(i));
+            p = p.next;
+        }
+
+        return dummy.next;
+    }
+    public ListNode trainingPlan(ListNode head, int cnt) {
+        ListNode node1 = null;
+        ListNode node2 = null;
+        node1 = head;
+        node2 = head;
+
+        if (head.next==null){
+            return head;
+        }
+        for (int i =1;i<cnt;i++){
+            node2 = node2.next;
+        }
+        while (node2.next!=null){
+            node1 = node1.next;
+            node2 = node2.next;
+        }
+        return node1;
+    }
+}
+class Solution151{
+    public String reverseWords(String s){
+        String[] str = s.trim().split(" ");
+        StringBuilder res = new StringBuilder();
+        for (int i =str.length-1;i>=0;i--){
+            if (str[i].equals(""))continue;
+            res.append(str[i]+" ");
+        }
+        return res.toString().trim();
+    }
+}
+class Solution78A{
+    private final List<List<Integer>> ans = new ArrayList<>();
+    private final List<Integer> path = new ArrayList<>();
+    private int[] nums;
+
+    public List<List<Integer>> subsets(int[] nums){
+        this.nums = nums;
+        dfs(0);
+        return ans;
+    }
+    private void dfs(int i ){
+        if (i== nums.length){
+            ans.add(new ArrayList<>(path));
+            return;
+        }
+        dfs(i+1);
+        path.add(nums[i]);
+        dfs(i+1);
+        path.remove(path.size()-1);
+    }
+
 }
