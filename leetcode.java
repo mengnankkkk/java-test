@@ -3876,3 +3876,76 @@ class Solution78A{
     }
 
 }
+class  Solution129{
+    public int sumNumbers(TreeNode root) {
+        return dfs(root, 0);
+    }
+    private int dfs(TreeNode node,int x){
+        if (node==null){
+            return 0;
+        }
+        x  =x*10+node.val;
+        if (node.left==node.right){
+            return x;
+        }
+        return dfs(node.left,x)+dfs(node.right,x);
+    }
+}
+class MinStack{
+    private Stack<Integer> stack;
+    private Stack<Integer> min_stack;
+    public MinStack(){
+        stack = new Stack<>();
+        min_stack = new Stack<>();
+    }
+    public     void push(int x){
+        stack.push(x);
+        if (min_stack.isEmpty()||x<=min_stack.peek()){
+            min_stack.push(x);
+        }
+    }
+    public     void pop(){
+        if (stack.pop().equals(min_stack.peek())){
+            min_stack.pop();
+        }
+    }
+    public     int top(){
+        return stack.peek();
+    }
+       public int getMin(){
+        return min_stack.peek();
+    }
+}
+class Solution101A{
+    public boolean isSymmetric(TreeNode root){
+        return root==null||recur(root.left,root.right);
+    }
+    private boolean recur(TreeNode L,TreeNode R){
+        if (L==null&&R==null) return true;
+        if (L==null||R==null||L.val!=R.val) return false;
+        return recur(L.left,R.right)&&recur(R.left,L.right);
+    }
+}
+class Solution34AA {
+    public int[] searchRange(int[] nums, int target) {
+        int start = lowBound(nums, target);
+        if (start == nums.length || nums[start] != target) {
+            return new int[]{-1, -1};
+        }
+        int end = lowBound(nums, target + 1) - 1;
+        return new int[]{start, end};
+    }
+
+    private int lowBound(int[] nums, int target) {
+        int left = 0, right = nums.length; // 注意 right = nums.length，开区间写法
+        while (left < right) {
+            int mid = (left + right) >>> 1;
+            if (nums[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid; // nums[mid] >= target
+            }
+        }
+        return left;
+    }
+}
