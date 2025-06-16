@@ -3949,3 +3949,68 @@ class Solution34AA {
         return left;
     }
 }
+class Solution104AA{
+    public int maxDepth(TreeNode root){
+        if (root==null){
+            return 0;
+        }
+        int left = maxDepth(root.left);
+        int right = maxDepth(root.right);
+        return Math.max(left,right)+1;
+    }
+}
+class Solution93AA{
+    void backtrack(List<Integer> state,int target,int[] choices,int start,List<List<Integer>> res){
+        if (target==0){
+            res.add(new ArrayList<>(state));
+            return;
+        }
+        for (int i=start;i<choices.length;i++){
+            if (target-choices[i]<0){
+                break;
+            }
+            state.add(choices[i]);
+            backtrack(state,target-choices[i],choices,i,res);
+            state.remove(state.size()-1);
+        }
+    }
+    public List<List<Integer>> combinationSum(int[] candidates,int target){
+        List<Integer> state = new ArrayList<>();
+        Arrays.sort(candidates);
+        int start = 0;
+        List<List<Integer>> res = new ArrayList<>();
+        backtrack(state,target,candidates,start,res);
+        return res;
+    }
+}
+class Solution394{
+    public String decodeString(String s) {
+        Stack<Integer> countstack = new Stack<>();
+        Stack<StringBuilder> stringstack = new Stack<>();
+        StringBuilder currentString = new StringBuilder();
+        int k = 0;
+
+        for (char c:s.toCharArray()){
+            if (Character.isDigit(c)){
+                k = k*10+(c-'0');
+            }
+            else if (c=='['){
+                countstack.push(k);
+                k=0;
+                stringstack.push(currentString);
+                currentString = new StringBuilder();
+            }
+            else if (c==']'){
+                int repeat = countstack.pop();
+                StringBuilder sb = stringstack.pop();
+                for (int i =0;i<repeat;i++){
+                    sb.append(currentString);
+                }
+                currentString = sb;
+            }else {
+                currentString.append(c);
+            }
+        }
+        return currentString.toString();
+    }
+}
