@@ -4014,3 +4014,47 @@ class Solution394{
         return currentString.toString();
     }
 }
+class Solution144A{
+    List<Integer> ans = new ArrayList<>();
+    public List<Integer> preorderTraversal(TreeNode root){
+        if (root==null){
+            return new ArrayList<>();
+        }
+        ans.add(root.val);
+        preorderTraversal(root.left);
+        preorderTraversal(root.right);
+        return ans;
+    }
+}
+class Solution110A{
+    public boolean isBalanced(TreeNode root){
+        return getHeight(root) !=-1;
+    }
+    private int getHeight(TreeNode node){
+        if (node==null){
+            return 0;
+        }
+        int leftH = getHeight(node.left);
+        if (leftH==-1){
+            return -1;
+        }
+        int rightH = getHeight(node.right);
+        if (rightH==-1||Math.abs(leftH-rightH)>1){
+            return -1;
+        }
+        return Math.max(leftH,rightH)+1;
+    }
+}
+class Solution64{
+    public int minPathSum(int[][] grid){
+        for(int i=0;i<grid.length;i++){
+            for (int j=0;j<grid[0].length;j++){
+                if (i==0&&j==0) continue;
+                else if (i==0) grid[i][j] = grid[i][j-1]+grid[i][j];
+                else if (j==0) grid[i][j]=grid[i-1][j]+grid[i][j];
+                else grid[i][j] += Math.min(grid[i - 1][j], grid[i][j - 1]);
+            }
+        }
+        return grid[grid.length-1][grid[0].length-1];
+    }
+}
