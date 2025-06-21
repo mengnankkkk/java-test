@@ -4045,7 +4045,7 @@ class Solution110A{
         return Math.max(leftH,rightH)+1;
     }
 }
-class Solution64{
+class Solution64A{
     public int minPathSum(int[][] grid){
         for(int i=0;i<grid.length;i++){
             for (int j=0;j<grid[0].length;j++){
@@ -4056,5 +4056,54 @@ class Solution64{
             }
         }
         return grid[grid.length-1][grid[0].length-1];
+    }
+}
+class Solution48A{
+    public void rotate(int[][] matrix){
+        int n  = matrix.length;
+        int[][] tmp  = new int[n][];
+        for (int i =0;i<n;i++){
+            tmp[i] = matrix[i].clone();
+        }
+        for (int i =0;i<n;i++){
+            for (int j = 0;j<n;j++){
+                matrix[j][n-1-i] = tmp[i][j];
+            }
+        }
+    }
+}
+class Solution221{
+    int maximalSquare(char[][] matrix){
+        int n  = matrix[0].length;
+        int[] heights = new int[n+1];
+        int ans = 0;
+        for (char[] row :matrix){
+            for (int j =0;j<n;j++){
+                if (row[j]=='0'){
+                    heights[j]=0;//柱子高度为0
+                }else {
+                    heights[j]++;
+                }
+            }
+            ans = Math.max(ans,largesSize(heights));
+        }
+        return ans * ans;
+    }
+    private int largesSize(int[] heights){
+        int n = heights.length;
+        int[] st = new int[n];
+        int top = -1;
+        st[++top]  = -1;//在栈中只有一个数的时候，栈顶的「下面那个数」是 -1，对应 left[i] = -1 的情况
+        int ans = 0;
+        for (int right = 0;right<n;right++){
+            int h = heights[right];
+            while (top>0&&h<=heights[st[top]]){
+                int i = st[top--];
+                int left = st[top];
+                ans =Math.max(ans,Math.min(heights[i],right-left-1));
+            }
+            st[++top] =right;
+        }
+        return ans;
     }
 }
