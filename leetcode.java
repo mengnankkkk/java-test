@@ -4107,3 +4107,50 @@ class Solution221{
         return ans;
     }
 }
+class Solution122A{
+    public int maxProfit(int[] prices){
+        int profit = 0;
+        for (int i =1;i<prices.length;i++){
+            int tmp = prices[i]-prices[i-1];
+            if (tmp>0) profit+=tmp;
+        }
+        return profit;
+    }
+}
+class Solution128A{
+    public int longestConsecutive(int[] nums){
+        int ans = 0;
+        Set<Integer> st = new HashSet<>();
+        for (int num:nums){
+            st.add(num);
+        }
+        for (int x:st){
+            if (st.contains(x-1)){
+                continue;
+            }
+            int y = x+1;
+            while (st.contains(y)){
+                y++;
+            }
+            ans = Math.max(ans,y-x);
+        }
+        return ans;
+    }
+}
+class Solution240{
+    public boolean searchMatrix(int[][] matrix, int target){
+        int i = 0;
+        int j  = matrix[0].length-1;
+        while (i<matrix.length&&j>=0){
+            if (matrix[i][j]==target){
+                return true;
+            }
+            if(matrix[i][j]<target){
+                i++;
+            }else {
+                j--;
+            }
+        }
+        return false;
+    }
+}
