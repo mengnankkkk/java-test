@@ -1,5 +1,4 @@
-import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
-import sun.plugin.net.protocol.jar.CachedJarURLConnection;
+
 
 import javax.swing.*;
 import java.util.*;
@@ -4152,5 +4151,62 @@ class Solution240{
             }
         }
         return false;
+    }
+}
+class Solution98AA {
+    public boolean isValidBST(TreeNode root) {
+        return dfs(root,Long.MIN_VALUE,Long.MAX_VALUE);
+
+    }
+    private boolean dfs(TreeNode node,long left,long right){
+        if (node==null){
+            return true;
+        }
+        long x = node.val;
+        return x<right&&x>left&&dfs(node.left,left,x)&&dfs(node.right,x,right);
+    }
+}
+class Solution234{
+    public boolean isPalindrome(ListNode head) {
+        if (head==null||head.next==null) return true;
+        ListNode slow = head,fast = head;
+        while (fast!=null&&fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode secondList = reverseList(slow);
+        ListNode p1 = head;
+        ListNode p2 = secondList;
+        while (p2!=null){
+            if (p1.val!= p2.val) return false;
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+        return true;
+    }
+    private ListNode reverseList(ListNode node){
+        ListNode pre = null,cur = node;
+        while (cur!=null){
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+}
+class Solution14AAA{
+    public String longestCommonPrefix(String[] strs){
+        if(strs.length==0) return "";
+        String ans = strs[0];
+        for (int i =1;i<strs.length;i++){
+            int j =0;
+            for (;j<ans.length()&&j<strs[i].length();j++){
+                if(ans.charAt(j)!=strs[i].charAt(j)) break;
+            }
+            ans = ans.substring(0,j);
+            if (ans.equals("")) return ans;
+        }
+        return ans;
     }
 }
