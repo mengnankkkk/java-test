@@ -4210,3 +4210,62 @@ class Solution14AAA{
         return ans;
     }
 }
+class Solution162{
+    public int findPeakElement(int[] nums){
+        int left = -1,right = nums.length-1;
+        while (left+1<right){
+            int mid = (left+right)>>>1;
+            if (nums[mid]>nums[mid+1]){
+                right = mid;
+            }else {
+                left = mid;
+            }
+        }
+        return right;
+    }
+}
+class Solution695{
+    public int dfs(int[][] grid,int i,int j){
+        if(i<0||j<0||i>=grid.length||j>=grid[0].length||grid[i][j]==0) return 0;
+        int sum = 1;
+        grid[i][j] = 0;
+        sum +=dfs(grid,i+1,j);
+        sum +=dfs(grid,i,j+1);
+        sum +=dfs(grid,i-1,j);
+        sum +=dfs(grid,i,j-1);
+        return sum;
+    }
+    public int maxAreaOfIsland(int[][] grid){
+        int max = 0;
+        for (int i=0;i<grid.length;i++){
+            for (int j=0;j<grid[0].length;j++){
+                if (grid[i][j]==1){
+                    max = Math.max(max,dfs(grid,i,j));
+                }
+            }
+        }
+        return max;
+    }
+}
+class Solution113AA {
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        dfs(root,targetSum,path,ans);
+        return ans;
+    }
+    private void dfs(TreeNode node, int left, List<Integer> path, List<List<Integer>> ans){
+        if (node==null){
+            return;
+        }
+        path.add(node.val);
+        left -=node.val;
+        if (node.left==node.right&&left==0){
+            ans.add(new ArrayList<>(path));
+        }else {
+            dfs(node.left,left,path,ans);
+            dfs(node.right,left,path,ans);
+        }
+        path.remove(path.size()-1);
+    }
+}
