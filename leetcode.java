@@ -4269,3 +4269,47 @@ class Solution113AA {
         path.remove(path.size()-1);
     }
 }
+class Solution662{
+    Map<Integer,Integer> map = new HashMap<>();
+    int ans;
+    public int widthOfBinaryTree(TreeNode root) {
+       dfs(root,1,0);
+       return ans;
+    }
+    void dfs(TreeNode root,int u,int depth){
+        if (root==null) return;
+        if (!map.containsKey(depth)) map.put(depth,u);
+        ans = Math.max(ans,u-map.get(depth)+1);
+        u = u-map.get(depth)+1;
+        dfs(root.left,u<<1,depth+1);
+        dfs(root.right,u<<1|1,depth+1);
+    }
+}
+class Solution62A{
+    public int uniquePaths(int m, int n){
+        int[] f = new int[n+1];
+        f[1]= 1;
+        for (int i=0;i<m;i++){
+            for (int j =0;j<n;j++){
+                f[j+1] +=f[j];
+            }
+        }
+        return f[n];
+    }
+}
+class Solution152A{
+    public int maxProduct(int[] nums) {
+        int maxF = nums[0];
+        int minF = nums[0];
+        int ans = nums[0];
+
+        for (int i=1;i<nums.length;i++){
+            int cur = nums[i];
+            int tmpMax = maxF,tmpMin = minF;
+            maxF = Math.max(cur, Math.max(cur * tmpMax, cur * tmpMin));
+            minF = Math.min(cur, Math.min(cur * tmpMax, cur * tmpMin));
+            ans = Math.max(ans,maxF);
+        }
+        return ans;
+    }
+}
