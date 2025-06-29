@@ -4313,3 +4313,38 @@ class Solution152A{
         return ans;
     }
 }
+class Solution198{
+    public int rob(int[] nums){
+        int pre = 0,cur = 0,tmp;
+        for(int num:nums){
+            tmp = cur;
+            cur = Math.max(pre+num,cur);
+            pre = tmp;
+        }
+        return cur;
+    }
+}
+class Solution179{
+    public String largestNumber(int[] nums){
+        String[] strs = new String[nums.length];
+        for (int i=0;i<nums.length;i++){
+            strs[i] = String.valueOf(nums[i]);
+        }
+        Arrays.sort(strs,(x,y)->(y+x).compareTo(x+y));
+        if (strs[0].equals("0")) return "0";
+        StringBuilder res = new StringBuilder();
+        for (String s:strs){
+            res.append(s);
+        }
+        return res.toString();
+    }
+}
+class Solution112A{
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if(root==null) return false;
+        targetSum -=root.val;
+        if (root.left==root.right&&root.left==null) return targetSum==0;
+        return hasPathSum(root.left,targetSum)||hasPathSum(root.right,targetSum);
+    }
+
+}
