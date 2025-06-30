@@ -4346,5 +4346,118 @@ class Solution112A{
         if (root.left==root.right&&root.left==null) return targetSum==0;
         return hasPathSum(root.left,targetSum)||hasPathSum(root.right,targetSum);
     }
+}
+class Solution560{
+    public int subarraySum(int[] nums, int k) {
+        int ans = 0;
+        int s = 0;
+        Map<Integer,Integer> cnt = new HashMap<>(nums.length);
+        for(int x:nums){
+            cnt.merge(s,1,Integer::sum);
+            s +=x;
+            ans +=cnt.getOrDefault(s-k,0);
+        }
+        return ans;
+    }
+}
+class Solution227{
+    static Stack<Integer> num = new Stack<Integer>();
+    static Stack<Character> op = new Stack<Character>();
+    static HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+    static void eval(){
+        int b = num.pop();
+        int a = num.pop();
+        char c =op.pop();
+        int r = 0;
+        if (c=='+') r = a+b;
+        else if (c=='-') r = a-b;
+        else if (c=='*') r = a*b;
+        else r = a/b;
+        num.push(r);
+    }
+    public int calculate(String s) {
+        s = '0'+s;
+        map.put('+',1);
+        map.put('-', 1);
+        map.put('*', 2);
+        map.put('/', 2);
+        for (int i =0;i<s.length();i++){
+            char c = s.charAt(i);
+            if (c==' ')continue;
+            if (c>='0'&&c<='9'){
+                int x = 0;
+                while (i<s.length()&&s.charAt(i)>='0'&&s.charAt(i)<=9){
+                    x =x*10+s.charAt(i++)-'0';
+                }
+                i--;
+                num.push(x);
+            }else {
+                while(!op.isEmpty() && map.get(op.peek()) >= map.get(c)) eval();
+                op.push(c);
+            }
+        }
+        while (!op.isEmpty()) eval();
+        return num.pop();
+     }
+}
+ class Solution227A {
+    public int calculate(String s) {
+        int num = 0;
+        char sign = '+'; // 初始默认是加法
+        Stack<Integer> stack = new Stack<>();
+        int n = s.length();
 
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+
+            // 如果是数字，累加
+            if (Character.isDigit(c)) {
+                num = num * 10 + (c - '0');
+            }
+
+            // 如果是运算符，或者是最后一个字符，就处理当前数字
+            if ((!Character.isDigit(c) && c != ' ') || i == n - 1) {
+                if (sign == '+') {
+                    stack.push(num);
+                } else if (sign == '-') {
+                    stack.push(-num);
+                } else if (sign == '*') {
+                    stack.push(stack.pop() * num);
+                } else if (sign == '/') {
+                    stack.push(stack.pop() / num); // 题目要求整数除法
+                }
+                sign = c;
+                num = 0;
+            }
+        }
+
+        // 把栈里所有数字加起来
+        int result = 0;
+        for (int val : stack) {
+            result += val;
+        }
+        return result;
+    }
+}
+class Solution169 {
+    public int majorityElement(int[] nums) {
+        Map<Integer,Integer> cnt = new HashMap<>();
+        for (int x:nums){
+            cnt.put(x, cnt.getOrDefault(x, 0) + 1);
+            if (cnt.get(x)>nums.length/2){
+              return x;
+            }
+        }
+        return -1;
+    }
+}
+class Solution169A{
+    public int majorityElement(int[] nums){
+        int x = 0,votes = 0;
+        for (int num:nums){
+            if (votes==0) x = num;
+            votes +=num ==x?1:-1;
+        }
+        return x;
+    }
 }
