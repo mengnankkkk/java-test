@@ -1,5 +1,4 @@
-import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
-import sun.plugin.net.protocol.jar.CachedJarURLConnection;
+
 
 import javax.swing.*;
 import java.util.*;
@@ -4152,5 +4151,313 @@ class Solution240{
             }
         }
         return false;
+    }
+}
+class Solution98AA {
+    public boolean isValidBST(TreeNode root) {
+        return dfs(root,Long.MIN_VALUE,Long.MAX_VALUE);
+
+    }
+    private boolean dfs(TreeNode node,long left,long right){
+        if (node==null){
+            return true;
+        }
+        long x = node.val;
+        return x<right&&x>left&&dfs(node.left,left,x)&&dfs(node.right,x,right);
+    }
+}
+class Solution234{
+    public boolean isPalindrome(ListNode head) {
+        if (head==null||head.next==null) return true;
+        ListNode slow = head,fast = head;
+        while (fast!=null&&fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode secondList = reverseList(slow);
+        ListNode p1 = head;
+        ListNode p2 = secondList;
+        while (p2!=null){
+            if (p1.val!= p2.val) return false;
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+        return true;
+    }
+    private ListNode reverseList(ListNode node){
+        ListNode pre = null,cur = node;
+        while (cur!=null){
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+}
+class Solution14AAA{
+    public String longestCommonPrefix(String[] strs){
+        if(strs.length==0) return "";
+        String ans = strs[0];
+        for (int i =1;i<strs.length;i++){
+            int j =0;
+            for (;j<ans.length()&&j<strs[i].length();j++){
+                if(ans.charAt(j)!=strs[i].charAt(j)) break;
+            }
+            ans = ans.substring(0,j);
+            if (ans.equals("")) return ans;
+        }
+        return ans;
+    }
+}
+class Solution162{
+    public int findPeakElement(int[] nums){
+        int left = -1,right = nums.length-1;
+        while (left+1<right){
+            int mid = (left+right)>>>1;
+            if (nums[mid]>nums[mid+1]){
+                right = mid;
+            }else {
+                left = mid;
+            }
+        }
+        return right;
+    }
+}
+class Solution695{
+    public int dfs(int[][] grid,int i,int j){
+        if(i<0||j<0||i>=grid.length||j>=grid[0].length||grid[i][j]==0) return 0;
+        int sum = 1;
+        grid[i][j] = 0;
+        sum +=dfs(grid,i+1,j);
+        sum +=dfs(grid,i,j+1);
+        sum +=dfs(grid,i-1,j);
+        sum +=dfs(grid,i,j-1);
+        return sum;
+    }
+    public int maxAreaOfIsland(int[][] grid){
+        int max = 0;
+        for (int i=0;i<grid.length;i++){
+            for (int j=0;j<grid[0].length;j++){
+                if (grid[i][j]==1){
+                    max = Math.max(max,dfs(grid,i,j));
+                }
+            }
+        }
+        return max;
+    }
+}
+class Solution113AA {
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        dfs(root,targetSum,path,ans);
+        return ans;
+    }
+    private void dfs(TreeNode node, int left, List<Integer> path, List<List<Integer>> ans){
+        if (node==null){
+            return;
+        }
+        path.add(node.val);
+        left -=node.val;
+        if (node.left==node.right&&left==0){
+            ans.add(new ArrayList<>(path));
+        }else {
+            dfs(node.left,left,path,ans);
+            dfs(node.right,left,path,ans);
+        }
+        path.remove(path.size()-1);
+    }
+}
+class Solution662{
+    Map<Integer,Integer> map = new HashMap<>();
+    int ans;
+    public int widthOfBinaryTree(TreeNode root) {
+       dfs(root,1,0);
+       return ans;
+    }
+    void dfs(TreeNode root,int u,int depth){
+        if (root==null) return;
+        if (!map.containsKey(depth)) map.put(depth,u);
+        ans = Math.max(ans,u-map.get(depth)+1);
+        u = u-map.get(depth)+1;
+        dfs(root.left,u<<1,depth+1);
+        dfs(root.right,u<<1|1,depth+1);
+    }
+}
+class Solution62A{
+    public int uniquePaths(int m, int n){
+        int[] f = new int[n+1];
+        f[1]= 1;
+        for (int i=0;i<m;i++){
+            for (int j =0;j<n;j++){
+                f[j+1] +=f[j];
+            }
+        }
+        return f[n];
+    }
+}
+class Solution152A{
+    public int maxProduct(int[] nums) {
+        int maxF = nums[0];
+        int minF = nums[0];
+        int ans = nums[0];
+
+        for (int i=1;i<nums.length;i++){
+            int cur = nums[i];
+            int tmpMax = maxF,tmpMin = minF;
+            maxF = Math.max(cur, Math.max(cur * tmpMax, cur * tmpMin));
+            minF = Math.min(cur, Math.min(cur * tmpMax, cur * tmpMin));
+            ans = Math.max(ans,maxF);
+        }
+        return ans;
+    }
+}
+class Solution198{
+    public int rob(int[] nums){
+        int pre = 0,cur = 0,tmp;
+        for(int num:nums){
+            tmp = cur;
+            cur = Math.max(pre+num,cur);
+            pre = tmp;
+        }
+        return cur;
+    }
+}
+class Solution179{
+    public String largestNumber(int[] nums){
+        String[] strs = new String[nums.length];
+        for (int i=0;i<nums.length;i++){
+            strs[i] = String.valueOf(nums[i]);
+        }
+        Arrays.sort(strs,(x,y)->(y+x).compareTo(x+y));
+        if (strs[0].equals("0")) return "0";
+        StringBuilder res = new StringBuilder();
+        for (String s:strs){
+            res.append(s);
+        }
+        return res.toString();
+    }
+}
+class Solution112A{
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if(root==null) return false;
+        targetSum -=root.val;
+        if (root.left==root.right&&root.left==null) return targetSum==0;
+        return hasPathSum(root.left,targetSum)||hasPathSum(root.right,targetSum);
+    }
+}
+class Solution560{
+    public int subarraySum(int[] nums, int k) {
+        int ans = 0;
+        int s = 0;
+        Map<Integer,Integer> cnt = new HashMap<>(nums.length);
+        for(int x:nums){
+            cnt.merge(s,1,Integer::sum);
+            s +=x;
+            ans +=cnt.getOrDefault(s-k,0);
+        }
+        return ans;
+    }
+}
+class Solution227{
+    static Stack<Integer> num = new Stack<Integer>();
+    static Stack<Character> op = new Stack<Character>();
+    static HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+    static void eval(){
+        int b = num.pop();
+        int a = num.pop();
+        char c =op.pop();
+        int r = 0;
+        if (c=='+') r = a+b;
+        else if (c=='-') r = a-b;
+        else if (c=='*') r = a*b;
+        else r = a/b;
+        num.push(r);
+    }
+    public int calculate(String s) {
+        s = '0'+s;
+        map.put('+',1);
+        map.put('-', 1);
+        map.put('*', 2);
+        map.put('/', 2);
+        for (int i =0;i<s.length();i++){
+            char c = s.charAt(i);
+            if (c==' ')continue;
+            if (c>='0'&&c<='9'){
+                int x = 0;
+                while (i<s.length()&&s.charAt(i)>='0'&&s.charAt(i)<=9){
+                    x =x*10+s.charAt(i++)-'0';
+                }
+                i--;
+                num.push(x);
+            }else {
+                while(!op.isEmpty() && map.get(op.peek()) >= map.get(c)) eval();
+                op.push(c);
+            }
+        }
+        while (!op.isEmpty()) eval();
+        return num.pop();
+     }
+}
+ class Solution227A {
+    public int calculate(String s) {
+        int num = 0;
+        char sign = '+'; // 初始默认是加法
+        Stack<Integer> stack = new Stack<>();
+        int n = s.length();
+
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+
+            // 如果是数字，累加
+            if (Character.isDigit(c)) {
+                num = num * 10 + (c - '0');
+            }
+
+            // 如果是运算符，或者是最后一个字符，就处理当前数字
+            if ((!Character.isDigit(c) && c != ' ') || i == n - 1) {
+                if (sign == '+') {
+                    stack.push(num);
+                } else if (sign == '-') {
+                    stack.push(-num);
+                } else if (sign == '*') {
+                    stack.push(stack.pop() * num);
+                } else if (sign == '/') {
+                    stack.push(stack.pop() / num); // 题目要求整数除法
+                }
+                sign = c;
+                num = 0;
+            }
+        }
+
+        // 把栈里所有数字加起来
+        int result = 0;
+        for (int val : stack) {
+            result += val;
+        }
+        return result;
+    }
+}
+class Solution169 {
+    public int majorityElement(int[] nums) {
+        Map<Integer,Integer> cnt = new HashMap<>();
+        for (int x:nums){
+            cnt.put(x, cnt.getOrDefault(x, 0) + 1);
+            if (cnt.get(x)>nums.length/2){
+              return x;
+            }
+        }
+        return -1;
+    }
+}
+class Solution169A{
+    public int majorityElement(int[] nums){
+        int x = 0,votes = 0;
+        for (int num:nums){
+            if (votes==0) x = num;
+            votes +=num ==x?1:-1;
+        }
+        return x;
     }
 }
