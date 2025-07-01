@@ -4461,3 +4461,44 @@ class Solution169A{
         return x;
     }
 }
+class Solution226{
+    public TreeNode invertTree(TreeNode root) {
+        if(root==null) return null;
+        TreeNode tmp =root.left;
+        root.left = invertTree(root.right);
+        root.right = invertTree(tmp);
+        return root;
+    }
+}
+class Solution718{
+    public int findLength(int[] nums1, int[] nums2){
+        int n  = nums1.length;
+        int m = nums2.length;
+        int ans = 0;
+        int [][] f= new int[n+1][m+1];
+        for(int i =0;i<n;i++){
+            for (int j=0;j<m;j++){
+                if(nums1[i]==nums2[j]){
+                    f[i+1][j+1] = f[i][j]+1;
+                    ans = Math.max(ans,f[i+1][j+1]);
+                }
+            }
+        }
+        return ans;
+    }
+}
+class Solution209{
+    public int minSubArrayLen(int target, int[] nums){
+        int n =  nums.length;
+        int left =0,ans = Integer.MAX_VALUE;
+        int sum = 0;
+        for (int right  = 0;right<n;right++){
+            sum +=nums[right];
+            while (sum>=target){
+                ans = Math.min(ans,right-left+1);
+                sum -=nums[left++];
+            }
+        }
+        return ans == Integer.MAX_VALUE ? 0 : ans;
+    }
+}
