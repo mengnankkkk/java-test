@@ -4502,3 +4502,43 @@ class Solution209{
         return ans == Integer.MAX_VALUE ? 0 : ans;
     }
 }
+class Solution139{
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Set<String> set = new HashSet<>(wordDict);
+        int n = s.length();
+        boolean[] dp =new boolean[n+1];
+        dp[0] = true;
+        for (int i=1;i<=n;i++){
+            for (int j=0;j<i;j++){
+                if (dp[j]&&set.contains(s.substring(j,i))){
+                    dp[i] =true;
+                    break;
+                }
+            }
+        }
+        return dp[n];
+    }
+}
+class Solution83A{
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head==null) return null;
+        ListNode cur = head;
+        while (cur!=null&&cur.next!=null){
+            if (cur.val==cur.next.val){
+                cur.next = cur.next.next;
+            }else {
+                cur =cur.next;
+            }
+        }
+        return head;
+    }
+}
+class Solution24A{
+    public ListNode swapPairs(ListNode head) {
+        if (head==null||head.next==null) return head;
+        ListNode tmp = head.next;
+        head.next = swapPairs(tmp.next);
+        tmp.next = head;
+        return tmp;
+    }
+}
