@@ -4542,3 +4542,74 @@ class Solution24A{
         return tmp;
     }
 }
+class Solution283A{
+    public void moveZeroes(int[] nums){
+        int slow = 0;
+        for (int fast = 0;fast<nums.length;fast++){
+            if (nums[fast]!=0){
+                int temp = nums[fast];
+                nums[fast] = nums[slow];
+                nums[slow++] = temp;
+            }
+        }
+    }
+}
+class Solution468{
+    public String validIPAddress(String queryIP){
+        boolean flag = false;
+        for (int i=0;i<queryIP.length();i++){
+            if (queryIP.charAt(i)=='.'){
+                flag = true;
+                break;
+            }else if (queryIP.charAt(i)==':'){
+                flag  = false;
+                break;
+            }
+        }
+        if (!flag){
+            String [] split = queryIP.split(":",-1);
+            if (split.length!=8){
+                return "Neither";
+            }
+            for (String s:split){
+                if (s.length()>4||s.isEmpty()) return "Neither";
+                for (char c:s.toCharArray()){
+                    if (!String.valueOf(c).matches("[0-9a-fA-F]")){
+                        return "Neither";
+                    }
+                }
+            }
+            return "IPv6";
+        }else {
+            String[] split = queryIP.split("\\.",-1);
+            if (split.length!=4) return "Neither";
+            for (String s:split){
+                if (s.isEmpty()) return "Neither";
+                try {
+                    int num = Integer.parseInt(s);
+                    if (num>255||!String.valueOf(num).equals(s)){
+                        return "Neither";
+                    }
+                }catch (NumberFormatException e){
+                    return "Neither";
+                }
+            }
+            return "IPv4";
+        }
+    }
+}
+class Solution739A {
+    public int[] dailyTemperatures(int[] temperatures) {
+        int n =temperatures.length;
+        int[] res = new int[n];
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int i=0;i<n;i++){
+            while (!stack.isEmpty()&&temperatures[i]>temperatures[stack.peek()]){
+                int pre = stack.pop();
+                res[pre]  =i-pre;
+            }
+            stack.push(i);
+        }
+        return res;
+    }
+}
