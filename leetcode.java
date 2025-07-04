@@ -4613,3 +4613,104 @@ class Solution739A {
         return res;
     }
 }
+class Solution138A{
+    public Node copyRandomList(Node head){
+        if (head==null) return null;
+        for(Node cur = head;cur!=null;cur = cur.next.next){
+            cur.next = new Node(cur.val,cur.next);
+        }
+        for (Node cur =head;cur!=null;cur = cur.next.next){
+            if (cur.random!=null){
+                cur.next.random = cur.random.next;
+            }
+        }
+        Node newHead = head.next;
+        Node cur = head;
+        for (;cur.next.next!=null;cur=cur.next){
+            Node copy = cur.next;
+            cur.next = copy.next;
+            copy.next =copy.next.next;
+        }
+        cur.next = null;
+        return newHead;
+
+    }
+}
+class Solution224A{
+    public int calculate(String s){
+            int res = 0;
+            int num = 0;
+            int sign = 1; // 当前符号，1 表示正，-1 表示负
+            Deque<Integer> stack = new LinkedList<>();
+            for(int i=0;i<s.length();i++){
+                char ch = s.charAt(i);
+                if (Character.isDigit(ch)){
+                    num = num*10+(ch-'0');
+                }else if (ch=='+'){
+                    res  +=sign*num;
+                    num = 0;
+                    sign = 1;
+                }else if (ch=='-'){
+                    res +=sign*num;
+                    num = 0;
+                    sign=-1;
+                } else if (ch=='('){
+                    stack.push(res);
+                    stack.push(sign);
+                    res= 0;
+                    sign =1;
+                }else if (ch==')'){
+                    res +=sign*num;
+                    num = 0;
+                    int preSign = stack.pop();
+                    int preRes = stack.pop();
+                    res = preRes+preSign*res;
+                }
+            }
+            res +=sign*num;
+            return res;
+    }
+}
+class Solution153{
+    public int findMin(int[] nums){
+        int left = 0,right = nums.length-1;
+        if (nums[left]<nums[right]) return nums[0];
+        while (left<right){
+            int mid = (left+right)>>>1;
+            if (nums[mid]>nums[right]){
+                left = mid+1;
+            }else {
+                right = mid;
+            }
+        }
+        return nums[left];
+    }
+}
+class Solution207{
+    public boolean canFinish(int numCourses, int[][] prerequisites){
+        List<Integer>[] g  = new ArrayList[numCourses];
+        Arrays.setAll(g,i->new ArrayList<>());;
+        for (int[] p : prerequisites) {
+            g[p[1]].add(p[0]);
+        }
+
+        int[] colors =new int[numCourses];
+        for (int i=0;i<numCourses;i++){
+            if (colors[i]==0&&dfs(i,g,colors)){
+                return false;
+            }
+
+        }
+        return true;
+    }
+    private boolean dfs(int x, List<Integer>[] g, int[] colors){
+        colors[x]=1;
+        for (int y:g[x]){
+            if (colors[y]==1||colors[y]==0&&dfs(y,g,colors)){
+                return true;
+            }
+        }
+        colors[x]=2;
+        return false;
+    }
+}
