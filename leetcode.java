@@ -4714,3 +4714,95 @@ class Solution207{
         return false;
     }
 }
+class Solution79A{
+    public boolean exist(char[][] board, String word) {
+        int r = board.length;
+        int t = board[0].length;
+        boolean[][] visited = new boolean[r][t];
+        for (int i=0;i<r;i++) {
+            for (int j = 0; j < t; j++) {
+                if (board[i][j] == word.charAt(0)) {
+                    if (dfs(board, word, i, j, 0, visited)) {
+                        return true;
+                    }
+
+                }
+            }
+        }
+        return false;
+    }
+    private boolean dfs(char[][] board, String word, int row, int col, int index, boolean[][] visited){
+        if (index==word.length()){
+            return true;
+        }
+        if (row < 0 || row >= board.length || col < 0 || col >= board[0].length ||
+                board[row][col] != word.charAt(index) || visited[row][col]) {
+            return false;
+        }
+        visited[row][col]=true;
+        boolean found = dfs(board, word, row + 1, col, index + 1, visited) ||
+                dfs(board, word, row - 1, col, index + 1, visited) ||
+                dfs(board, word, row, col + 1, index + 1, visited) ||
+                dfs(board, word, row, col - 1, index + 1, visited);
+        visited[row][col]= false;
+        return found;
+    }
+}
+class Solution47AA {
+    List<Integer> nums;
+    List<List<Integer>> res;
+
+    void swap(int a, int b) {
+        int tmp = nums.get(a);
+        nums.set(a, nums.get(b));
+        nums.set(b, tmp);
+    }
+
+    void dfs(int x) {
+        if (x == nums.size() - 1) {
+            res.add(new ArrayList<>(nums));
+            return;
+        }
+        HashSet<Integer> set = new HashSet<>();
+        for (int i = x; i < nums.size(); i++) {//固定x
+            if (set.contains(nums.get(i))) {
+                continue;
+            }
+            set.add(nums.get(i));
+            swap(i, x);
+            dfs(x + 1);
+            swap(x, i);
+        }
+    }
+
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        this.res = new ArrayList<>();
+        this.nums = new ArrayList<>();
+        for (int num : nums) {
+            this.nums.add(num);
+        }
+        dfs(0);
+        return res;
+    }
+}
+class Solution402A {
+    public String removeKdigits(String num, int k) {
+        StringBuilder sb = new StringBuilder();
+        for(char ch:num.toCharArray()){
+            while (!sb.isEmpty()&&ch<sb.charAt(sb.length()-1)&&k>0){
+                sb.deleteCharAt(sb.length()-1);
+                k--;
+            }
+            sb.append(ch);
+        }
+        while (!sb.isEmpty()&&k>0){
+            sb.deleteCharAt(sb.length()-1);
+            k--;
+        }
+        while (!sb.isEmpty()&&sb.charAt(0)=='0'){
+            sb.deleteCharAt(0);
+        }
+        return sb.isEmpty()?"0":sb.toString();
+
+    }
+}
