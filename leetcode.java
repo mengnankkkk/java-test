@@ -4806,3 +4806,92 @@ class Solution402A {
 
     }
 }
+class Solution76A{
+    public String minWindow(String S, String t) {
+        int[] cnt = new int[128];
+        int less = 0;
+        for (char c:t.toCharArray()){
+            if (cnt[c]==0){
+                less++;
+            }
+            cnt[c]++;
+        }
+        char[] s = S.toCharArray();
+        int m  = s.length;
+        int ansleft  = -1;
+        int ansRight = m;
+
+        int left =0;
+        for (int right = 0;right<m;right++){
+            char c =s[right];
+            cnt[c]--;
+            if (cnt[c]==0){
+                less--;
+            }
+            while (less==0){
+                if (right-left<ansRight-ansleft){
+                    ansleft = left;
+                    ansRight = right;
+                }
+                char x = s[left];
+                if (cnt[x]==0){
+                    less++;
+                }
+                cnt[x]++;
+                left++;
+            }
+        }
+        return ansleft<0?"":S.substring(ansleft,ansRight+1);
+    }
+}
+class Solution124A {
+    private int ans = Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        dfs(root);
+        return ans;
+    }
+    private int dfs(TreeNode root){
+        if (root==null){
+            return 0;
+        }
+        int lval = dfs(root.left);
+        int rval  =dfs(root.right);
+        ans  = Math.max(ans,lval+rval+root.val);
+        return Math.max(Math.max(lval,rval)+ root.val,0);
+    }
+}
+class Trie{
+    private static class Node{
+        Node[] son = new Node[26];
+        boolean end;
+    }
+    private final Node root = new Node();
+    public void insert(String word) {
+        Node cur = root;
+        for (char c:word.toCharArray()){
+            c -='a';
+            if (cur.son[c]==null){
+                cur.son[c] = new Node();
+            }
+            cur = cur.son[c];
+        }
+        cur.end = true;
+    }
+    public boolean search(String word) {
+        return find(word)==2;
+    }
+    public boolean startsWith(String prefix) {
+        return find(prefix)!=0;
+    }
+    private int find(String word){
+        Node cur = root;
+        for (char c:word.toCharArray()){
+            c-='a';
+            if(cur.son[c]==null){
+                return 0;
+            }
+            cur = cur.son[c];
+        }
+        return cur.end?2:1;
+    }
+}
