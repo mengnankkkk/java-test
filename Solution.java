@@ -304,6 +304,10 @@ class Node {
         this.next = null;
         this.random = null;
     }
+
+    public Node(int val, Node next) {
+
+    }
 }
 class Solution17{
     public ListNode sortList(ListNode head){

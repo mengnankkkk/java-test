@@ -4461,3 +4461,526 @@ class Solution169A{
         return x;
     }
 }
+class Solution226{
+    public TreeNode invertTree(TreeNode root) {
+        if(root==null) return null;
+        TreeNode tmp =root.left;
+        root.left = invertTree(root.right);
+        root.right = invertTree(tmp);
+        return root;
+    }
+}
+class Solution718{
+    public int findLength(int[] nums1, int[] nums2){
+        int n  = nums1.length;
+        int m = nums2.length;
+        int ans = 0;
+        int [][] f= new int[n+1][m+1];
+        for(int i =0;i<n;i++){
+            for (int j=0;j<m;j++){
+                if(nums1[i]==nums2[j]){
+                    f[i+1][j+1] = f[i][j]+1;
+                    ans = Math.max(ans,f[i+1][j+1]);
+                }
+            }
+        }
+        return ans;
+    }
+}
+class Solution209{
+    public int minSubArrayLen(int target, int[] nums){
+        int n =  nums.length;
+        int left =0,ans = Integer.MAX_VALUE;
+        int sum = 0;
+        for (int right  = 0;right<n;right++){
+            sum +=nums[right];
+            while (sum>=target){
+                ans = Math.min(ans,right-left+1);
+                sum -=nums[left++];
+            }
+        }
+        return ans == Integer.MAX_VALUE ? 0 : ans;
+    }
+}
+class Solution139{
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Set<String> set = new HashSet<>(wordDict);
+        int n = s.length();
+        boolean[] dp =new boolean[n+1];
+        dp[0] = true;
+        for (int i=1;i<=n;i++){
+            for (int j=0;j<i;j++){
+                if (dp[j]&&set.contains(s.substring(j,i))){
+                    dp[i] =true;
+                    break;
+                }
+            }
+        }
+        return dp[n];
+    }
+}
+class Solution83A{
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head==null) return null;
+        ListNode cur = head;
+        while (cur!=null&&cur.next!=null){
+            if (cur.val==cur.next.val){
+                cur.next = cur.next.next;
+            }else {
+                cur =cur.next;
+            }
+        }
+        return head;
+    }
+}
+class Solution24A{
+    public ListNode swapPairs(ListNode head) {
+        if (head==null||head.next==null) return head;
+        ListNode tmp = head.next;
+        head.next = swapPairs(tmp.next);
+        tmp.next = head;
+        return tmp;
+    }
+}
+class Solution283A{
+    public void moveZeroes(int[] nums){
+        int slow = 0;
+        for (int fast = 0;fast<nums.length;fast++){
+            if (nums[fast]!=0){
+                int temp = nums[fast];
+                nums[fast] = nums[slow];
+                nums[slow++] = temp;
+            }
+        }
+    }
+}
+class Solution468{
+    public String validIPAddress(String queryIP){
+        boolean flag = false;
+        for (int i=0;i<queryIP.length();i++){
+            if (queryIP.charAt(i)=='.'){
+                flag = true;
+                break;
+            }else if (queryIP.charAt(i)==':'){
+                flag  = false;
+                break;
+            }
+        }
+        if (!flag){
+            String [] split = queryIP.split(":",-1);
+            if (split.length!=8){
+                return "Neither";
+            }
+            for (String s:split){
+                if (s.length()>4||s.isEmpty()) return "Neither";
+                for (char c:s.toCharArray()){
+                    if (!String.valueOf(c).matches("[0-9a-fA-F]")){
+                        return "Neither";
+                    }
+                }
+            }
+            return "IPv6";
+        }else {
+            String[] split = queryIP.split("\\.",-1);
+            if (split.length!=4) return "Neither";
+            for (String s:split){
+                if (s.isEmpty()) return "Neither";
+                try {
+                    int num = Integer.parseInt(s);
+                    if (num>255||!String.valueOf(num).equals(s)){
+                        return "Neither";
+                    }
+                }catch (NumberFormatException e){
+                    return "Neither";
+                }
+            }
+            return "IPv4";
+        }
+    }
+}
+class Solution739A {
+    public int[] dailyTemperatures(int[] temperatures) {
+        int n =temperatures.length;
+        int[] res = new int[n];
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int i=0;i<n;i++){
+            while (!stack.isEmpty()&&temperatures[i]>temperatures[stack.peek()]){
+                int pre = stack.pop();
+                res[pre]  =i-pre;
+            }
+            stack.push(i);
+        }
+        return res;
+    }
+}
+class Solution138A{
+    public Node copyRandomList(Node head){
+        if (head==null) return null;
+        for(Node cur = head;cur!=null;cur = cur.next.next){
+            cur.next = new Node(cur.val,cur.next);
+        }
+        for (Node cur =head;cur!=null;cur = cur.next.next){
+            if (cur.random!=null){
+                cur.next.random = cur.random.next;
+            }
+        }
+        Node newHead = head.next;
+        Node cur = head;
+        for (;cur.next.next!=null;cur=cur.next){
+            Node copy = cur.next;
+            cur.next = copy.next;
+            copy.next =copy.next.next;
+        }
+        cur.next = null;
+        return newHead;
+
+    }
+}
+class Solution224A{
+    public int calculate(String s){
+            int res = 0;
+            int num = 0;
+            int sign = 1; // 当前符号，1 表示正，-1 表示负
+            Deque<Integer> stack = new LinkedList<>();
+            for(int i=0;i<s.length();i++){
+                char ch = s.charAt(i);
+                if (Character.isDigit(ch)){
+                    num = num*10+(ch-'0');
+                }else if (ch=='+'){
+                    res  +=sign*num;
+                    num = 0;
+                    sign = 1;
+                }else if (ch=='-'){
+                    res +=sign*num;
+                    num = 0;
+                    sign=-1;
+                } else if (ch=='('){
+                    stack.push(res);
+                    stack.push(sign);
+                    res= 0;
+                    sign =1;
+                }else if (ch==')'){
+                    res +=sign*num;
+                    num = 0;
+                    int preSign = stack.pop();
+                    int preRes = stack.pop();
+                    res = preRes+preSign*res;
+                }
+            }
+            res +=sign*num;
+            return res;
+    }
+}
+class Solution153{
+    public int findMin(int[] nums){
+        int left = 0,right = nums.length-1;
+        if (nums[left]<nums[right]) return nums[0];
+        while (left<right){
+            int mid = (left+right)>>>1;
+            if (nums[mid]>nums[right]){
+                left = mid+1;
+            }else {
+                right = mid;
+            }
+        }
+        return nums[left];
+    }
+}
+class Solution207{
+    public boolean canFinish(int numCourses, int[][] prerequisites){
+        List<Integer>[] g  = new ArrayList[numCourses];
+        Arrays.setAll(g,i->new ArrayList<>());;
+        for (int[] p : prerequisites) {
+            g[p[1]].add(p[0]);
+        }
+
+        int[] colors =new int[numCourses];
+        for (int i=0;i<numCourses;i++){
+            if (colors[i]==0&&dfs(i,g,colors)){
+                return false;
+            }
+
+        }
+        return true;
+    }
+    private boolean dfs(int x, List<Integer>[] g, int[] colors){
+        colors[x]=1;
+        for (int y:g[x]){
+            if (colors[y]==1||colors[y]==0&&dfs(y,g,colors)){
+                return true;
+            }
+        }
+        colors[x]=2;
+        return false;
+    }
+}
+class Solution79A{
+    public boolean exist(char[][] board, String word) {
+        int r = board.length;
+        int t = board[0].length;
+        boolean[][] visited = new boolean[r][t];
+        for (int i=0;i<r;i++) {
+            for (int j = 0; j < t; j++) {
+                if (board[i][j] == word.charAt(0)) {
+                    if (dfs(board, word, i, j, 0, visited)) {
+                        return true;
+                    }
+
+                }
+            }
+        }
+        return false;
+    }
+    private boolean dfs(char[][] board, String word, int row, int col, int index, boolean[][] visited){
+        if (index==word.length()){
+            return true;
+        }
+        if (row < 0 || row >= board.length || col < 0 || col >= board[0].length ||
+                board[row][col] != word.charAt(index) || visited[row][col]) {
+            return false;
+        }
+        visited[row][col]=true;
+        boolean found = dfs(board, word, row + 1, col, index + 1, visited) ||
+                dfs(board, word, row - 1, col, index + 1, visited) ||
+                dfs(board, word, row, col + 1, index + 1, visited) ||
+                dfs(board, word, row, col - 1, index + 1, visited);
+        visited[row][col]= false;
+        return found;
+    }
+}
+class Solution47AA {
+    List<Integer> nums;
+    List<List<Integer>> res;
+
+    void swap(int a, int b) {
+        int tmp = nums.get(a);
+        nums.set(a, nums.get(b));
+        nums.set(b, tmp);
+    }
+
+    void dfs(int x) {
+        if (x == nums.size() - 1) {
+            res.add(new ArrayList<>(nums));
+            return;
+        }
+        HashSet<Integer> set = new HashSet<>();
+        for (int i = x; i < nums.size(); i++) {//固定x
+            if (set.contains(nums.get(i))) {
+                continue;
+            }
+            set.add(nums.get(i));
+            swap(i, x);
+            dfs(x + 1);
+            swap(x, i);
+        }
+    }
+
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        this.res = new ArrayList<>();
+        this.nums = new ArrayList<>();
+        for (int num : nums) {
+            this.nums.add(num);
+        }
+        dfs(0);
+        return res;
+    }
+}
+class Solution402A {
+    public String removeKdigits(String num, int k) {
+        StringBuilder sb = new StringBuilder();
+        for(char ch:num.toCharArray()){
+            while (!sb.isEmpty()&&ch<sb.charAt(sb.length()-1)&&k>0){
+                sb.deleteCharAt(sb.length()-1);
+                k--;
+            }
+            sb.append(ch);
+        }
+        while (!sb.isEmpty()&&k>0){
+            sb.deleteCharAt(sb.length()-1);
+            k--;
+        }
+        while (!sb.isEmpty()&&sb.charAt(0)=='0'){
+            sb.deleteCharAt(0);
+        }
+        return sb.isEmpty()?"0":sb.toString();
+
+    }
+}
+class Solution76A{
+    public String minWindow(String S, String t) {
+        int[] cnt = new int[128];
+        int less = 0;
+        for (char c:t.toCharArray()){
+            if (cnt[c]==0){
+                less++;
+            }
+            cnt[c]++;
+        }
+        char[] s = S.toCharArray();
+        int m  = s.length;
+        int ansleft  = -1;
+        int ansRight = m;
+
+        int left =0;
+        for (int right = 0;right<m;right++){
+            char c =s[right];
+            cnt[c]--;
+            if (cnt[c]==0){
+                less--;
+            }
+            while (less==0){
+                if (right-left<ansRight-ansleft){
+                    ansleft = left;
+                    ansRight = right;
+                }
+                char x = s[left];
+                if (cnt[x]==0){
+                    less++;
+                }
+                cnt[x]++;
+                left++;
+            }
+        }
+        return ansleft<0?"":S.substring(ansleft,ansRight+1);
+    }
+}
+class Solution124A {
+    private int ans = Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        dfs(root);
+        return ans;
+    }
+    private int dfs(TreeNode root){
+        if (root==null){
+            return 0;
+        }
+        int lval = dfs(root.left);
+        int rval  =dfs(root.right);
+        ans  = Math.max(ans,lval+rval+root.val);
+        return Math.max(Math.max(lval,rval)+ root.val,0);
+    }
+}
+class Trie{
+    private static class Node{
+        Node[] son = new Node[26];
+        boolean end;
+    }
+    private final Node root = new Node();
+    public void insert(String word) {
+        Node cur = root;
+        for (char c:word.toCharArray()){
+            c -='a';
+            if (cur.son[c]==null){
+                cur.son[c] = new Node();
+            }
+            cur = cur.son[c];
+        }
+        cur.end = true;
+    }
+    public boolean search(String word) {
+        return find(word)==2;
+    }
+    public boolean startsWith(String prefix) {
+        return find(prefix)!=0;
+    }
+    private int find(String word){
+        Node cur = root;
+        for (char c:word.toCharArray()){
+            c-='a';
+            if(cur.son[c]==null){
+                return 0;
+            }
+            cur = cur.son[c];
+        }
+        return cur.end?2:1;
+    }
+}
+class MedianFinder {
+    private final PriorityQueue<Integer> left = new PriorityQueue<>((a,b)->b-a);
+    private final PriorityQueue<Integer> right = new PriorityQueue<>();
+
+
+    public MedianFinder() {
+
+    }
+
+    public void addNum(int num) {
+        if (left.size()==right.size()){
+            right.offer(num);
+            left.offer(right.poll());
+        }else {
+            left.offer(num);
+            right.offer(left.poll());
+        }
+    }
+
+    public double findMedian() {
+        if(left.size()>right.size()){
+            return left.peek();
+        }
+        return (left.peek()+right.peek())/2.0;
+    }
+}
+class Solution32AA{
+    public int longestValidParentheses(String s){
+        if (s.length()<=1) return 0;
+        boolean vaild[] = new boolean[s.length()];
+        Stack<Integer> stack = new Stack<>();
+
+        for (int i=0;i<s.length();i++){
+            if (s.charAt(i)=='(') stack.push(i);
+            if (s.charAt(i)==')'&&!stack.isEmpty()){
+                int index = stack.pop();
+                vaild[i] = true;
+                vaild[index]=true;
+            }
+        }
+        int res = 0;
+        int count = 0;
+        for (int i=0;i<vaild.length;i++){
+            if (vaild[i])
+                count++;
+            else{
+                res = Math.max(res,count);
+                count=0;
+            }
+        }
+        res = Math.max(res,count);
+        return res;
+    }
+}
+class Solution141A {
+    public boolean hasCycle(ListNode head) {
+        if (head==null) return false;
+        ListNode slow = head,fast=head;
+        while (fast!=null&&fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+            if (fast==slow){
+                return true;
+            }
+        }
+        return false;
+
+    }
+}
+class Solution72A{
+    public int minDistance(String text1, String text2){
+        char[] t=  text2.toCharArray();
+        int m = t.length;
+        int[] f= new int[m+1];
+        for (int j=0;j<m;j++){
+            f[j+1] = j+1;
+        }
+        for (char x:text1.toCharArray()){
+            int pre = f[0];
+            f[0]++;
+            for (int j=0;j<m;j++){
+                int tmp =f[j+1];
+                f[j+1] = x ==t[j]?pre:Math.min(Math.min(f[j+1],f[j]),pre)+1;
+                pre = tmp;
+            }
+        }
+        return f[m];
+    }
+}
