@@ -4895,3 +4895,92 @@ class Trie{
         return cur.end?2:1;
     }
 }
+class MedianFinder {
+    private final PriorityQueue<Integer> left = new PriorityQueue<>((a,b)->b-a);
+    private final PriorityQueue<Integer> right = new PriorityQueue<>();
+
+
+    public MedianFinder() {
+
+    }
+
+    public void addNum(int num) {
+        if (left.size()==right.size()){
+            right.offer(num);
+            left.offer(right.poll());
+        }else {
+            left.offer(num);
+            right.offer(left.poll());
+        }
+    }
+
+    public double findMedian() {
+        if(left.size()>right.size()){
+            return left.peek();
+        }
+        return (left.peek()+right.peek())/2.0;
+    }
+}
+class Solution32AA{
+    public int longestValidParentheses(String s){
+        if (s.length()<=1) return 0;
+        boolean vaild[] = new boolean[s.length()];
+        Stack<Integer> stack = new Stack<>();
+
+        for (int i=0;i<s.length();i++){
+            if (s.charAt(i)=='(') stack.push(i);
+            if (s.charAt(i)==')'&&!stack.isEmpty()){
+                int index = stack.pop();
+                vaild[i] = true;
+                vaild[index]=true;
+            }
+        }
+        int res = 0;
+        int count = 0;
+        for (int i=0;i<vaild.length;i++){
+            if (vaild[i])
+                count++;
+            else{
+                res = Math.max(res,count);
+                count=0;
+            }
+        }
+        res = Math.max(res,count);
+        return res;
+    }
+}
+class Solution141A {
+    public boolean hasCycle(ListNode head) {
+        if (head==null) return false;
+        ListNode slow = head,fast=head;
+        while (fast!=null&&fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+            if (fast==slow){
+                return true;
+            }
+        }
+        return false;
+
+    }
+}
+class Solution72A{
+    public int minDistance(String text1, String text2){
+        char[] t=  text2.toCharArray();
+        int m = t.length;
+        int[] f= new int[m+1];
+        for (int j=0;j<m;j++){
+            f[j+1] = j+1;
+        }
+        for (char x:text1.toCharArray()){
+            int pre = f[0];
+            f[0]++;
+            for (int j=0;j<m;j++){
+                int tmp =f[j+1];
+                f[j+1] = x ==t[j]?pre:Math.min(Math.min(f[j+1],f[j]),pre)+1;
+                pre = tmp;
+            }
+        }
+        return f[m];
+    }
+}
