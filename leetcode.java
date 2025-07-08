@@ -1,6 +1,7 @@
 
 
 import javax.swing.*;
+import javax.xml.stream.events.Characters;
 import java.util.*;
 
 
@@ -4984,3 +4985,68 @@ class Solution72A{
         return f[m];
     }
 }
+class Solution692{
+    public List<String> topKFrequent(String[] words, int k) {
+        Map<String,Integer> map =new HashMap<>();
+        for(String word:words){
+            map.put(word,map.getOrDefault(word,0)+1);
+        }
+        PriorityQueue<String> queue = new PriorityQueue<>(
+                (w1,w2)->map.get(w1).equals(map.get(w2))?w2.compareTo(w1):map.get(w1)-map.get(w2)
+        );
+        for (String word:map.keySet()){
+            queue.offer(word);
+            if (queue.size()>k){
+                queue.poll();
+            }
+        }
+        List<String> res = new ArrayList<>();
+        while (!queue.isEmpty()){
+            res.add(queue.poll());
+        }
+        Collections.reverse(res);
+        return res;
+    }
+}
+class Solution3B {
+    public int lengthOfLongestSubstring(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        int left = -1, maxlen = 0;
+        for (int right = 0; right < s.length(); right++) {
+            if (map.containsKey(s.charAt(right))) {
+                left = Math.max(left, map.get(s.charAt(right)));
+            }
+            map.put(s.charAt(right), right);
+            maxlen = Math.max(maxlen, right - left);
+        }
+        return maxlen;
+    }
+}
+class Solution394A{
+    public String decodeString(String s) {
+        int num  = 0;
+        String  curSting = "";
+        Stack<Integer> stack_multi=  new Stack<>();
+        Stack<String> stack = new Stack<>();
+        for (Character c:s.toCharArray()){
+                if (Character.isDigit(c)){
+                    num = num*10+c-'0';
+                }else if (c=='['){
+                    stack_multi.push(num);
+                    stack.push(curSting);
+                    num = 0;
+                    curSting = "";
+                }else if (c==']'){
+                    int longnum = stack_multi.pop();
+                    StringBuilder temp = new StringBuilder(stack.pop());
+                    for (int i=0;i<longnum;i++){
+                        temp.append(curSting);
+                    }
+                    curSting=  temp.toString();
+                }else {
+                    curSting +=c;
+                }
+            }
+        return curSting;
+        }
+    }
