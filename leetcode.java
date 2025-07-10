@@ -5050,3 +5050,95 @@ class Solution394A{
         return curSting;
         }
     }
+    class Solution82AA{
+        public ListNode deleteDuplicates(ListNode head) {
+            ListNode dummy = new ListNode(0,head);
+            ListNode cur  = dummy;
+            while (cur.next!=null&&cur.next.next!=null){
+                int val = cur.next.val;
+                if (cur.next.next.val == val){
+                    while (cur.next!=null&&cur.next.val == val){
+                        cur.next = cur.next.next;
+                    }
+                }else {
+                    cur = cur.next;
+                }
+
+            }
+            return dummy.next;
+        }
+    }
+class Solution18B {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        int n = nums.length;
+        if (nums == null || nums.length < 4) return res;
+        Arrays.sort(nums);
+        for (int i = 0; i < n - 3; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            if ((long) nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] > target) {
+                break;
+            }
+            if ((long) nums[i] + nums[n - 3] + nums[n - 2] + nums[n - 1] < target) {
+                continue;
+            }
+            for (int j = i + 1; j < n - 2; j++) {
+                if (j > i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
+                if ((long) nums[i] + nums[j] + nums[j + 1] + nums[j + 2] > target) {
+                    break;
+                }
+                if ((long) nums[i] + nums[j] + nums[n - 2] + nums[n - 1] < target) {
+                    continue;
+                }
+                int left = j + 1;
+                int right = n - 1;
+                while (left < right) {
+                    long sum = (long) nums[i] + nums[j] + nums[left] + nums[right];
+                    if (sum == target) {
+                        res.add(Arrays.asList(nums[i], nums[j], nums[left], nums[right]));
+                        while (left < right && nums[left] == nums[left + 1]) {
+                            left++;
+                        }
+                        while (left < right && nums[right] == nums[right - 1]) {
+                            right--;
+                        }
+                        left++;
+                        right--;
+                    } else if (sum < target) {
+                        left++;
+                    } else {
+                        right--;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
+class Solution40A{
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        dfs(0,target,candidates,ans,path);
+        return ans;
+    }
+    private void dfs(int i,int left,int[] candidates,List<List<Integer>> ans,List<Integer> path){
+        if (left==0){
+            ans.add(new ArrayList<>(path));
+            return;
+        }
+        for (int j=i;j<candidates.length&&candidates[j]<=left;j++){
+            if (j>i&&candidates.length==candidates[j-1]){
+                continue;
+            }
+            path.add(candidates[j]);
+            dfs(j+1,left-candidates[j],candidates,ans,path);
+            path.remove(path.size()-1);
+        }
+    }
+}
