@@ -5142,3 +5142,106 @@ class Solution40A{
         }
     }
 }
+class Solution415AAA{
+    public String addStringsA(String num1, String num2) {
+        String ans= "";
+        StringBuilder sb = new StringBuilder();
+        sb.append(turn(num1)+turn(num2));
+        return sb.toString();
+    }
+    private long turn(String nums){
+        long ans = 0;
+        for (int i=nums.length();i>=0;i--){
+            ans +=(i-1)*10;
+        }
+        return ans;
+    }
+    public String addStrings(String num1, String num2){
+        StringBuilder res= new StringBuilder();
+        int i = num1.length()-1,j=num2.length()-1,carry = 0;
+        while (i>=0||j>=0){
+            int n1 = i>=0?num1.charAt(i)-'0':0;
+            int n2 = j>=0?num2.charAt(j)-'0':0;
+            int tmp  = n1+n2+carry;
+            carry = tmp/10;
+            res.append(tmp%10);
+            i--;j--;
+
+        }
+        if (carry==1) res.append(1);
+        return res.reverse().toString();
+    }
+}
+class Solution946{
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        Stack<Integer> stack = new Stack<>();
+        int i =0;
+        for (int num:pushed){
+            stack.push(num);
+            while (!stack.isEmpty()&&stack.peek()==popped[i]){
+                stack.pop();
+                i++;
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+class LRUCacheAA {
+    private static class Node{
+        int key,vaule;
+        Node prev,next;
+        Node(int k,int v){
+            key = k;
+            vaule = v;
+        }
+    }
+    private final int capacity;
+    private final Node dummy = new Node(0, 0); // 哨兵节点
+    private final Map<Integer, Node> keyToNode = new HashMap<>();
+
+    public LRUCacheAA(int capacity) {
+        this.capacity = capacity;
+        dummy.prev = dummy;
+        dummy.next = dummy;
+    }
+
+    public int get(int key) {
+        Node node = getNode(key);
+        return node!=null?node.vaule:-1;
+    }
+
+    public void put(int key, int value) {
+        Node node = getNode(key);
+        if (node!=null){
+            node.vaule = value;
+            return;
+        }
+        node = new Node(key,value);
+        keyToNode.put(key,node);
+        pushFront(node);
+        if (keyToNode.size()>capacity){
+            Node backNode = dummy.prev;
+            keyToNode.remove(backNode.key);
+            remove(backNode);
+        }
+    }
+    private void remove(Node x){
+        x.prev.next = x.next;
+        x.next.prev = x.prev;
+    }
+    private void pushFront(Node x){
+        x.prev = dummy;
+        x.next = dummy.next;
+        x.prev.next = x;
+        x.next.prev = x;
+    }
+    private Node getNode(int key){
+        if (!keyToNode.containsKey(key)){
+            return null;
+        }
+        Node node = keyToNode.get(key);
+        remove(node);
+        pushFront(node);
+        return node;
+    }
+}
