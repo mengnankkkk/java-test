@@ -5245,3 +5245,75 @@ class LRUCacheAA {
         return node;
     }
 }
+class Solution88AA{
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int len1 = m-1,len2=n-1;
+        int len = m+n-1;
+        while (len1>=0&&len2>=0){
+            nums1[len--] = nums1[len1]>nums2[len2]?nums1[len1--]:nums2[len2--];
+        }
+       System.arraycopy(nums2,0,nums1,0,len2+1);
+    }
+}
+class Solution143B{
+    public void reorderList(ListNode head) {
+        ListNode mid = middle(head);
+        ListNode head2 = reverseList(mid);
+        while (head2.next!=null){
+            ListNode next = head.next;
+            ListNode next2 = head2.next;
+            head.next = head2;
+            head2.next = next;
+            head = next;
+            head2 = next2;
+        }
+    }
+    private ListNode reverseList(ListNode head){
+        ListNode pre = null,cur = head;
+        while (cur!=null){
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre=  cur;
+            cur = next;
+        }
+        return pre;
+    }
+    private ListNode middle(ListNode head){
+        ListNode slow =head,fast = head;
+        while (fast!=null&&fast.next!=null){
+            slow  = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+}
+class Solution91AA{
+    public int numDecodings(String s) {
+        int n = s.length();
+        s=  " "+s;
+        char[] cs = s.toCharArray();
+        int[] f = new int[n+1];
+        f[0] = 1;
+        for (int i=1;i<=n;i++){
+            int a = cs[i]-'0',b = (cs[i-1]-'0')*10+(cs[i]-'0');
+            if (1<=a&&a<=9) f[i] = f[i-1];
+            if (10<=b&&b<=26) f[i]+=f[i-2];
+        }
+        return f[n];
+    }
+    public int numDecodingsA(String s){
+        int n = s.length();
+        s = " "+s;
+        char[] cs = s.toCharArray();
+        int[]f = new int[n+1];
+        f[0]  =1;
+        for (int i=1;i<=n;i++){
+            f[i%3] = 0;
+            int a = cs[i]-'0',b = (cs[i-1]-'0')*10+(cs[i]-'0');
+            if (1<=a&&a<=9) f[i%3] = f[(i-1)%3];
+            if (10<=b&&b<=26) f[i%3] +=f[(i-2)%3];
+        }
+
+        return f[n%3];
+    }
+}
