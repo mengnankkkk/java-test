@@ -5317,3 +5317,94 @@ class Solution91AA{
         return f[n%3];
     }
 }
+class Solution215{
+    public int findKthLargest(int[] nums, int k) {
+        Arrays.sort(nums);
+        return nums[nums.length-k];
+    }
+}
+class Solution25AAa{
+    public ListNode reverseKGroup(ListNode head, int k) {
+        //统计节点个数
+        int n = 0;
+        for (ListNode cur = head;cur!=null;cur = cur.next){
+            n++;
+        }
+        ListNode dummy = new ListNode(0,head);
+        ListNode p0 = dummy;
+        ListNode pre  =null;
+        ListNode cur = head;
+
+        for (;n>=k;n-=k){
+            for(int i=0;i<k;i++){
+                ListNode next =cur.next;
+                cur.next = pre;
+                pre = cur;
+                cur = next;
+            }
+
+            ListNode next = p0.next;
+            p0.next.next = cur;
+            p0.next = pre;
+            p0 = next;
+        }
+        return dummy.next;
+    }
+}
+class Solution15AAA{
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        for (int k =0;k<nums.length-2;k++){
+            if (nums[k]>0) break;
+            if(k>0&&nums[k]==nums[k-1]) continue;
+            int i=k+1,j=nums.length-1;
+            while (i<j){
+                int sum = nums[k]+nums[i]+nums[j];
+                if(sum<0){
+                    while (i<j&&nums[i]==nums[++i]);
+                }else if (sum>0){
+                    while (i<j&&nums[j]==nums[--j]);
+                }else {
+                    res.add(new ArrayList<Integer>(Arrays.asList(nums[k],nums[i],nums[j])));
+                    i++;j--;
+                    while (i<j&&nums[i]==nums[i-1]){
+                        i++;
+                    }
+                    while (i<j&&nums[j]==nums[j+1]){
+                        j--;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
+class Solution53B {
+    public int maxSubArray(int[] nums) {
+        int ans = Integer.MIN_VALUE;
+        int minpresum = 0,presum = 0;
+        for(int x:nums){
+            presum +=x;
+            ans = Math.max(ans,presum-minpresum);
+            minpresum = Math.min(minpresum,presum);
+
+        }
+        return ans;
+    }
+}
+class Solution21B {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+       if(list1==null){
+           return list2;
+       }else if (list2==null){
+           return list1;
+       }else if(list1.val<list2.val){
+           list1.next = mergeTwoLists(list1.next,list2);
+           return list1;
+       }else {
+           list2.next = mergeTwoLists(list1,list2.next);
+           return list2;
+       }
+    }
+}
