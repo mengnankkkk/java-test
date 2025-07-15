@@ -5408,3 +5408,73 @@ class Solution21B {
        }
     }
 }
+class Solution5B{
+    public String longestPalindrome(String s) {
+     if (s==null||s.length()<2){
+         return s;
+     }
+     int strlen = s.length();
+     int maxStart = 0;
+     int maxEnd = 0;
+     int maxLen = 1;
+
+
+     boolean[][] dp  =new boolean[strlen][strlen];
+
+     for (int r= 3;r<strlen;r++){
+         for (int l = 0;l<r;l++){
+             if (s.charAt(l)==s.charAt(r)&&(r-l<=2||dp[l+1][r-1])){
+                 dp[l][r] = true;
+                 if (r-l+1>maxLen){
+                     maxLen = r-l+1;
+                     maxStart = l;
+                     maxEnd = r;
+                 }
+             }
+         }
+     }
+     return s.substring(maxStart,maxEnd+1);
+
+    }
+}
+class Solution102B {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        if (root!=null) queue.add(root);
+        while (!queue.isEmpty()){
+            List<Integer> tmp = new ArrayList<>();
+            for (int i=queue.size();i>0;i--){
+                TreeNode node = queue.poll();
+                tmp.add(node.val);
+                if (node.left!=null) queue.add(node.left);
+                if (node.right!=null) queue.add(node.right);
+            }
+            res.add(tmp);
+        }
+        return res;
+    }
+}
+class Solution33B{
+    public int search(int[] nums, int target) {
+        int n = nums.length;
+        int end = nums[n-1];
+        int left =0;
+        int right  = n-1;
+        while (left<right){
+            int mid = (left+right)>>>1;
+            if (target<=end&&nums[mid]>end){
+                left = mid+1;
+            }else if (target>end&&nums[mid]<=end){
+                right =mid;
+            }else {
+                if (nums[mid]<target){
+                    left = mid+1;
+                }else {
+                    right = mid;
+                }
+            }
+        }
+        return nums[left]!=target?-1:left;
+    }
+}
