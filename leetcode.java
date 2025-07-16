@@ -5478,3 +5478,79 @@ class Solution33B{
         return nums[left]!=target?-1:left;
     }
 }
+class Solution200B{
+    public int numIslands(char[][] grid) {
+        int count = 0;
+        for (int i=0;i<grid.length;i++){
+            for(int j =0;j<grid[0].length;j++){
+                if(grid[i][j]=='1'){
+                    dfs(grid,i,j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    private void dfs(char[][] grid ,int i,int j){
+        if(i<0||j<0||i>=grid.length||j>=grid[0].length||grid[i][j]=='0') return;
+        grid[i][j] ='0';
+        dfs(grid,i-1,j);
+        dfs(grid,i+1,j);
+        dfs(grid,i,j-1);
+        dfs(grid,i,j+1);
+    }
+}
+class Solution46A{
+    List<List<Integer>> ans= new ArrayList<>();
+    List<Integer> nums = new ArrayList<>();
+    public List<List<Integer>> permute(int[] nums) {
+        this.ans = new ArrayList<>();
+        this.nums = new ArrayList<>();
+        for (int num:nums){
+            this.nums.add(num);
+        }
+        dfs(0);
+        return ans;
+
+
+
+    }
+    void swap(int a,int b){
+        int tmp  = nums.get(a);
+        nums.set(a,nums.get(b));
+        nums.set(b,tmp);
+    }
+    void dfs(int x){
+        if (x== nums.size()-1){
+            ans.add(new ArrayList<>(nums));
+            return;
+        }
+        for (int i=x;i<nums.size();i++){
+            swap(i,x);
+            dfs(x+1);
+            swap(i,x);//这就是回溯
+        }
+    }
+}
+class Solution20AB{
+    public boolean isValid(String s) {
+        Stack<Character> stack = new Stack<>();
+        for (char c:s.toCharArray()){
+
+                if (c=='('||c=='['||c=='{'){
+                    stack.push(c);
+                }
+               else if (c==')'||c==']'||c=='}') {
+                    if (stack.isEmpty()) return false;
+
+                    char top = stack.pop();
+                    if ((c == ')' && top != '(') || (c == ']' && top != '[') || (c == '}' && top != '{')) {
+                        return false;
+                    }
+                }
+
+
+        }
+        return stack.isEmpty();
+    }
+}
