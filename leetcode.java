@@ -1,5 +1,7 @@
 
 
+import org.w3c.dom.Text;
+
 import javax.swing.*;
 import javax.xml.stream.events.Characters;
 import java.util.*;
@@ -5553,4 +5555,106 @@ class Solution20AB{
         }
         return stack.isEmpty();
     }
+}
+class Solution121B{
+    public int maxProfit(int[] prices) {
+        int cost = Integer.MAX_VALUE,profit = 0;
+        for (int price:prices){
+            cost = Math.min(cost,price);
+            profit = Math.max(profit,price-cost);
+        }
+        return profit;
+    }
+}
+class Solution236B{
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root==null||root==p||root==q) return root;
+        TreeNode left =lowestCommonAncestor(root.left,p,q);
+        TreeNode right = lowestCommonAncestor(root.right,p,q);
+        if (left==null) return right;
+        if (right==null) return left;
+        return root;
+    }
+}
+class Solution103B {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res= new ArrayList<>();
+        Queue<TreeNode> queue =new LinkedList<>();
+        if (root!=null) queue.add(root);
+        while (!queue.isEmpty()){
+            LinkedList<Integer> tmp  =new LinkedList<>();
+            for (int i=queue.size();i>0;i--){
+                TreeNode node = queue.poll();
+                if (res.size()%2==0) tmp.addLast(node.val);
+                else tmp.addFirst(node.val);
+                if(node.left!=null) queue.add(node.left);
+                if (node.right!=null) queue.add(node.right);
+            }
+            res.add(tmp);
+        }
+        return res;
+
+    }
+}
+class  OptimizedQuickSort{
+    private static final Random random  = new Random();
+    private static final int INSERTION_SORT_THRESHOLD = 16;
+
+    public int [] sortArry(int[] nums){
+        if (nums==null||nums.length<=1) return nums;
+        quickSort(nums,0,nums.length-1);
+        return nums;
+    }
+    private void quickSort(int[] nums, int left, int right){
+        if (left>=right) return;
+        if (right-left+1<=INSERTION_SORT_THRESHOLD){
+            insertionSort(nums,left,right);//小数字使用插入排序
+            return;
+        }
+        int[] pivots = partition3Way(nums,left,right);
+        quickSort(nums,left,pivots[0]-1);//只递归小于的部分
+        quickSort(nums,pivots[1]+1,right);//只递归大于的部分
+
+    }
+    private void swap(int[] nums,int i,int j){
+        if (i!=j){
+            int temp = nums[i];
+            nums[i] = nums[j];
+            nums[j]  = temp;
+        }
+    }
+    //插入排序
+    private void insertionSort(int[] nums,int left,int right){
+        for (int i=left+1;i<=right;i++){
+            int key = nums[i];
+            int j  = i-1;
+            while (j>=left&&nums[j]>key){
+                nums[j+1]  = nums[j];
+                j--;
+            }
+            nums[j+1] = key;
+        }
+    }
+    private int[] partition3Way(int[] nums,int left,int right){
+        int randomIndex = left+random.nextInt(right-left+1);
+        swap(nums,left,randomIndex);//一个随机值，交换left和随机值
+
+        int pivot = nums[left];
+        int lt = left;
+        int i  = left+1;
+        int gt =right +1;
+
+        while (i<gt){
+            if (nums[i]<pivot){//小于pivot放入左区域
+                swap(nums,++lt,i++);
+            }else if (nums[i]>pivot){//放入右区域
+                swap(nums,--gt,i);
+            }else {
+                i++;//只需要移动指针即可
+            }
+        }
+        swap(nums,left,lt);//最后交换回来
+        return new int[]{lt,gt-1};
+    }
+
 }
