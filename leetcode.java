@@ -5658,3 +5658,73 @@ class  OptimizedQuickSort{
     }
 
 }
+class Solution92B {
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+
+        ListNode g = dummy;
+        ListNode p = dummy.next;
+        for (int step = 0;step<left-1;step++){
+            g = g.next;
+            p = p.next;
+        }
+        for (int i=0;i<right-left;i++){
+            ListNode removed = p.next;
+            p.next = p.next.next;
+
+            removed.next  = g.next;
+            g.next =removed;
+        }
+        return dummy.next;
+    }
+}
+class Solution141B{
+    public boolean hasCycle(ListNode head) {
+        if (head==null) return false;
+        ListNode slow = head;
+        ListNode fast  = head;
+        while (fast!=null&&fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+            if (fast==slow){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+class Solution54B {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        if(matrix.length==0) return new ArrayList<Integer>();
+        int l = 0, r = matrix[0].length - 1, t = 0, b = matrix.length - 1, x = 0;
+        Integer[] ans = new Integer[(r+1)*(b+1)];
+        while (true){
+            for (int i=l;i<=r;i++) ans[x++]  = matrix[t][i];
+            if(++t>b) break;
+            for (int i=t;i<=b;i++) ans[x++] = matrix[i][r];
+            if (l>--r) break;
+            for (int i = r;i>=l;i--) ans[x++] = matrix[b][i];
+            if (t>--b) break;
+            for(int i=b;i>=t;i--) ans[x++]  = matrix[i][l];
+            if (++l>r) break;
+        }
+        return Arrays.asList(ans);
+    }
+}
+class Solution300B {
+    public int lengthOfLIS(int[] nums) {
+        if (nums.length == 0) return 0;
+        int[] dp = new int[nums.length];
+        int res = 0;
+        Arrays.fill(dp, 1);
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) dp[i] = Math.max(dp[i], dp[j] + 1);
+            }
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+}
+
