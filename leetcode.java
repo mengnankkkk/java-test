@@ -5727,4 +5727,57 @@ class Solution300B {
         return res;
     }
 }
+class Solution23B{
+    public ListNode mergeKLists(ListNode[] lists) {
+        PriorityQueue<ListNode> pq = new PriorityQueue<>((a,b)->a.val-b.val);
+        for (ListNode head:lists){
+            if (head!=null){
+                pq.offer(head);
+            }
+
+        }
+        ListNode dummy = new ListNode(0);
+        ListNode cur  = dummy;
+        while(!pq.isEmpty()){
+            ListNode node = pq.poll();
+            if (node.next!=null){
+                pq.offer(node.next);
+            }
+            cur.next = node;
+            cur = cur.next;
+        }
+        return dummy.next;
+    }
+}
+class Solution415B {
+    public String addStrings(String num1, String num2) {
+        StringBuilder sb = new StringBuilder("");
+        int i=num1.length()-1,j = num2.length()-1,carry = 0;
+        while (i>=0||j>=0){
+            int n1 = i>=0?num1.charAt(i)-'0':0;
+            int n2 = j>=0?num2.charAt(j)-'0':0;
+            int tmp = n1+n2+carry;
+            carry = tmp/10;
+            sb.append(tmp%10);
+            i--;j--;
+        }
+        if (carry==1) sb.append(1);
+        return sb.reverse().toString();
+    }
+}
+class Solution56B {
+    public int[][] merge(int[][] intervals) {
+        List<int[]> ans = new ArrayList<>();
+        Arrays.sort(intervals,(p,q)->p[0]-q[0]);
+        for (int[] p:intervals){
+            int m  =ans.size();
+            if (m>0&&p[0]<=ans.get(m-1)[1]){
+                ans.get(m-1)[1] = Math.max(ans.get(m-1)[1],p[1]);
+            }else {
+                ans.add(p);
+            }
+        }
+        return ans.toArray(new int[ans.size()][]);
+    }
+}
 
