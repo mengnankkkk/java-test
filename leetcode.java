@@ -5780,4 +5780,65 @@ class Solution56B {
         return ans.toArray(new int[ans.size()][]);
     }
 }
+ class Solution160B {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA==null||headB==null) return null;
+        ListNode pA= headA;
+        ListNode pB=  headB;
+        while (pA!=pB){
+            pA = (pA==null)?headB:pA.next;
+            pB = (pB==null) ?headA:pB.next;
+        }
+        return pA;
+    }
+}
+class Solution42B{
+    public int trap(int[] height){
+        int ans = 0;
+        int left= 0,right = height.length-1;
+        int preMax = 0,sufMax = 0;
+        while (left<right){
+            preMax = Math.max(preMax,height[left]);
+            sufMax = Math.max(sufMax,height[right]);
+            ans +=preMax<sufMax?preMax-height[left++]:sufMax-height[right--];
+        }
+        return ans;
+    }
+}
+class Solution407 {
+    private static final int[][] DIRS = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
+    public int trapRainWater(int[][] heightMap) {
+        if (heightMap==null||heightMap.length<=2||heightMap[0].length<=2){
+            return 0;
+        }
+        int rows = heightMap.length;
+        int cols  = heightMap[0].length;
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->(a[0]-b[0]));
+        for (int i=0;i<rows;i++){
+            for (int j=0;j<cols;j++){
+                if (i==0||i==rows-1||j==0||j==cols-1){
+                    pq.add(new int[]{heightMap[i][j],i,j});
+                    heightMap[i][j] = -1;
+                }
+            }
+        }
+        int ans=  0;
+        while (!pq.isEmpty()){
+            int[] t = pq.poll();
+            int minHeight = t[0],i=t[1],j=t[2];
+            for (int[] d:DIRS){
+                int x= i+d[0],y = j+d[1];//i,j的邻居
+                if (0 <= x && x < rows && 0 <= y && y < cols && heightMap[x][y] >= 0){
+                    ans +=Math.max(minHeight-heightMap[x][y],0);
+                    pq.add(new int[]{Math.max(minHeight, heightMap[x][y]), x, y});
+                    heightMap[x][y] = -1;
+                }
+            }
+        }
+        return ans;
+    }
+
+}
+
+
 
