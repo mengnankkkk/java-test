@@ -5839,6 +5839,60 @@ class Solution407 {
     }
 
 }
+class Solution124B{
+    private int ans = Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        dfs(root);
+        return ans;
+    }
+    private int  dfs(TreeNode root){
+        if (root==null) return 0;
+        int lval = dfs(root.left);
+        int rval = dfs(root.right);
+        ans  = Math.max(ans,rval+lval+root.val);
+        return Math.max(Math.max(lval,rval)+root.val,0);
+    }
+}
+class Solution1143B{
+    public int longestCommonSubsequence(String text1, String text2) {
+        char[] t = text2.toCharArray();
+        int m  = t.length;
+        int[]f = new int[m+1];
+        for (char x:text1.toCharArray()){
+            int pre = 0;
+            for(int j=0;j<m;j++){
+                int tmp = f[j+1];
+                f[j+1] = x==t[j]?pre+1:Math.max(f[j+1],f[j]);
+                pre = tmp;
+            }
+        }
+        return f[m];
+    }
+}
+class Solution93B{
+    public List<String> restoreIpAddresses(String s) {
+        int n  = s.length();
+        List<String> ans = new ArrayList<>();
+        for (int i =1;i<n&&isvalid(s,0,i);i++){
+            for (int j=i+1;j<n&&isvalid(s,i,j);j++){
+                for (int k =j+1;k<n&&isvalid(s,j,k);k++){
+                    if (isvalid(s,k,n)){
+                        ans.add(String.format("%s.%s.%s.%s",s.substring(0,i),s.substring(i,j),s.substring(j,k),s.substring(k)
+                                ));
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+    private boolean isvalid(String s,int i,int j){
+        if (j-i>3||j-i>1&&s.charAt(i)=='0'){
+            return false;
+        }
+        return Integer.parseInt(s.substring(i,j))<=255;
+    }
+}
+
 
 
 
