@@ -3163,7 +3163,7 @@ class Solution124{
         return Math.max(Math.max(LVal,RVal)+node.val,0);
     }
 }
-class Solution142{
+class Solution142AA{
     public ListNode detectCycle(ListNode head){
         ListNode fast= head,slow  =head;
         while (fast!=null&&fast.next!=null){
@@ -5892,7 +5892,154 @@ class Solution93B{
         return Integer.parseInt(s.substring(i,j))<=255;
     }
 }
+class Solution142A{
+    public ListNode detectCycle(ListNode head) {
+        if (head==null)return null;
+        ListNode fast = head,slow = head;
+        while (fast!=null&&fast.next!=null){
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast==slow){
+                break;
+            }
+        }
+        if (fast==null||fast.next==null) return null;
+        fast = head;
+        while (slow!=fast){
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return fast;
+    }
+}
+class Solution82B {
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode dummy = new ListNode(0,head);
+        ListNode cur = dummy;
+        while (cur.next!=null&&cur.next.next!=null){
+            int val = cur.next.val;
+            if (cur.next.next.val==val){
+                while (cur.next!=null&&cur.next.val==val){
+                    cur.next = cur.next.next;
+                }
+            }else {
+                cur = cur.next;
+            }
+        }
+        return dummy.next;
+    }
+}
+class Solution19AA {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0,head);
+        ListNode left = dummy,right = dummy;
+        while (n-->0){
+            right = right.next;
+        }
+        while (right.next!=null){
+            right = right.next;
+            left = left.next;
+        }
+        left.next = left.next.next;
+        return dummy.next;
+    }
+}
+class Solution4A{
+    public double findMedianSortedArrays(int[] nums1, int[] nums2){
+        //确保num1是较短的数组
+        if (nums1.length>nums2.length){
+            int[] tmp  = nums1;
+            nums1 = nums2;
+            nums2 = tmp;
+        }
+        int m = nums1.length;
+        int n = nums2.length;
+        //哨兵值
+        int[] a = new int[m+2];
+        int[] b = new int[n+2];
+        a[0] = b[0] = Integer.MIN_VALUE;
+        a[m+1] = b[n+1] = Integer.MAX_VALUE;
+        System.arraycopy(nums1,0,a,1,m);
+        System.arraycopy(nums2,0,b,1,n);
 
+
+        int left =0,right = m;
+        while (left<=right){
+            int i = (left+right)>>>1;
+            int j = (m+n+1)/2-i;//总的
+            if (a[i]<=b[j+1]&&b[j]<=a[i+1]){
+                int max1 = Math.max(a[i],b[j]);
+                int min2 =Math.min(a[i+1],b[j+1]);
+                return (m+n)%2>0?max1:(max1+min2)/2.0;
+            }else if (a[i]>b[j+1]){
+                right = i-1;
+            }else {
+                left=i+1;
+            }
+        }
+        return 0.0;
+    }
+}
+class Solution199AB{
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> ans  = new ArrayList<>();
+        dfs(root,0,ans);
+        return ans;
+    }
+    private void dfs(TreeNode root,int depth,List<Integer> ans){
+        if (root==null) return;
+        if (depth==ans.size()){
+            ans.add(root.val);
+        }
+        dfs(root.right,depth+1,ans);
+        dfs(root.left,depth+1,ans);
+    }
+}
+class Solution94B{
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> ans= new ArrayList<>();
+        dfs(root,ans);
+        return ans;
+    }
+    private void dfs(TreeNode root,List<Integer> ans){
+        if (root==null)return;
+        dfs(root.left,ans);
+        ans.add(root.val);
+        dfs(root.right,ans);
+    }
+}
+class Solution165A{
+    public int compareVersion(String version1, String version2) {
+        int i =0,j=0;
+        int n = version1.length(),m = version2.length();
+        while (i<n||j<m){
+            int num1=0,num2 = 0;
+            while (i<n&&version1.charAt(i)!='.') num1 = num1*10+version1.charAt(i++)-'0';
+            while (j<m&&version2.charAt(j)!='.') num2 =num2*10+version2.charAt(j++)-'0';
+            if (num1>num2) return 1;
+            else if (num1<num2)  return -1;
+            i++;j++;
+
+        }
+        return 0;
+    }
+}
+class Solution704B{
+    public int search(int[] nums, int target) {
+        int left =0,right  = nums.length-1;
+        while (left<=right){
+            int mid = (left+right)>>>1;
+            if (nums[mid]==target) return mid;
+            else if (nums[mid]>target){
+                right = mid-1;
+            }
+            else {
+                left = mid+1;
+            }
+        }
+        return -1;
+    }
+}
 
 
 
