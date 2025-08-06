@@ -6040,6 +6040,141 @@ class Solution704B{
         return -1;
     }
 }
+class MyQueueAB {
+    private Stack<Integer> A;
+    private Stack<Integer> B;
+
+    public MyQueueAB() {
+        A = new Stack<>();
+        B = new Stack<>();
+    }
+
+    public void push(int x) {
+        A.push(x);
+    }
+
+    public int pop() {
+        int peek = peek();
+        B.pop();
+        return peek;
+    }
+
+    public int peek() {
+        if(!B.isEmpty()) return B.peek();
+        if (A.isEmpty()) return -1;
+        while (!A.isEmpty()){
+            B.push(A.pop());
+        }
+        return B.peek();
+    }
+
+    public boolean empty() {
+        return A.isEmpty()&&B.isEmpty();
+    }
+}
+class Solution148AA{
+    public ListNode sortList(ListNode head) {
+        if (head==null||head.next==null) return head;
+        ListNode head2 = middle(head);
+        head = sortList(head);
+        head2 = sortList(head2);
+        return mergeTowLists(head,head2);
+    }
+    private ListNode middle(ListNode head ){
+        ListNode pre=  head;
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast!=null&&fast.next!=null){
+            pre = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        pre.next = null;
+        return slow;
+    }
+    private ListNode mergeTowLists(ListNode list1,ListNode list2){
+        ListNode dummy = new ListNode(0);
+        ListNode cur = dummy;
+        while (list1!=null&&list2!=null){
+            if (list1.val<list2.val){
+                cur.next = list1;
+                list1  = list1.next;
+            }else {
+                cur.next = list2;
+                list2 = list2.next;
+            }
+            cur = cur.next;
+        }
+        cur.next = list1!=null?list1:list2;
+        return dummy.next;
+    }
+}
+class Solution22B{
+    public List<String> generateParenthesis(int n) {
+        List<String> ans= new ArrayList<>();
+        char[] path = new char[n*2];
+        dfs(0,0,n,path,ans);
+        return ans;
+    }
+    private void dfs(int left,int right,int n,char[] path,List<String> ans){
+        if (right==n){
+            ans.add(new String(path));
+            return;
+        }
+        if (left<n){
+            path[left+right] = '(';
+            dfs(left+1,right,n,path,ans);
+        }
+        if (right<left){
+            path[left+right] = ')';
+            dfs(left,right+1,n,path,ans);
+        }
+
+    }
+}
+class Solution206AAA{
+    public ListNode reverseList(ListNode head) {
+        if(head==null) return null;
+        ListNode cur  = head,pre = null;
+        while (cur!=null){
+            ListNode tmp = cur.next;
+            cur.next = pre;
+            pre  = cur;
+            cur = tmp;
+        }
+        return pre;
+    }
+}
+class Solution92A{
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        ListNode dummy = new ListNode(0,head);
+        ListNode p0 = dummy;
+        for(int i =0;i<left-1;i++){
+            p0 = p0.next;
+        }
+        ListNode pre = null,cur = p0.next;
+        for(int i=0;i<right-left+1;i++){
+            ListNode tmp = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = tmp;
+        }
+        p0.next.next = cur;
+        p0.next = pre;
+        return dummy.next;
+    }
+
+}
+class Solution236AASS{
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root==null||root==p||root==q) return root;
+        TreeNode left = lowestCommonAncestor(root.left,p,q);
+        TreeNode right = lowestCommonAncestor(root.right,p,q);
+        if (left!=null&&right!=null) return root;
+        return left!=null?left:right;
+    }
+}
 
 
 
