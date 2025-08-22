@@ -134,3 +134,61 @@ class Solution15D{
         return ans;
     }
 }
+class Solution20D{
+    public boolean isValid(String s) {
+        Stack<Character> queue = new Stack<>();
+        if (s==null||s.length()%2!=0) return false;
+        for (char c:s.toCharArray()){
+            if (c=='{'||c=='('||c=='['){
+                queue.push(c);
+            }else {
+                if (queue.isEmpty()) return false;
+                char top = queue.pop();
+                if (c=='}'&&top!='{'){
+                  return false;
+                }if (c==']'&&top!='['){
+                  return false;
+                }if (c==')'&&top!='('){
+                  return false;
+                }
+            }
+        }
+
+        return queue.isEmpty();
+
+    }
+}
+class Solution3D {
+    public int lengthOfLongestSubstring(String s) {
+        if (s==null||s.length()==0) return 0;
+        char[] cnt = s.toCharArray();
+        int l = 0;
+        Set<Character> map = new HashSet<>();
+        int left = 0;
+        for (int right = 0;right<s.length();right++){
+            while (map.contains(cnt[right])){
+                map.remove(cnt[left]);
+                left++;
+            }
+            map.add(cnt[right]);
+            l = Math.max(right-left+1,l);
+        }
+        return l;
+    }
+    public int lengthOfLongestSubstringD(String s){
+        if (s==null||s.length()==0) return 0;
+        int n = s.length();
+        int maxLen = 0;
+        int[] index = new int[128];
+
+        for (int right = 0,left=0;right<n;right++){
+            char c = s.charAt(right);
+
+            left  =Math.max(left,index[c]);
+
+            maxLen = Math.max(maxLen,right-left+1);
+            index[c] = right+1;
+        }
+        return  maxLen;
+    }
+}
